@@ -6,7 +6,7 @@
 Reasonably making forms sound good again
 
 ## Usage
-```ocalm
+```ml
 module SignInFormParams = {
   type state = {
     password: string,
