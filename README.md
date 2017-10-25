@@ -25,12 +25,12 @@ module ReForm = ReForm.Create SignInFormParams;
 
 let component = ReasonReact.statelessComponent "SignInForm";
 
-let make _children => {
+let make ::signInMutation _children => {
   ...component,
   render: fun _ =>
-    <ReForm handleSubmit=(fun _ => ignore ())>
+    <ReForm onSubmit=signInMutation>
       (
-        fun form handleChange handleSubmit =>
+        fun ::form ::handleChange ::handleSubmit =>
           <FormWrapper>
             <FieldsWrapper>
               <FormField
@@ -50,7 +50,7 @@ let make _children => {
                 placeholderTextColor=AppTheme.Colors.blackLight
               />
             </FieldsWrapper>
-            <RaisedButton text="Sign in" onPress={handleSubmit}/>
+            <RaisedButton text="Sign in" onPress=handleSubmit/>
             </FormWrapper>
       )
     </ReForm>
