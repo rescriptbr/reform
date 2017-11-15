@@ -1,34 +1,30 @@
-type action = HandleChange (string, string) | HandleSubmit;
+type action =
+  | HandleChange((string, string))
+  | HandleSubmit;
 
-module Create (Config: {
-  type state;
-  let handleChange: action => state => state;
-  let initialState: state;
-}) => {
-
+module Create =
+       (Config: {type state; let handleChange: (action, state) => state; let initialState: state;}) => {
   type values = Config.state;
   type state = {
     values,
     errors: Config.state
   };
-
-  let component = ReasonReact.reducerComponent "ReForm";
-
-  let make onSubmit::(onSubmit: values => unit) children => {
+  let component = ReasonReact.reducerComponent("ReForm");
+  let make = (~onSubmit: values => unit, children) => {
     ...component,
-    initialState: fun () => {values: Config.initialState, errors: Config.initialState},
-    reducer: fun action state => switch action {
-      | HandleChange (_, _) => ReasonReact.Update {...state, values: (Config.handleChange action state.values)}
-      | HandleSubmit => {
+    initialState: () => {values: Config.initialState, errors: Config.initialState},
+    reducer: (action, state) =>
+      switch action {
+      | HandleChange((_, _)) =>
+        ReasonReact.Update({...state, values: Config.handleChange(action, state.values)})
+      | HandleSubmit =>
         onSubmit(state.values);
         ReasonReact.NoUpdate
-      }
-    },
-    render: fun self => {
-      let handleChange = fun field => self.reduce (fun value => HandleChange (field, value));
-      let handleSubmit = self.reduce (fun _ => HandleSubmit);
-
-      (children.(0) form::self.state ::handleChange ::handleSubmit)
+      },
+    render: (self) => {
+      let handleChange = (field) => self.reduce((value) => HandleChange((field, value)));
+      let handleSubmit = self.reduce((_) => HandleSubmit);
+      children[0](~form=self.state, ~handleChange, ~handleSubmit)
     }
   };
 };

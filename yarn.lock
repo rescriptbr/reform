@@ -6,9 +6,9 @@ asap@~2.0.3:
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/asap/-/asap-2.0.6.tgz#e50347611d7e690943208bbdafebcbc2fb866d46"
 
-bs-platform@^1.9.1:
-  version "1.9.3"
-  resolved "https://registry.yarnpkg.com/bs-platform/-/bs-platform-1.9.3.tgz#8c28976ea206165183f0e8bb2c3cfd8a04120a8a"
+bs-platform@2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/bs-platform/-/bs-platform-2.0.0.tgz#17ee607fa829f67b8b920438ebca5ec1deab3276"
 
 core-js@^1.0.0:
   version "1.2.7"
@@ -83,8 +83,8 @@ prop-types@^15.6.0:
     object-assign "^4.1.1"
 
 react-dom@>=15.0.0:
-  version "16.0.0"
-  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.0.0.tgz#9cc3079c3dcd70d4c6e01b84aab2a7e34c303f58"
+  version "16.1.1"
+  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.1.1.tgz#b2e331b6d752faf1a2d31399969399a41d8d45f8"
   dependencies:
     fbjs "^0.8.16"
     loose-envify "^1.1.0"
@@ -92,8 +92,8 @@ react-dom@>=15.0.0:
     prop-types "^15.6.0"
 
 react@>=15.0.0:
-  version "16.0.0"
-  resolved "https://registry.yarnpkg.com/react/-/react-16.0.0.tgz#ce7df8f1941b036f02b2cca9dbd0cb1f0e855e2d"
+  version "16.1.1"
+  resolved "https://registry.yarnpkg.com/react/-/react-16.1.1.tgz#d5c4ef795507e3012282dd51261ff9c0e824fe1f"
   dependencies:
     fbjs "^0.8.16"
     loose-envify "^1.1.0"
