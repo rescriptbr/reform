@@ -56,5 +56,8 @@ typings/
 
 # dotenv environment variables file
 .env
+
+# BS
 .merlin
-lib/
+lib/bs
+lib/ocaml
