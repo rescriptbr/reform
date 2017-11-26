@@ -82,7 +82,7 @@ prop-types@^15.6.0:
     loose-envify "^1.3.1"
     object-assign "^4.1.1"
 
-react-dom@>=15.0.0:
+"react-dom@>=15.0.0 || >=16.0.0":
   version "16.1.1"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.1.1.tgz#b2e331b6d752faf1a2d31399969399a41d8d45f8"
   dependencies:
@@ -91,7 +91,7 @@ react-dom@>=15.0.0:
     object-assign "^4.1.1"
     prop-types "^15.6.0"
 
-react@>=15.0.0:
+"react@>=15.0.0 || >=16.0.0":
   version "16.1.1"
   resolved "https://registry.yarnpkg.com/react/-/react-16.1.1.tgz#d5c4ef795507e3012282dd51261ff9c0e824fe1f"
   dependencies:
@@ -100,12 +100,12 @@ react@>=15.0.0:
     object-assign "^4.1.1"
     prop-types "^15.6.0"
 
-reason-react@^0.2.3:
-  version "0.2.4"
-  resolved "https://registry.yarnpkg.com/reason-react/-/reason-react-0.2.4.tgz#96d85a533fc93e695818dbb3e6a8ae05fbf0de7d"
+reason-react@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/reason-react/-/reason-react-0.3.0.tgz#c3ad272ed2dd2757f6934fcaacba9b192b891f57"
   dependencies:
-    react ">=15.0.0"
-    react-dom ">=15.0.0"
+    react ">=15.0.0 || >=16.0.0"
+    react-dom ">=15.0.0 || >=16.0.0"
 
 setimmediate@^1.0.5:
   version "1.0.5"

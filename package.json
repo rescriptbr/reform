@@ -6,9 +6,7 @@
   "repository": "git@github.com:Astrocoders/reform.git",
   "author": "Gabriel R. Abreu <grsabreu@gmail.com>",
   "license": "MIT",
-  "dependencies": {
-    "reason-react": "^0.2.3"
-  },
+  "dependencies": {},
   "devDependencies": {
     "bs-platform": "2.0.0"
   },
@@ -17,5 +15,8 @@
     "bs:build": "bsb -make-world -clean-world",
     "bs:watch": "bsb -make-world -clean-world -w",
     "bs:setup": "bsb -make-world"
+  },
+  "peerDependencies": {
+    "reason-react": "^0.3.0"
   }
 }
