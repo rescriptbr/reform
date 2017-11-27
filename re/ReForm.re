@@ -8,20 +8,20 @@ module Create =
   type values = Config.state;
   type state = {
     values,
+    isSubmitting: bool,
     error: option(string)
   };
   let component = ReasonReact.reducerComponent("ReForm");
   let make = (~onSubmit: values => unit, ~validate: values => option(string), children) => {
     ...component,
-    initialState: () => {values: Config.initialState, error: None},
+    initialState: () => {values: Config.initialState, error: None, isSubmitting: false},
     reducer: (action, state) =>
       switch action {
-      | HandleError(error) => ReasonReact.Update({ ...state, error })
+      | HandleError(error) => ReasonReact.Update({ ...state, isSubmitting: false, error })
       | HandleChange((_, _)) =>
         ReasonReact.Update({...state, values: Config.handleChange(action, state.values)})
       | HandleSubmit =>
-        onSubmit(state.values);
-        ReasonReact.NoUpdate
+        ReasonReact.UpdateWithSideEffects({...state, isSubmitting: true}, (_) => onSubmit(state.values))
       },
     render: (self) => {
       let handleChange = (field) => self.reduce((value) => HandleChange((field, value)));
