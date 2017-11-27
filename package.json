@@ -1,6 +1,6 @@
 {
   "name": "bs-reform",
-  "version": "2.0.4-beta",
+  "version": "2.0.4-beta.1",
   "description": "Reasonably making forms sound good again",
   "main": "lib/js/re/ReForm.js",
   "repository": "git@github.com:Astrocoders/reform.git",
