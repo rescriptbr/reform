@@ -32,7 +32,7 @@ module Create =
         handleValidation(validationError);
         validationError == None ? handleFormSubmit() : ignore();
       };
-      children[0](~form=self.state, ~handleChange, ~handleSubmit)
+      children[0](~form=self.state, ~handleChange, ~handleSubmit, ~handleValidation)
     }
   };
 };
