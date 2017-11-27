@@ -13,7 +13,7 @@
     "bs:setup": "bsb -make-world"
   },
   "peerDependencies": {
-    "bs-platform": "2.0.0",
+    "bs-platform": "^2.1.0",
     "reason-react": "^0.3.0"
   }
 }
