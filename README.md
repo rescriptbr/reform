@@ -29,9 +29,9 @@ let component = ReasonReact.statelessComponent("SignInForm");
 let make = (~signInMutation, _children) => {
   ...component,
   render: (_) => {
-    let validate: SignInFormParams.state => option(string) = (values) => {
-      if(values.password == "12345") Some("Sorry, can't do");
-      None;
+    let validate: SignInFormParams.state => option(string) = (values) => switch values {
+      | { password: "12345" } => Some("Sorry, can't do")
+      | _ => None
     }
 
     <ReForm onSubmit=signInMutation validate>
