@@ -6,7 +6,9 @@
   "repository": "git@github.com:Astrocoders/reform.git",
   "author": "Gabriel R. Abreu <grsabreu@gmail.com>",
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+    "reason-react": "^0.3.0"
+  },
   "devDependencies": {},
   "scripts": {
     "start": "yarn bs:watch",
