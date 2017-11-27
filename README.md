@@ -6,32 +6,39 @@
 Reasonably making forms sound good again
 
 ## Usage
-```ml
+
+```reason
 module SignInFormParams = {
   type state = {
     password: string,
     email: string
   };
   let initialState = {password: "", email: ""};
-  let handleChange action state =>
+  let handleChange = (action, state) =>
     switch action {
-    | ReForm.HandleChange ("password", value) => {...state, password: value}
-    | ReForm.HandleChange ("email", value) => {...state, email: value}
+    | ReForm.HandleChange("password", value) => {...state, password: value}
+    | ReForm.HandleChange("email", value) => {...state, email: value}
     | _ => state
     };
 };
 
-module ReForm = ReForm.Create SignInFormParams;
+module ReForm = ReForm.Create(SignInFormParams);
 
-let component = ReasonReact.statelessComponent "SignInForm";
+let component = ReasonReact.statelessComponent("SignInForm");
 
-let make ::signInMutation _children => {
+let make = (~signInMutation, _children) => {
   ...component,
-  render: fun _ =>
-    <ReForm onSubmit=signInMutation>
+  render: (_) => {
+    let validate: SignInFormParams.state => option(string) = (values) => {
+      if(values.password == "12345") Some("Sorry, can't do");
+      None;
+    }
+
+    <ReForm onSubmit=signInMutation validate>
       (
-        fun ::form ::handleChange ::handleSubmit =>
+        (~form, ~handleChange, ~handleSubmit) =>
           <FormWrapper>
+            <ErrorWarn error=form.error/>
             <FieldsWrapper>
               <FormField
                 fieldType=FormField.TextField
@@ -39,12 +46,12 @@ let make ::signInMutation _children => {
                 placeholder="Email"
                 style=fieldsStyle
                 placeholderTextColor=AppTheme.Colors.blackLight
-                onChangeText=(handleChange "email")
+                onChangeText=handleChange("email")
               />
               <FormField
                 fieldType=FormField.TextField
                 placeholder="Password"
-                onChangeText=(handleChange "password")
+                onChangeText=handleChange("password")
                 value=form.values.password
                 style=fieldsStyle
                 placeholderTextColor=AppTheme.Colors.blackLight
@@ -54,5 +61,6 @@ let make ::signInMutation _children => {
             </FormWrapper>
       )
     </ReForm>
+  }
 }
 ```
