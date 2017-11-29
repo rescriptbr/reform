@@ -34,7 +34,7 @@ let make = (~signInMutation, _children) => {
       | _ => None
     }
 
-    <ReForm onSubmit=signInMutation validate>
+    <ReForm onSubmit=((values, ~setError, ~setSubmitting) => whatever(values, ~setError, ~setSubmitting)) validate>
       (
         (~form, ~handleChange, ~handleSubmit) =>
           <FormWrapper>
