@@ -7,10 +7,12 @@ module Create =
            let initialState: state;
          }
        ) => {
+  /* TODO: Make a variant out of this */
+  type value = string;
   type action =
     | HandleSubmitting(bool)
     | HandleError(option(string))
-    | HandleChange((Config.fields, string))
+    | HandleChange((Config.fields, value))
     | HandleSubmit;
   type values = Config.state;
   type state = {
