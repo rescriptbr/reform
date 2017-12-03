@@ -3,7 +3,7 @@ module Create =
          Config: {
            type state;
            type fields;
-           let handleChange: (fields, state) => state;
+           let handleChange: ((fields, 'a), state) => state;
            let initialState: state;
          }
        ) => {
@@ -37,8 +37,8 @@ module Create =
       switch action {
       | HandleSubmitting(isSubmitting) => ReasonReact.Update({...state, isSubmitting})
       | HandleError(error) => ReasonReact.Update({...state, isSubmitting: false, error})
-      | HandleChange((field, _)) =>
-        ReasonReact.Update({...state, values: Config.handleChange(field, state.values)})
+      | HandleChange((field, value)) =>
+        ReasonReact.Update({...state, values: Config.handleChange((field, value), state.values)})
       | HandleSubmit =>
         ReasonReact.UpdateWithSideEffects(
           {...state, isSubmitting: true},
