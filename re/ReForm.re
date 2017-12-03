@@ -3,7 +3,7 @@ module Create =
          Config: {
            type state;
            type fields;
-           let handleChange: ((fields, 'a), state) => state;
+           let handleChange: ((fields, string), state) => state;
            let initialState: state;
          }
        ) => {
