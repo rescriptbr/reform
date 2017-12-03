@@ -1,11 +1,17 @@
-type action =
-  | HandleSubmitting(bool)
-  | HandleError(option(string))
-  | HandleChange((string, string))
-  | HandleSubmit;
-
 module Create =
-       (Config: {type state; let handleChange: (action, state) => state; let initialState: state;}) => {
+       (
+         Config: {
+           type state;
+           type fields;
+           let handleChange: (fields, state) => state;
+           let initialState: state;
+         }
+       ) => {
+  type action =
+    | HandleSubmitting(bool)
+    | HandleError(option(string))
+    | HandleChange((Config.fields, string))
+    | HandleSubmit;
   type values = Config.state;
   type state = {
     values,
@@ -15,7 +21,13 @@ module Create =
   let component = ReasonReact.reducerComponent("ReForm");
   let make =
       (
-        ~onSubmit: (values, ~setSubmitting: ReasonReact.Callback.t(bool), ~setError: ReasonReact.Callback.t(option(string))) => unit,
+        ~onSubmit:
+           (
+             values,
+             ~setSubmitting: ReasonReact.Callback.t(bool),
+             ~setError: ReasonReact.Callback.t(option(string))
+           ) =>
+           unit,
         ~validate: values => option(string),
         children
       ) => {
@@ -25,12 +37,19 @@ module Create =
       switch action {
       | HandleSubmitting(isSubmitting) => ReasonReact.Update({...state, isSubmitting})
       | HandleError(error) => ReasonReact.Update({...state, isSubmitting: false, error})
-      | HandleChange((_, _)) =>
-        ReasonReact.Update({...state, values: Config.handleChange(action, state.values)})
+      | HandleChange((field, _)) =>
+        ReasonReact.Update({...state, values: Config.handleChange(field, state.values)})
       | HandleSubmit =>
         ReasonReact.UpdateWithSideEffects(
           {...state, isSubmitting: true},
-          ((self) => onSubmit(state.values, ~setSubmitting=self.reduce(isSubmitting => HandleSubmitting(isSubmitting)), ~setError=self.reduce((error) => HandleError(error))))
+          (
+            (self) =>
+              onSubmit(
+                state.values,
+                ~setSubmitting=self.reduce((isSubmitting) => HandleSubmitting(isSubmitting)),
+                ~setError=self.reduce((error) => HandleError(error))
+              )
+          )
         )
       },
     render: (self) => {
