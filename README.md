@@ -14,11 +14,11 @@ module SignInFormParams = {
     email: string
   };
   let initialState = {password: "", email: ""};
+  type fields = [ | `password | `email ];
   let handleChange = (action, state) =>
     switch action {
-    | ReForm.HandleChange("password", value) => {...state, password: value}
-    | ReForm.HandleChange("email", value) => {...state, email: value}
-    | _ => state
+    | (`password, value) => {...state, password: value}
+    | (`email, value) => {...state, email: value}
     };
 };
 
@@ -46,12 +46,12 @@ let make = (~signInMutation, _children) => {
                 placeholder="Email"
                 style=fieldsStyle
                 placeholderTextColor=AppTheme.Colors.blackLight
-                onChangeText=handleChange("email")
+                onChangeText=handleChange(`email)
               />
               <FormField
                 fieldType=FormField.TextField
                 placeholder="Password"
-                onChangeText=handleChange("password")
+                onChangeText=handleChange(`password)
                 value=form.values.password
                 style=fieldsStyle
                 placeholderTextColor=AppTheme.Colors.blackLight
