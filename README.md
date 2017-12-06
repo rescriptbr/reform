@@ -22,7 +22,7 @@ module SignInFormParams = {
     };
 };
 
-module ReForm = ReForm.Create(SignInFormParams);
+module SignInForm = ReForm.Create(SignInFormParams);
 
 let component = ReasonReact.statelessComponent("SignInForm");
 
@@ -34,7 +34,14 @@ let make = (~signInMutation, _children) => {
       | _ => None
     }
 
-    <ReForm onSubmit=((values, ~setError, ~setSubmitting) => whatever(values, ~setError, ~setSubmitting)) validate>
+    <ReForm
+      onSubmit=((values, ~setError, ~setSubmitting) => whatever(values, ~setError, ~setSubmitting))
+      schema=[
+        (`password, [Required]),
+        (`email, [Required])
+      ]
+      validate
+    >
       (
         (~form, ~handleChange, ~handleSubmit) =>
           <FormWrapper>

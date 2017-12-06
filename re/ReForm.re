@@ -15,12 +15,39 @@ module Create =
     | HandleChange((Config.fields, value))
     | HandleSubmit;
   type values = Config.state;
+  type validation =
+    | Required
+    | Email
+    | Custom(values => option(string));
+  type fieldValidation = (Config.fields, list(validation));
+  type formSchema = list(fieldValidation);
   type state = {
     values,
     isSubmitting: bool,
     error: option(string)
   };
   let component = ReasonReact.reducerComponent("ReForm");
+  let handleSchemaValidation:
+    (formSchema, ReasonReact.Callback.t(option(string)), values, (Config.fields, value)) => unit =
+    (schema, setError, values, (fieldName, fieldValue)) =>
+      switch (List.find(((fieldValidationName, _)) => compare(fieldValidationName, fieldName) == 0, schema)) {
+      | (_, validations) =>
+        validations
+        |> List.iter(
+             (validationType) =>
+               switch validationType {
+               | Required when fieldValue == "" => setError(Some("Fill up all fields"))
+               | Email when Js.Re.test(fieldValue, [%bs.re "/@/"]) =>
+                 setError(Some("Invalid email"))
+               | Custom(mapper) =>
+                 setError(mapper(values));
+                 ()
+                | _ => ()
+               }
+           )
+        |> ignore
+      | exception Not_found => setError(None)
+      };
   let make =
       (
         ~onSubmit:
@@ -31,6 +58,7 @@ module Create =
            ) =>
            unit,
         ~validate: values => option(string),
+        ~schema: formSchema,
         children
       ) => {
     ...component,
@@ -40,7 +68,9 @@ module Create =
       | HandleSubmitting(isSubmitting) => ReasonReact.Update({...state, isSubmitting})
       | HandleError(error) => ReasonReact.Update({...state, isSubmitting: false, error})
       | HandleChange((field, value)) =>
-        ReasonReact.Update({...state, values: Config.handleChange((field, value), state.values)})
+      ReasonReact.UpdateWithSideEffects({...state, values: Config.handleChange((field, value), state.values)}, (self) => {
+        handleSchemaValidation(schema, self.reduce((error) => HandleError(error)), state.values, (field, value))
+      })
       | HandleSubmit =>
         ReasonReact.UpdateWithSideEffects(
           {...state, isSubmitting: true},
