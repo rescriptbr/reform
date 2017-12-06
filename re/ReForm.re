@@ -91,13 +91,15 @@ module Create =
         ReasonReact.UpdateWithSideEffects(
           {...state, values: Config.handleChange((field, value), state.values)},
           (
-            (self) =>
+            (self) => {
+              self.reduce(((field, value)) => HandlePairUpdate((field, value)), (field, value));
               handleSchemaValidation(
                 schema,
                 self.reduce((error) => HandleError(error)),
                 state.values,
                 (field, value)
               ) |> ignore
+            }
           )
         )
       | HandleSubmit =>
