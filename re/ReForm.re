@@ -37,7 +37,7 @@ module Create =
              (validationType) =>
                switch validationType {
                | Required when fieldValue == "" => setError(Some("Fill up all fields"))
-               | Email when Js.Re.test(fieldValue, [%bs.re "/@/"]) =>
+               | Email when Js.Re.test(fieldValue, [%bs.re "/@/"]) == false =>
                  setError(Some("Invalid email"))
                | Custom(mapper) =>
                  setError(mapper(values));
