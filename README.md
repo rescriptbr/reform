@@ -8,33 +8,44 @@ Reasonably making forms sound good again
 ## Usage
 
 ```reason
-module SignInFormParams = {
+module SignUpFormParams = {
   type state = {
     password: string,
-    email: string
+    email: string,
+    confirmPassword,
   };
-  let initialState = {password: "", email: ""};
+  let initialState = {password: "", email: "", confirmPassword: ""};
   type fields = [ | `password | `email ];
   let handleChange = (action, state) =>
     switch action {
     | (`password, value) => {...state, password: value}
+    | (`confirmPassword, value) => {...state, password: value}
     | (`email, value) => {...state, email: value}
     };
 };
 
-module ReForm = ReForm.Create(SignInFormParams);
+module SignUpForm = ReForm.Create(SignUpFormParams);
 
-let component = ReasonReact.statelessComponent("SignInForm");
+let component = ReasonReact.statelessComponent("SignUpForm");
 
-let make = (~signInMutation, _children) => {
+let make = (~signUpMutation, _children) => {
   ...component,
   render: (_) => {
-    let validate: SignInFormParams.state => option(string) = (values) => switch values {
+    /* Global validation if you want */
+    let validate: SignUpFormParams.state => option(string) = (values) => switch values {
       | { password: "12345" } => Some("Sorry, can't do")
       | _ => None
     }
 
-    <ReForm onSubmit=((values, ~setError, ~setSubmitting) => whatever(values, ~setError, ~setSubmitting)) validate>
+    <ReForm
+      onSubmit=((values, ~setError, ~setSubmitting) => whatever(values, ~setError, ~setSubmitting))
+      schema=[
+        (`password, [Required]),
+        (`confirmPassword, [Custom(({ confirmPassword, password }) => confirmPassword != password ? Some("Password don't match") : None)]),
+        (`email, [Required, Email])
+      ]
+      validate
+    >
       (
         (~form, ~handleChange, ~handleSubmit) =>
           <FormWrapper>
