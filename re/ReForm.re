@@ -4,7 +4,6 @@ module Create =
            type state;
            type fields;
            let handleChange: ((fields, string), state) => state;
-           let initialState: state;
          }
        ) => {
   /* TODO: Make a variant out of this */
@@ -31,10 +30,11 @@ module Create =
            ) =>
            unit,
         ~validate: values => option(string),
+        ~initialState: Config.state,
         children
       ) => {
     ...component,
-    initialState: () => {values: Config.initialState, error: None, isSubmitting: false},
+    initialState: () => {values: initialState, error: None, isSubmitting: false},
     reducer: (action, state) =>
       switch action {
       | HandleSubmitting(isSubmitting) => ReasonReact.Update({...state, isSubmitting})
