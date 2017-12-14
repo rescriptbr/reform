@@ -13,7 +13,6 @@ module SignInFormParams = {
     password: string,
     email: string
   };
-  let initialState = {password: "", email: ""};
   type fields = [ | `password | `email ];
   let handleChange = (action, state) =>
     switch action {
@@ -34,7 +33,11 @@ let make = (~signInMutation, _children) => {
       | _ => None
     }
 
-    <ReForm onSubmit=((values, ~setError, ~setSubmitting) => whatever(values, ~setError, ~setSubmitting)) validate>
+    <ReForm
+      initialState={password: "", email: ""}
+      onSubmit=((values, ~setError, ~setSubmitting) => whatever(values, ~setError, ~setSubmitting))
+      validate
+    >
       (
         (~form, ~handleChange, ~handleSubmit) =>
           <FormWrapper>
