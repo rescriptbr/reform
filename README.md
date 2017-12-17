@@ -21,9 +21,9 @@ module SignInFormParams = {
     };
 };
 
-module ReForm = ReForm.Create(SignInFormParams);
+module SignInForm = ReForm.Create(SignInFormParams);
 
-let component = ReasonReact.statelessComponent("SignInForm");
+let component = ReasonReact.statelessComponent("SignIn");
 
 let make = (~signInMutation, _children) => {
   ...component,
@@ -31,9 +31,9 @@ let make = (~signInMutation, _children) => {
     let validate: SignInFormParams.state => option(string) = (values) => switch values {
       | { password: "12345" } => Some("Sorry, can't do")
       | _ => None
-    }
+    };
 
-    <ReForm
+    <SignInForm
       initialState={password: "", email: ""}
       onSubmit=((values, ~setError, ~setSubmitting) => whatever(values, ~setError, ~setSubmitting))
       validate
@@ -66,7 +66,7 @@ let make = (~signInMutation, _children) => {
             <RaisedButton text="Sign in" onPress=handleSubmit/>
             </FormWrapper>
       )
-    </ReForm>
+    </SignInForm>
   }
 }
 ```
