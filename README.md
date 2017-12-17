@@ -38,7 +38,7 @@ let make = (~signInMutation, _children) => {
       onSubmit=((values, ~setError, ~setSubmitting) => whatever(values, ~setError, ~setSubmitting))
       validate
     >
-      (
+      ...(
         (~form, ~handleChange, ~handleSubmit) =>
           <FormWrapper>
             <ErrorWarn error=form.error/>
