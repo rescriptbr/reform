@@ -1,7 +1,7 @@
 # ReForm.re
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/Astrocoders/bs-package-boilerplate.svg)](https://greenkeeper.io/)
-[![Build Status](https://travis-ci.org/Astrocoders/bs-package-boilerplate.svg?branch=master)](https://travis-ci.org/Astrocoders/bs-package-boilerplate)
+[![Greenkeeper badge](https://badges.greenkeeper.io/Astrocoders/reform.svg)](https://greenkeeper.io/)
+[![Build Status](https://travis-ci.org/Astrocoders/reform.svg?branch=master)](https://travis-ci.org/Astrocoders/reform)
 
 Reasonably making forms sound good again
 
@@ -49,6 +49,9 @@ let make = (~signInMutation, _children) => {
                 placeholder="Email"
                 style=fieldsStyle
                 placeholderTextColor=AppTheme.Colors.blackLight
+                /* handleChange signature is (fields, string) => unit, so you can use right away with RN and React Web.
+                ** Just make an abstraction above to not give it an event and just the value
+                */
                 onChangeText=handleChange(`email)
               />
               <FormField
