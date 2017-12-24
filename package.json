@@ -1,16 +1,16 @@
 {
   "name": "bs-reform",
-  "version": "2.0.5",
+  "version": "2.0.6",
   "description": "Reasonably making forms sound good again",
   "main": "lib/js/re/ReForm.js",
   "repository": "git@github.com:Astrocoders/reform.git",
-	"homepage": "https://github.com/Astrocoders/reform#readme",
-	"bugs": "https://github.com/Astrocoders/reform/issues",
-	"keywords": [
-		"reason",
-		"bucklescript",
-		"react",
-		"form"
+  "homepage": "https://github.com/Astrocoders/reform#readme",
+  "bugs": "https://github.com/Astrocoders/reform/issues",
+  "keywords": [
+    "reason",
+    "bucklescript",
+    "react",
+    "form"
   ],
   "author": "Gabriel R. Abreu <grsabreu@gmail.com>",
   "license": "MIT",
