@@ -34,36 +34,52 @@ module Create =
         children
       ) => {
     ...component,
-    initialState: () => {values: initialState, error: None, isSubmitting: false},
+    initialState: () => {
+      values: initialState,
+      error: None,
+      isSubmitting: false
+    },
     reducer: (action, state) =>
-      switch action {
-      | HandleSubmitting(isSubmitting) => ReasonReact.Update({...state, isSubmitting})
-      | HandleError(error) => ReasonReact.Update({...state, isSubmitting: false, error})
+      switch (action) {
+      | HandleSubmitting(isSubmitting) =>
+        ReasonReact.Update({...state, isSubmitting})
+      | HandleError(error) =>
+        ReasonReact.Update({...state, isSubmitting: false, error})
       | HandleChange((field, value)) =>
-        ReasonReact.Update({...state, values: Config.handleChange((field, value), state.values)})
+        ReasonReact.Update({
+          ...state,
+          values: Config.handleChange((field, value), state.values)
+        })
       | HandleSubmit =>
         ReasonReact.UpdateWithSideEffects(
           {...state, isSubmitting: true},
           (
-            (self) =>
+            self =>
               onSubmit(
                 state.values,
-                ~setSubmitting=self.reduce((isSubmitting) => HandleSubmitting(isSubmitting)),
-                ~setError=self.reduce((error) => HandleError(error))
+                ~setSubmitting=
+                  isSubmitting => self.send(HandleSubmitting(isSubmitting)),
+                ~setError=error => self.send(HandleError(error))
               )
           )
         )
       },
-    render: (self) => {
-      let handleChange = (field) => self.reduce((value) => HandleChange((field, value)));
-      let handleValidation = self.reduce((error) => HandleError(error));
-      let handleFormSubmit = self.reduce((_) => HandleSubmit);
+    render: self => {
+      let handleChange = (field, value) =>
+        self.send(HandleChange((field, value)));
+      let handleValidation = error => self.send(HandleError(error));
+      let handleFormSubmit = (_) => self.send(HandleSubmit);
       let handleSubmit = (_) => {
         let validationError = validate(self.state.values);
         handleValidation(validationError);
-        validationError == None ? handleFormSubmit() : ignore()
+        validationError == None ? handleFormSubmit() : ignore();
       };
-      children(~form=self.state, ~handleChange, ~handleSubmit, ~handleValidation)
+      children(
+        ~form=self.state,
+        ~handleChange,
+        ~handleSubmit,
+        ~handleValidation
+      );
     }
   };
 };

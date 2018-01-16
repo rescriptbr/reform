@@ -10,6 +10,16 @@ bs-platform@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/bs-platform/-/bs-platform-2.1.0.tgz#63560ff8f7142c9c0631559df1c35590b9f6d8b2"
 
+"bs-platform@github:bsansouci/bsb-native#2.1.1":
+  version "2.1.1"
+  resolved "https://codeload.github.com/bsansouci/bsb-native/tar.gz/d76155b709dba032cdb11e99ebe0e2c37bcb2c85"
+  dependencies:
+    yauzl "^2.9.1"
+
+buffer-crc32@~0.2.3:
+  version "0.2.13"
+  resolved "https://registry.yarnpkg.com/buffer-crc32/-/buffer-crc32-0.2.13.tgz#0d333e3f00eac50aa1454abd30ef8c2a5d9a7242"
+
 core-js@^1.0.0:
   version "1.2.7"
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-1.2.7.tgz#652294c14651db28fa93bd2d5ff2983a4f08c636"
@@ -31,6 +41,12 @@ fbjs@^0.8.16:
     promise "^7.1.1"
     setimmediate "^1.0.5"
     ua-parser-js "^0.7.9"
+
+fd-slicer@~1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/fd-slicer/-/fd-slicer-1.0.1.tgz#8b5bcbd9ec327c5041bf9ab023fd6750f1177e65"
+  dependencies:
+    pend "~1.2.0"
 
 iconv-lite@~0.4.13:
   version "0.4.19"
@@ -68,6 +84,10 @@ object-assign@^4.1.0, object-assign@^4.1.1:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/object-assign/-/object-assign-4.1.1.tgz#2109adc7965887cfc05cbbd442cac8bfbb360863"
 
+pend@~1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/pend/-/pend-1.2.0.tgz#7a57eb550a6783f9115331fcf4663d5c8e007a50"
+
 promise@^7.1.1:
   version "7.3.1"
   resolved "https://registry.yarnpkg.com/promise/-/promise-7.3.1.tgz#064b72602b18f90f29192b8b1bc418ffd1ebd3bf"
@@ -100,9 +120,9 @@ prop-types@^15.6.0:
     object-assign "^4.1.1"
     prop-types "^15.6.0"
 
-reason-react@^0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/reason-react/-/reason-react-0.3.0.tgz#c3ad272ed2dd2757f6934fcaacba9b192b891f57"
+reason-react@^0.3.1:
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/reason-react/-/reason-react-0.3.1.tgz#55d5fcd07825299ce5d04f99e763bf2af1f9e0f2"
   dependencies:
     react ">=15.0.0 || >=16.0.0"
     react-dom ">=15.0.0 || >=16.0.0"
@@ -115,6 +135,19 @@ ua-parser-js@^0.7.9:
   version "0.7.17"
   resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-0.7.17.tgz#e9ec5f9498b9ec910e7ae3ac626a805c4d09ecac"
 
+"upgrade-reason-react-to-031@git+https://github.com/chenglou/upgrade-reason-react-to-031.git":
+  version "0.0.1"
+  resolved "git+https://github.com/chenglou/upgrade-reason-react-to-031.git#94703e5ddc4d91158845a23ae17d9e1b049502c2"
+  dependencies:
+    bs-platform "github:bsansouci/bsb-native#2.1.1"
+
 whatwg-fetch@>=0.10.0:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/whatwg-fetch/-/whatwg-fetch-2.0.3.tgz#9c84ec2dcf68187ff00bc64e1274b442176e1c84"
+
+yauzl@^2.9.1:
+  version "2.9.1"
+  resolved "https://registry.yarnpkg.com/yauzl/-/yauzl-2.9.1.tgz#a81981ea70a57946133883f029c5821a89359a7f"
+  dependencies:
+    buffer-crc32 "~0.2.3"
+    fd-slicer "~1.0.1"
