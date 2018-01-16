@@ -59,5 +59,4 @@ typings/
 
 # BS
 .merlin
-lib/bs
-lib/ocaml
+lib/

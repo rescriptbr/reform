@@ -22,6 +22,6 @@
   },
   "peerDependencies": {
     "bs-platform": "^2.1.0",
-    "reason-react": "^0.3.0"
+    "reason-react": "^0.3.1"
   }
 }
