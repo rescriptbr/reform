@@ -102,7 +102,7 @@ module Create =
           self.state.errors
           |> List.filter(((fieldName, _)) => fieldName === field)
           |> List.map(((_, error)) => error)
-          |> List.hd;
+          |> (finalList) => List.length(finalList) == 0 ? None : List.hd(finalList);
       children(
         ~form=self.state,
         ~handleChange,
