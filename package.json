@@ -1,8 +1,7 @@
 {
   "name": "bs-reform",
-  "version": "2.0.6",
+  "version": "3.0.0",
   "description": "Reasonably making forms sound good again",
-  "main": "lib/js/re/ReForm.js",
   "repository": "git@github.com:Astrocoders/reform.git",
   "homepage": "https://github.com/Astrocoders/reform#readme",
   "bugs": "https://github.com/Astrocoders/reform/issues",
@@ -22,6 +21,6 @@
   },
   "peerDependencies": {
     "bs-platform": "^2.1.0",
-    "reason-react": "^0.3.0"
+    "reason-react": "^0.3.1"
   }
 }
