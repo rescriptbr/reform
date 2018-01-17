@@ -1,5 +1,47 @@
+/* Validation types */
+module Validation = {
+  module I18n = {
+    type dictionary = {
+      required: string,
+      email: string
+    };
+    let ptBR = {
+      required: {j|Campo obrigatório|j},
+      email: {j|Email inválido|j},
+    };
+    let en = {
+      required: "Field is required",
+      email: "Invalid email"
+    };
+    type dict = [ | `ptBR | `en ];
+    let getDict = dict => switch (dict) {
+      | `ptBR => ptBR
+      | `en => en
+    }
+  };
+
+  type validation('values) =
+    | Required
+    | Email
+    | Custom('values => option(string));
+
+  let getValidationError = ((_, _, validator), ~values, ~value, ~i18n) => {
+    let dictionary = I18n.getDict(i18n);
+    switch validator {
+    | Required => String.length(value) < 1 ? Some(dictionary.required) : None
+    | Custom(fn) => fn(values)
+    | Email => Js.Re.test(value, [%bs.re {|/\S+@\S+\.\S+/|}]) ? None : Some(dictionary.required)
+    }
+  };
+};
+
+module type Config = {
+  type state;
+  type fields;
+  let handleChange: ((fields, string), state) => state;
+};
 module Create =
-       (Config: {type state; type fields; let handleChange: ((fields, string), state) => state;}) => {
+       (Config: Config) => {
   /* TODO: Make a variant out of this */
   type value = string;
   /* Form actions */
@@ -11,22 +53,13 @@ module Create =
     | HandleChange((Config.fields, value))
     | HandleSubmit;
   type values = Config.state;
-  /* Validation types */
-  type validation =
-    | Required
-    | Email
-    | Custom(values => option(string));
   type fieldGetter = (values) => value;
-  type schema = list((Config.fields, fieldGetter, validation));
-  let validateField: (Config.fields, values, value, schema) => option(string) =
-    (field, values, value, schema) => {
-      let fieldValidation =
+  type schema = list((Config.fields, fieldGetter, Validation.validation(values)));
+  let validateField: (Config.fields, values, value, schema, Validation.I18n.dict) => option(string) =
+    (field, values, value, schema, i18n) => {
+      let fieldSchema =
         schema |> List.filter(((fieldName, _, _)) => fieldName === field) |> List.hd;
-      switch fieldValidation {
-      | (_, _, Required) => String.length(value) < 1 ? Some("Field is required") : None
-      | (_, _, Custom(fn)) => fn(values)
-      | _ => None
-      }
+      Validation.getValidationError(fieldSchema, ~values, ~value, ~i18n);
     };
   type state = {
     values,
@@ -47,6 +80,7 @@ module Create =
         ~validate: values => option(string)=(_) => None,
         ~initialState: Config.state,
         ~schema: schema,
+        ~i18n: Validation.I18n.dict=`en,
         children
       ) => {
     ...component,
@@ -62,7 +96,7 @@ module Create =
           errors:
             state.errors
             |> List.filter(((fieldName, _)) => fieldName !== field)
-            |> List.append([(field, validateField(field, state.values, value, schema))])
+            |> List.append([(field, validateField(field, state.values, value, schema, i18n))])
         })
       | HandleChange((field, value)) =>
         ReasonReact.UpdateWithSideEffects(
@@ -89,7 +123,7 @@ module Create =
       let handleSubmit = (_) => {
         let globalValidationError = validate(self.state.values);
         let fieldsValidationErrors = schema
-          |> List.map(((fieldName, getter, _)) => (fieldName, validateField(fieldName, self.state.values, getter(self.state.values), schema)))
+          |> List.map(((fieldName, getter, _)) => (fieldName, validateField(fieldName, self.state.values, getter(self.state.values), schema, i18n)))
           |> List.filter((( _, fieldError )) => fieldError === None);
 
         self.send(SetFieldsErrors(fieldsValidationErrors));
