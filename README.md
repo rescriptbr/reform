@@ -35,6 +35,10 @@ let make = (~signInMutation, _children) => {
 
     <SignInForm
       initialState={password: "", email: ""}
+      schema=[
+        (`password, state => state.password, Required),
+        (`email, state => state.email, Required),
+      ]
       onSubmit=((values, ~setError, ~setSubmitting) => whatever(values, ~setError, ~setSubmitting))
       validate
     >
