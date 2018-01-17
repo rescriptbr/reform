@@ -28,18 +28,16 @@ let component = ReasonReact.statelessComponent("SignIn");
 let make = (~signInMutation, _children) => {
   ...component,
   render: (_) => {
-    let validate: SignInFormParams.state => option(string) = (values) => switch values {
-      | { password: "12345" } => Some("Sorry, can't do")
-      | _ => None
-    };
-
     <SignInForm
       initialState={password: "", email: ""}
+      schema=[
+        (`password, state => state.password, Required),
+        (`email, state => state.email, Required),
+      ]
       onSubmit=((values, ~setError, ~setSubmitting) => whatever(values, ~setError, ~setSubmitting))
-      validate
     >
       ...(
-        (~form, ~handleChange, ~handleSubmit) =>
+        (~form, ~handleChange, ~handleSubmit, ~handleValidation as _, ~getErrorForField) =>
           <FormWrapper>
             <ErrorWarn error=form.error/>
             <FieldsWrapper>
@@ -54,6 +52,8 @@ let make = (~signInMutation, _children) => {
                 */
                 onChangeText=handleChange(`email)
               />
+              /* getErrorForField returns a option(string) */
+              <ErrorText value=getErrorForField(`password)/>
               <FormField
                 fieldType=FormField.TextField
                 placeholder="Password"
