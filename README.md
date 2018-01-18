@@ -84,3 +84,25 @@ let make = (~signInMutation, _children) => {
   }
 }
 ```
+
+## Schema
+
+ReForm accepts a validation schema that looks like 
+```reason
+[
+  (fieldName, getter, validator)
+]
+```
+or
+
+```reason
+[
+  (`email, s => s.email, Email)
+]
+```
+
+### Available validators
+
+-* *Custom(state => option(string))*
+- *Required*
+- *Email*
