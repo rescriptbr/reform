@@ -13,11 +13,6 @@ module Validation = {
       required: "Field is required",
       email: "Invalid email"
     };
-    type dict = [ | `ptBR | `en ];
-    let getDict = dict => switch (dict) {
-      | `ptBR => ptBR
-      | `en => en
-    }
   };
 
   type validation('values) =
@@ -25,13 +20,24 @@ module Validation = {
     | Email
     | Custom('values => option(string));
 
-  let getValidationError = ((_, _, validator), ~values, ~value, ~i18n) => {
-    let dictionary = I18n.getDict(i18n);
+  let getValidationError = ((_, _, validator), ~values, ~value, ~i18n: I18n.dictionary) => {
     switch validator {
-    | Required => String.length(value) < 1 ? Some(dictionary.required) : None
+    | Required => String.length(value) < 1 ? Some(i18n.required) : None
     | Custom(fn) => fn(values)
-    | Email => Js.Re.test(value, [%bs.re {|/\S+@\S+\.\S+/|}]) ? None : Some(dictionary.required)
+    | Email => Js.Re.test(value, [%bs.re {|/\S+@\S+\.\S+/|}]) ? None : Some(i18n.email)
     }
+  };
+};
+
+module Helpers = {
+  let handleDomFormChange = (handleChange, event) => {
+    handleChange(
+      ReactDOMRe.domElementToObj(ReactEventRe.Form.target(event))##value
+    )
+  };
+  let handleDomFormSubmit = (handleSubmit, event) => {
+    ReactEventRe.Synthetic.preventDefault(event);
+    handleSubmit(())
   };
 };
 
@@ -55,7 +61,7 @@ module Create =
   type values = Config.state;
   type fieldGetter = (values) => value;
   type schema = list((Config.fields, fieldGetter, Validation.validation(values)));
-  let validateField: (Config.fields, values, value, schema, Validation.I18n.dict) => option(string) =
+  let validateField: (Config.fields, values, value, schema, Validation.I18n.dictionary) => option(string) =
     (field, values, value, schema, i18n) => {
       let fieldSchema =
         schema |> List.filter(((fieldName, _, _)) => fieldName === field) |> List.hd;
@@ -80,7 +86,7 @@ module Create =
         ~validate: values => option(string)=(_) => None,
         ~initialState: Config.state,
         ~schema: schema,
-        ~i18n: Validation.I18n.dict=`en,
+        ~i18n: Validation.I18n.dictionary=Validation.I18n.en,
         children
       ) => {
     ...component,
@@ -124,12 +130,12 @@ module Create =
         let globalValidationError = validate(self.state.values);
         let fieldsValidationErrors = schema
           |> List.map(((fieldName, getter, _)) => (fieldName, validateField(fieldName, self.state.values, getter(self.state.values), schema, i18n)))
-          |> List.filter((( _, fieldError )) => fieldError === None);
+          |> List.filter((( _, fieldError )) => fieldError !== None);
 
         self.send(SetFieldsErrors(fieldsValidationErrors));
 
         handleValidation(globalValidationError);
-        globalValidationError === None || List.length(fieldsValidationErrors) == 0 ? handleFormSubmit() : ignore()
+        globalValidationError === None && List.length(fieldsValidationErrors) == 0 ? handleFormSubmit() : ignore()
       };
       let getErrorForField: Config.fields => option(string) =
         (field) =>
