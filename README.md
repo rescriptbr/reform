@@ -35,7 +35,7 @@ let make = (~signInMutation, _children) => {
       initialState={password: "", email: ""}
       schema=[
         (`password, state => state.password, Required),
-        (`email, state => state.email, Required),
+        (`email, state => state.email, Email),
       ]
       onSubmit=((values, ~setError, ~setSubmitting) => whatever(values, ~setError, ~setSubmitting))
     >
