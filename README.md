@@ -103,7 +103,7 @@ or
 
 ### Available validators
 
-- *_*Custom(state => option(string))*_
+- _Custom(state => option(string))_
 ```reason
 (`password, s => s.password, Custom(values => values.password == "123" ? Some("Really?") : None))
 ```
