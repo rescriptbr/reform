@@ -16,6 +16,7 @@ module SignInFormParams = {
     email: string
   };
   type fields = [ | `password | `email ];
+  /* This will probably be a tuple of getters/setters in the next release */
   let handleChange = (action, state) =>
     switch action {
     | (`password, value) => {...state, password: value}
@@ -39,7 +40,18 @@ let make = (~signInMutation, _children) => {
       onSubmit=((values, ~setError, ~setSubmitting) => whatever(values, ~setError, ~setSubmitting))
     >
       ...(
-        (~form, ~handleChange, ~handleSubmit, ~handleValidation as _, ~getErrorForField) =>
+        (
+           /* this is { values, errors, error }
+           * the form.error value is used if you need a global error, submitting error for instance
+           */
+          ~form,
+          ~handleChange,
+          ~handleSubmit,
+          /* This sets the value of form.error */
+          ~handleValidation as _,
+          /* A helper to get any field error */
+          ~getErrorForField
+        ) =>
           <FormWrapper>
             <ErrorWarn error=form.error/>
             <FieldsWrapper>
@@ -66,7 +78,7 @@ let make = (~signInMutation, _children) => {
               />
             </FieldsWrapper>
             <RaisedButton text="Sign in" onPress=handleSubmit/>
-            </FormWrapper>
+          </FormWrapper>
       )
     </SignInForm>
   }
