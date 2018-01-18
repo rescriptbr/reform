@@ -7,6 +7,8 @@ Reasonably making forms sound good again
 
 ## Usage
 
+Checkout `demo/src/app.re` also
+
 ```reason
 module SignInFormParams = {
   type state = {
