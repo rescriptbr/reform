@@ -103,6 +103,15 @@ or
 
 ### Available validators
 
--* *Custom(state => option(string))*
-- *Required*
-- *Email*
+- *_*Custom(state => option(string))*_
+```reason
+(`password, s => s.password, Custom(values => values.password == "123" ? Some("Really?") : None))
+```
+- _Required_
+```reason
+(`fullName, s => s.fullName, Required)
+```
+- _Email_
+```reason
+(`email, s => s.email, Email)
+```
