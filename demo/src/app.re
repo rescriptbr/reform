@@ -9,12 +9,11 @@ module SignUpParams = {
     password: string
   };
   type fields = [ | `email | `password | `confirmPassword];
-  let handleChange = (action, state) =>
-    switch action {
-    | (`email, value) => {...state, email: value}
-    | (`password, value) => {...state, password: value}
-    | (`confirmPassword, value) => {...state, confirmPassword: value}
-    };
+  let lens = [
+    (`email, (s) => s.email, (s, email) => { ...s, email }),
+    (`password, (s) => s.password, (s, password) => { ...s, password }),
+    (`confirmPassword, (s) => s.confirmPassword, (s, confirmPassword) => { ...s, confirmPassword }),
+  ];
 };
 
 let defaults = (value, maybe) =>
@@ -44,11 +43,10 @@ let make = (~message, _children) => {
         )
         initialState={email: "", password: "", confirmPassword: ""}
         schema=[
-          (`email, s => s.email, Email),
-          (`password, s => s.password, Required),
+          (`email, Email),
+          (`password, Required),
           (
             `confirmPassword,
-            s => s.confirmPassword,
             Custom(
               s =>
                 s.confirmPassword !== s.password ?
