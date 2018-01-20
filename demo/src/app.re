@@ -9,6 +9,7 @@ module SignUpParams = {
     password: string
   };
   type fields = [ | `email | `password | `confirmPassword];
+  /* (fieldName, getter, setter) */
   let lens = [
     (`email, (s) => s.email, (s, email) => { ...s, email }),
     (`password, (s) => s.password, (s, password) => { ...s, password }),
