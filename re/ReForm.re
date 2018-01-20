@@ -7,49 +7,49 @@ module Validation = {
     };
     let ptBR = {
       required: {j|Campo obrigatório|j},
-      email: {j|Email inválido|j},
+      email: {j|Email inválido|j}
     };
-    let en = {
-      required: "Field is required",
-      email: "Invalid email"
-    };
+    let en = {required: "Field is required", email: "Invalid email"};
   };
-
   type validation('values) =
     | Required
     | Email
     | Custom('values => option(string));
-
-  let getValidationError = ((_, _, validator), ~values, ~value, ~i18n: I18n.dictionary) => {
+  let getValidationError =
+      ((_, validator), ~values, ~value, ~i18n: I18n.dictionary) =>
     switch validator {
     | Required => String.length(value) < 1 ? Some(i18n.required) : None
     | Custom(fn) => fn(values)
-    | Email => Js.Re.test(value, [%bs.re {|/\S+@\S+\.\S+/|}]) ? None : Some(i18n.email)
-    }
-  };
+    | Email =>
+      Js.Re.test(value, [%bs.re {|/\S+@\S+\.\S+/|}]) ? None : Some(i18n.email)
+    };
 };
 
 module Helpers = {
-  let handleDomFormChange = (handleChange, event) => {
+  let handleDomFormChange = (handleChange, event) =>
     handleChange(
       ReactDOMRe.domElementToObj(ReactEventRe.Form.target(event))##value
-    )
-  };
+    );
   let handleDomFormSubmit = (handleSubmit, event) => {
     ReactEventRe.Synthetic.preventDefault(event);
-    handleSubmit(())
+    handleSubmit();
   };
+};
+
+module Value = {
+  type t = string;
 };
 
 module type Config = {
   type state;
   type fields;
-  let handleChange: ((fields, string), state) => state;
+  /* (fieldName, setter, getter) */
+  let lens: list((fields, state => Value.t, (state, Value.t) => state));
 };
-module Create =
-       (Config: Config) => {
+
+module Create = (Config: Config) => {
   /* TODO: Make a variant out of this */
-  type value = string;
+  type value = Value.t;
   /* Form actions */
   type action =
     | HandleSubmitting(bool)
@@ -59,14 +59,33 @@ module Create =
     | HandleChange((Config.fields, value))
     | HandleSubmit;
   type values = Config.state;
-  type fieldGetter = (values) => value;
-  type schema = list((Config.fields, fieldGetter, Validation.validation(values)));
-  let validateField: (Config.fields, values, value, schema, Validation.I18n.dictionary) => option(string) =
-    (field, values, value, schema, i18n) => {
-      let fieldSchema =
-        schema |> List.filter(((fieldName, _, _)) => fieldName === field) |> List.hd;
-      Validation.getValidationError(fieldSchema, ~values, ~value, ~i18n);
+
+  type schema =
+    list((Config.fields, Validation.validation(values)));
+
+  module Field = {
+    let getFieldLens: (Config.fields) => (Config.fields, Config.state => value, (Config.state, value) => Config.state) = (field) => {
+      /* TODO handle exception */
+      Config.lens
+      |> List.find(((fieldName, _, _)) => fieldName === field);
     };
+    let validateField:
+      (Config.fields, values, value, schema, Validation.I18n.dictionary) =>
+      option(string) =
+      (field, values, value, schema, i18n) => {
+        let fieldSchema =
+          schema
+          |> List.filter(((fieldName, _)) => fieldName === field)
+          |> List.hd;
+        Validation.getValidationError(fieldSchema, ~values, ~value, ~i18n);
+      };
+
+    let handleChange: ((Config.fields, value), values) => values = ((field, value), values) => {
+      let (_, _, setter) = getFieldLens(field);
+      setter(values, value)
+    };
+  };
+
   type state = {
     values,
     isSubmitting: bool,
@@ -90,66 +109,104 @@ module Create =
         children
       ) => {
     ...component,
-    initialState: () => {values: initialState, error: None, isSubmitting: false, errors: []},
+    initialState: () => {
+      values: initialState,
+      error: None,
+      isSubmitting: false,
+      errors: []
+    },
     reducer: (action, state) =>
       switch action {
-      | HandleSubmitting(isSubmitting) => ReasonReact.Update({...state, isSubmitting})
-      | HandleError(error) => ReasonReact.Update({...state, isSubmitting: false, error})
-      | SetFieldsErrors(errors) => ReasonReact.Update({...state, isSubmitting: false, errors})
+      | HandleSubmitting(isSubmitting) =>
+        ReasonReact.Update({...state, isSubmitting})
+      | HandleError(error) =>
+        ReasonReact.Update({...state, isSubmitting: false, error})
+      | SetFieldsErrors(errors) =>
+        ReasonReact.Update({...state, isSubmitting: false, errors})
       | HandleFieldValidation((field, value)) =>
         ReasonReact.Update({
           ...state,
           errors:
             state.errors
             |> List.filter(((fieldName, _)) => fieldName !== field)
-            |> List.append([(field, validateField(field, state.values, value, schema, i18n))])
+            |> List.append([
+                 (
+                   field,
+                   Field.validateField(field, state.values, value, schema, i18n)
+                 )
+               ])
         })
       | HandleChange((field, value)) =>
         ReasonReact.UpdateWithSideEffects(
-          {...state, values: Config.handleChange((field, value), state.values)},
-          ((self) => self.reduce((_) => HandleFieldValidation((field, value)), ()))
+          {
+            ...state,
+            values: Field.handleChange((field, value), state.values)
+          },
+          (
+            self =>
+              self.reduce((_) => HandleFieldValidation((field, value)), ())
+          )
         )
       | HandleSubmit =>
         ReasonReact.UpdateWithSideEffects(
           {...state, isSubmitting: true},
           (
-            (self) =>
+            self =>
               onSubmit(
                 state.values,
-                ~setSubmitting=(isSubmitting) => self.send(HandleSubmitting(isSubmitting)),
-                ~setError=(error) => self.send(HandleError(error))
+                ~setSubmitting=
+                  isSubmitting => self.send(HandleSubmitting(isSubmitting)),
+                ~setError=error => self.send(HandleError(error))
               )
           )
         )
       },
-    render: (self) => {
-      let handleChange = (field, value) => self.send(HandleChange((field, value)));
-      let handleValidation = (error) => self.send(HandleError(error));
+    render: self => {
+      let handleChange = (field, value) =>
+        self.send(HandleChange((field, value)));
+      let handleValidation = error => self.send(HandleError(error));
       let handleFormSubmit = (_) => self.send(HandleSubmit);
       let handleSubmit = (_) => {
         let globalValidationError = validate(self.state.values);
-        let fieldsValidationErrors = schema
-          |> List.map(((fieldName, getter, _)) => (fieldName, validateField(fieldName, self.state.values, getter(self.state.values), schema, i18n)))
-          |> List.filter((( _, fieldError )) => fieldError !== None);
-
+        let fieldsValidationErrors =
+          schema
+            |> List.map(((fieldName, _)) => {
+              let (_, getter, _) = Field.getFieldLens(fieldName);
+               (
+                 fieldName,
+                 Field.validateField(
+                   fieldName,
+                   self.state.values,
+                   getter(self.state.values),
+                   schema,
+                   i18n
+                 )
+               )
+              }
+             )
+          |> List.filter(((_, fieldError)) => fieldError !== None);
         self.send(SetFieldsErrors(fieldsValidationErrors));
-
         handleValidation(globalValidationError);
-        globalValidationError === None && List.length(fieldsValidationErrors) == 0 ? handleFormSubmit() : ignore()
+        globalValidationError === None
+        && List.length(fieldsValidationErrors) == 0 ?
+          handleFormSubmit() : ignore();
       };
       let getErrorForField: Config.fields => option(string) =
-        (field) =>
+        field =>
           self.state.errors
           |> List.filter(((fieldName, _)) => fieldName === field)
           |> List.map(((_, error)) => error)
-          |> (finalList) => List.length(finalList) == 0 ? None : List.hd(finalList);
+          |> (
+            finalList =>
+              List.length(finalList) == 0 ? None : List.hd(finalList)
+          );
       children(
         ~form=self.state,
         ~handleChange,
         ~handleSubmit,
         ~handleValidation,
         ~getErrorForField
-      )
+      );
     }
   };
 };

@@ -10,32 +10,32 @@ Reasonably making forms sound good again
 Checkout `demo/src/app.re` also
 
 ```reason
-module SignInFormParams = {
+module SignUpFormParams = {
   type state = {
     password: string,
     email: string
   };
-  type fields = [ | `password | `email ];
-  /* This will probably be a tuple of getters/setters in the next release */
-  let handleChange = (action, state) =>
-    switch action {
-    | (`password, value) => {...state, password: value}
-    | (`email, value) => {...state, email: value}
-    };
+  type fields = [ | `password | `email | `confirmPassword];
+  /* (fieldName, getter, setter) */
+  let lens = [
+    (`email, (s) => s.email, (s, email) => { ...s, email }),
+    (`password, (s) => s.password, (s, password) => { ...s, password }),
+    (`confirmPassword, (s) => s.confirmPassword, (s, confirmPassword) => { ...s, confirmPassword }),
+  ];
 };
 
-module SignInForm = ReForm.Create(SignInFormParams);
+module SignUpForm = ReForm.Create(SignUpFormParams);
 
-let component = ReasonReact.statelessComponent("SignIn");
+let component = ReasonReact.statelessComponent("SignUp");
 
 let make = (~signInMutation, _children) => {
   ...component,
   render: (_) => {
-    <SignInForm
+    <SignUpForm
       initialState={password: "", email: ""}
       schema=[
-        (`password, state => state.password, Required),
-        (`email, state => state.email, Email),
+        (`password, Required),
+        (`email, Email),
       ]
       onSubmit=((values, ~setError, ~setSubmitting) => whatever(values, ~setError, ~setSubmitting))
     >
@@ -76,11 +76,12 @@ let make = (~signInMutation, _children) => {
                 style=fieldsStyle
                 placeholderTextColor=AppTheme.Colors.blackLight
               />
+              etc
             </FieldsWrapper>
             <RaisedButton text="Sign in" onPress=handleSubmit/>
           </FormWrapper>
       )
-    </SignInForm>
+    </SignUpForm>
   }
 }
 ```
