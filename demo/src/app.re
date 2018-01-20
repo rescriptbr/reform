@@ -32,13 +32,11 @@ let make = (~message, _children) => {
   render: _self =>
     <div className="App">
       <div className="App-header">
-        <img src=logo className="App-logo" alt="logo" />
+        <img src="https://astrocoders.com/images/hero/logo.png" className="App-logo" alt="logo" />
         <h2> (ReasonReact.stringToElement(message)) </h2>
       </div>
       <p className="App-intro">
-        (ReasonReact.stringToElement("To get started, edit"))
-        <code> (ReasonReact.stringToElement(" src/app.re ")) </code>
-        (ReasonReact.stringToElement("and save to reload."))
+        (ReasonReact.stringToElement("Say hello to ReForm"))
       </p>
       <SignUpForm
         onSubmit=(
