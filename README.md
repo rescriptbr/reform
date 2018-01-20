@@ -5,6 +5,21 @@
 
 Reasonably making forms sound good again
 
+
+## Installation
+
+```
+yarn add bs-reform
+```
+
+Then add it to bsconfig.json
+
+```
+"bs-dependencies": [
+ "bs-reform"
+]
+```
+
 ## Usage
 
 Checkout `demo/src/app.re` also
