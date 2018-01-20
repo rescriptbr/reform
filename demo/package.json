@@ -14,6 +14,7 @@
     "eject": "react-scripts eject",
     "prepare": "npm link bs-platform"
   },
+  "homepage": "https://astrocoders.github.io/bs-reform",
   "devDependencies": {
     "bs-jest": "^0.3.2",
     "reason-react": "^0.3.1",
