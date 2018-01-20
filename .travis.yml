@@ -15,3 +15,8 @@ notifications:
 
 script:
   - npm test
+  - git config --global user.email "grsabreu@users.noreply.github.com"
+  - git config --global user.name "Gabriel Bot"
+  - echo "machine github.com login grsabreu password $GITHUB_TOKEN" > ~/.netrc
+  - cd website && yarn install && GIT_USER=grsabreu npm run publish-gh-pages
+
