@@ -35,4 +35,4 @@ echo "\033[1;31mPushing new site to GitHub repo\n\033[0m"
 git push --force origin $GH_PAGES_BRANCH
 
 # Get back to develop
-git checkout develop
+git checkout master
