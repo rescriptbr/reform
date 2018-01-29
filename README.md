@@ -131,3 +131,7 @@ or
 ```reason
 (`email, s => s.email, Email)
 ```
+
+#### Any doubts?
+
+If you have any doubts don't hesitate to reach out the wonderful https://discord.gg/reasonml
