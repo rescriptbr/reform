@@ -3,8 +3,23 @@
 [![Greenkeeper badge](https://badges.greenkeeper.io/Astrocoders/reform.svg)](https://greenkeeper.io/)
 [![Build Status](https://travis-ci.org/Astrocoders/reform.svg?branch=master)](https://travis-ci.org/Astrocoders/reform)
 
-Reasonably making forms sound good again
+![ReForm demo](./website/static/img/fulldemo.png)
 
+Reasonably making forms sound good again (pun 100% intended)
+
+* [Installation](#installation)
+* [What this is and why](#what-this-is-and-why)
+* [Quick usage](#usage)
+* [API](#api)
+  * [Component params](#component-params)
+  * [onSubmit](#onsubmit-param)
+  * [Schema](#schema)
+  * [Available validators](#available-validators)
+  * [reform.form](#form)
+  * [reform.getErrorForField](#geterrorforfield-configfields--optionsstring)
+  * [reform.handleSubmit](#handlesubmit-unit--unit)
+  * [reform.handleChange](#handlechange-configfields-string--unit)
+  * [reform.handleGlobalValidation](#handleglobalvalidation-optionstring--unit)
 
 ## Installation
 
@@ -19,6 +34,11 @@ Then add it to bsconfig.json
  "bs-reform"
 ]
 ```
+
+## What this is and why
+Dealing with forms directly can scalate really quickly to a hell when not using the right approach.
+We created ReForm to be both deadly simple and to make forms sound good leveraging ReasonML's powerful typesytem.
+Even the schemas we use are nothing more than constructors built-in in the language itself with a small size footprint.
 
 ## Usage
 
@@ -55,18 +75,12 @@ let make = (~signInMutation, _children) => {
       onSubmit=((values, ~setError, ~setSubmitting) => whatever(values, ~setError, ~setSubmitting))
     >
       ...(
-        (
-           /* this is { values, errors, error }
-           * the form.error value is used if you need a global error, submitting error for instance
-           */
-          ~form,
-          ~handleChange,
-          ~handleSubmit,
-          /* This sets the value of form.error */
-          ~handleValidation as _,
-          /* A helper to get any field error */
-          ~getErrorForField
-        ) =>
+        ({
+          form,
+          handleChange,
+          handleSubmit,
+          getErrorForField
+        }) =>
           <FormWrapper>
             <ErrorWarn error=form.error/>
             <FieldsWrapper>
@@ -76,12 +90,8 @@ let make = (~signInMutation, _children) => {
                 placeholder="Email"
                 style=fieldsStyle
                 placeholderTextColor=AppTheme.Colors.blackLight
-                /* handleChange signature is (fields, string) => unit, so you can use right away with RN and React Web.
-                ** Just make an abstraction above to not give it an event and just the value
-                */
                 onChangeText=handleChange(`email)
               />
-              /* getErrorForField returns a option(string) */
               <ErrorText value=getErrorForField(`password)/>
               <FormField
                 fieldType=FormField.TextField
@@ -101,33 +111,133 @@ let make = (~signInMutation, _children) => {
 }
 ```
 
+# API
+We tried to make the API simple yet very powerful, so you don't have to worry about learning a lot of quirks
+
+## Component params
+When you create a new ReForm module you get a brand new ReasonReact component
+```reason
+/* Just some regular ReasonReact guy */
+module Form = ReForm.Create(SignUpFormParams);
+```
+These are the props/params it accepts:
+### schema param
+The schema tells to ReForm how to validate your date, take a look at [Schema](#schema) to see more
+
+### validate param
+We let this scape hatch for when the provided validators aren't enough for you and you need some more complexity.
+```reason
+let validate: SignUpForm.values => option(string) = (values) => {
+  switch (values) {
+    | { email: "unsafeTypeGuy@ohno.com" } when values.password === "secretThing" => Some("Can't do.")
+    | _ => None
+  }
+}
+
+<Form
+  validate
+  /* Yes! You can still use schema with it */
+  schema=[(`email, Email)]
+>
+```
+
+The returned valued of `validate` will set `reform.form.error`
+
+### onSubmit param
+This is the guy you'll be putting your POST/mutation/whatever logic into, it is triggered after `handleSubmit` is called.
+
+```reason
+let onSubmit = (values, ~setError, ~setSubmitting) => {
+  Js.Promise.(
+    values 
+    |> convertToJS
+    |> mutate
+    |> then_(response => {
+        switch(response##error |> Js.Null_undefined.to_opt) {
+          | None =>
+            setSubmitting(false);
+            doSomeOtherThing();
+          | Some(error) =>
+            setSubmitting(false);
+            setError(Some("Something went wrong, try again"))
+        }
+      })
+  )
+  |> ignore
+}
+
+
+<Form schema onSubmit>
+```
+
+### i18n param
+You can pass a custom dictionary to be shown as the validators errors
+
+## children: (YourForm.reform => ReasonReact.reactElement)
+The param passed to the children is a record of the following type
+```reason
+type reform = {
+  form: state,
+  handleChange: (Config.fields, value) => unit,
+  handleGlobalValidation: option(string) => unit,
+  handleSubmit: unit => unit,
+  getErrorForField: Config.fields => option(string)
+};
+```
+### form: Params.state
+Accessed via `reform.form` and contains the following
+```reason
+{
+  /* The record containing the actual form state */
+  values: Params.state,
+  /* The submitting state */
+  isSubmitting: bool,
+  /* This is intended to store global validation error, like a submitting failure */
+  error: option(string)
+}
+```
+
+### handleChange: (Config.fields, string) => unit
+`handleChange` takes the field in question and its string value, we made like this so you can use it both in Web and React Native
+
+### handleSubmit: unit => unit
+Triggers the submitting and makes ReForm set `reform.form.isSubmitting` to true
+
+### getErrorForField: Config.fields => options(string)
+Returns the validation error, if there is any, for the field in question
+
+### handleGlobalValidation: option(string) => unit
+Handles the global error value at `reform.form.error`
+
 ## Schema
+
+The schema used by ReForm is nothing more than a tuple and the validator is a [constructor](http://2ality.com/2017/12/variants-reasonml.html#variants-as-data-structures) thus the final representation is really lightweight and does not enforce you to bring Yet Another Schema Validator For JS.
+
+It is passed as a param to the form, `<SignInForm schema>`
 
 ReForm accepts a validation schema that looks like 
 ```reason
-[
-  (fieldName, getter, validator)
-]
+(fieldName, getter, validator)
 ```
 or
 
 ```reason
-[
-  (`email, s => s.email, Email)
-]
+(`email, s => s.email, Email)
 ```
+
+Take a look in the demo to see it in action.
 
 ### Available validators
 
-- _Custom(state => option(string))_
+#### Custom(state => option(string))
 ```reason
 (`password, s => s.password, Custom(values => values.password == "123" ? Some("Really?") : None))
 ```
-- _Required_
+#### Required
 ```reason
 (`fullName, s => s.fullName, Required)
 ```
-- _Email_
+#### Email
 ```reason
 (`email, s => s.email, Email)
 ```
