@@ -59,16 +59,18 @@ module Create = (Config: Config) => {
     | HandleChange((Config.fields, value))
     | HandleSubmit;
   type values = Config.state;
-
-  type schema =
-    list((Config.fields, Validation.validation(values)));
-
+  type schema = list((Config.fields, Validation.validation(values)));
   module Field = {
-    let getFieldLens: (Config.fields) => (Config.fields, Config.state => value, (Config.state, value) => Config.state) = (field) => {
-      /* TODO handle exception */
-      Config.lens
-      |> List.find(((fieldName, _, _)) => fieldName === field);
-    };
+    let getFieldLens:
+      Config.fields =>
+      (
+        Config.fields,
+        Config.state => value,
+        (Config.state, value) => Config.state
+      ) =
+      field =>
+        /* TODO handle exception */
+        Config.lens |> List.find(((fieldName, _, _)) => fieldName === field);
     let validateField:
       (Config.fields, values, value, schema, Validation.I18n.dictionary) =>
       option(string) =
@@ -79,18 +81,25 @@ module Create = (Config: Config) => {
           |> List.hd;
         Validation.getValidationError(fieldSchema, ~values, ~value, ~i18n);
       };
-
-    let handleChange: ((Config.fields, value), values) => values = ((field, value), values) => {
-      let (_, _, setter) = getFieldLens(field);
-      setter(values, value)
-    };
+    let handleChange: ((Config.fields, value), values) => values =
+      ((field, value), values) => {
+        let (_, _, setter) = getFieldLens(field);
+        setter(values, value);
+      };
   };
-
   type state = {
     values,
     isSubmitting: bool,
     errors: list((Config.fields, option(string))),
     error: option(string)
+  };
+  /* Type of what is given to the children */
+  type reform = {
+    form: state,
+    handleChange: (Config.fields, value) => unit,
+    handleGlobalValidation: option(string) => unit,
+    handleSubmit: unit => unit,
+    getErrorForField: Config.fields => option(string)
   };
   let component = ReasonReact.reducerComponent("ReForm");
   let make =
@@ -132,16 +141,19 @@ module Create = (Config: Config) => {
             |> List.append([
                  (
                    field,
-                   Field.validateField(field, state.values, value, schema, i18n)
+                   Field.validateField(
+                     field,
+                     state.values,
+                     value,
+                     schema,
+                     i18n
+                   )
                  )
                ])
         })
       | HandleChange((field, value)) =>
         ReasonReact.UpdateWithSideEffects(
-          {
-            ...state,
-            values: Field.handleChange((field, value), state.values)
-          },
+          {...state, values: Field.handleChange((field, value), state.values)},
           (
             self =>
               self.reduce((_) => HandleFieldValidation((field, value)), ())
@@ -164,14 +176,14 @@ module Create = (Config: Config) => {
     render: self => {
       let handleChange = (field, value) =>
         self.send(HandleChange((field, value)));
-      let handleValidation = error => self.send(HandleError(error));
+      let handleGlobalValidation = error => self.send(HandleError(error));
       let handleFormSubmit = (_) => self.send(HandleSubmit);
       let handleSubmit = (_) => {
         let globalValidationError = validate(self.state.values);
         let fieldsValidationErrors =
           schema
-            |> List.map(((fieldName, _)) => {
-              let (_, getter, _) = Field.getFieldLens(fieldName);
+          |> List.map(((fieldName, _)) => {
+               let (_, getter, _) = Field.getFieldLens(fieldName);
                (
                  fieldName,
                  Field.validateField(
@@ -181,12 +193,11 @@ module Create = (Config: Config) => {
                    schema,
                    i18n
                  )
-               )
-              }
-             )
+               );
+             })
           |> List.filter(((_, fieldError)) => fieldError !== None);
         self.send(SetFieldsErrors(fieldsValidationErrors));
-        handleValidation(globalValidationError);
+        handleGlobalValidation(globalValidationError);
         globalValidationError === None
         && List.length(fieldsValidationErrors) == 0 ?
           handleFormSubmit() : ignore();
@@ -200,13 +211,13 @@ module Create = (Config: Config) => {
             finalList =>
               List.length(finalList) == 0 ? None : List.hd(finalList)
           );
-      children(
-        ~form=self.state,
-        ~handleChange,
-        ~handleSubmit,
-        ~handleValidation,
-        ~getErrorForField
-      );
+      children({
+        form: self.state,
+        handleChange,
+        handleSubmit,
+        handleGlobalValidation,
+        getErrorForField
+      });
     }
   };
 };
