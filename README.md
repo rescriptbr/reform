@@ -165,6 +165,9 @@ let onSubmit = (values, ~setError, ~setSubmitting) => {
   )
   |> ignore
 }
+
+
+<Form schema onSubmit>
 ```
 
 ### i18n param
