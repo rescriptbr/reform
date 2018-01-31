@@ -12,14 +12,14 @@ Reasonably making forms sound good again (pun 100% intended)
 * [Quick usage](#usage)
 * [API](#api)
   * [Component params](#component-params)
-  * [onSubmit](#onsubmit)
+  * [onSubmit](#onsubmit-param)
   * [Schema](#schema)
   * [Available validators](#available-validators)
   * [reform.form](#form)
-  * [reform.getErrorForField](#geterrorforfield)
-  * [reform.handleSubmit](#handlesubmit)
-  * [reform.handleChange](#handlechange)
-  * [reform.handleGlobalValidation](#handleglobalvalidation)
+  * [reform.getErrorForField](#geterrorforfield-configfields--optionsstring)
+  * [reform.handleSubmit](#handlesubmit-unit--unit)
+  * [reform.handleChange](#handlechange-configfields-string--unit)
+  * [reform.handleGlobalValidation](#handleglobalvalidation-optionstring--unit)
 
 ## Installation
 
@@ -121,10 +121,10 @@ When you create a new ReForm module you get a brand new ReasonReact component
 module Form = ReForm.Create(SignUpFormParams);
 ```
 These are the props/params it accepts:
-### <Form schema>
+### schema param
 The schema tells to ReForm how to validate your date, take a look at [Schema](#schema) to see more
 
-### <Form validate>, validate: Config.values => option(string)
+### validate param
 We let this scape hatch for when the provided validators aren't enough for you and you need some more complexity.
 ```reason
 let validate: SignUpForm.values => option(string) = (values) => {
@@ -143,7 +143,7 @@ let validate: SignUpForm.values => option(string) = (values) => {
 
 The returned valued of `validate` will set `reform.form.error`
 
-### <Form onSubmit>, onSubmit(values, ~setError, ~setSubmitting) => unit
+### onSubmit param
 This is the guy you'll be putting your POST/mutation/whatever logic into, it is triggered after `handleSubmit` is called.
 
 ```reason
@@ -167,7 +167,7 @@ let onSubmit = (values, ~setError, ~setSubmitting) => {
 }
 ```
 
-### <Form i18n>, i18n: ReForm.Validation.I18n.dictionary
+### i18n param
 You can pass a custom dictionary to be shown as the validators errors
 
 ## children: (YourForm.reform => ReasonReact.reactElement)
