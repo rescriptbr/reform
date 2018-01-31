@@ -10,10 +10,16 @@ Reasonably making forms sound good again (pun 100% intended)
 * [Installation](#installation)
 * [What this is and why](#what-this-is-and-why)
 * [Quick usage](#usage)
-* [API](#validation)
+* [API](#api)
+  * [Component params](#component-params)
+  * [onSubmit](#onsubmit)
   * [Schema](#schema)
   * [Available validators](#available-validators)
-  * [reform.getErrorForField](#reform.getErrorForField)
+  * [reform.form](#form)
+  * [reform.getErrorForField](#geterrorforfield)
+  * [reform.handleSubmit](#handlesubmit)
+  * [reform.handleChange](#handlechange)
+  * [reform.handleGlobalValidation](#handleglobalvalidation)
 
 ## Installation
 
@@ -108,6 +114,62 @@ let make = (~signInMutation, _children) => {
 # API
 We tried to make the API simple yet very powerful, so you don't have to worry about learning a lot of quirks
 
+## Component params
+When you create a new ReForm module you get a brand new ReasonReact component
+```reason
+/* Just some regular ReasonReact guy */
+module Form = ReForm.Create(SignUpFormParams);
+```
+These are the props/params it accepts:
+### <Form schema>
+The schema tells to ReForm how to validate your date, take a look at [Schema](#schema) to see more
+
+### <Form validate>, validate: Config.values => option(string)
+We let this scape hatch for when the provided validators aren't enough for you and you need some more complexity.
+```reason
+let validate: SignUpForm.values => option(string) = (values) => {
+  switch (values) {
+    | { email: "unsafeTypeGuy@ohno.com" } when values.password === "secretThing" => Some("Can't do.")
+    | _ => None
+  }
+}
+
+<Form
+  validate
+  /* Yes! You can still use schema with it */
+  schema=[(`email, Email)]
+>
+```
+
+The returned valued of `validate` will set `reform.form.error`
+
+### <Form onSubmit>, onSubmit(values, ~setError, ~setSubmitting) => unit
+This is the guy you'll be putting your POST/mutation/whatever logic into, it is triggered after `handleSubmit` is called.
+
+```reason
+let onSubmit = (values, ~setError, ~setSubmitting) => {
+  Js.Promise.(
+    values 
+    |> convertToJS
+    |> mutate
+    |> then_(response => {
+        switch(response##error |> Js.Null_undefined.to_opt) {
+          | None =>
+            setSubmitting(false);
+            doSomeOtherThing();
+          | Some(error) =>
+            setSubmitting(false);
+            setError(Some("Something went wrong, try again"))
+        }
+      })
+  )
+  |> ignore
+}
+```
+
+### <Form i18n>, i18n: ReForm.Validation.I18n.dictionary
+You can pass a custom dictionary to be shown as the validators errors
+
 ## children: (YourForm.reform => ReasonReact.reactElement)
 The param passed to the children is a record of the following type
 ```reason
@@ -119,10 +181,36 @@ type reform = {
   getErrorForField: Config.fields => option(string)
 };
 ```
+### form: Params.state
+Accessed via `reform.form` and contains the following
+```reason
+{
+  /* The record containing the actual form state */
+  values: Params.state,
+  /* The submitting state */
+  isSubmitting: bool,
+  /* This is intended to store global validation error, like a submitting failure */
+  error: option(string)
+}
+```
+
+### handleChange: (Config.fields, string) => unit
+`handleChange` takes the field in question and its string value, we made like this so you can use it both in Web and React Native
+
+### handleSubmit: unit => unit
+Triggers the submitting and makes ReForm set `reform.form.isSubmitting` to true
+
+### getErrorForField: Config.fields => options(string)
+Returns the validation error, if there is any, for the field in question
+
+### handleGlobalValidation: option(string) => unit
+Handles the global error value at `reform.form.error`
 
 ## Schema
 
 The schema used by ReForm is nothing more than a tuple and the validator is a [constructor](http://2ality.com/2017/12/variants-reasonml.html#variants-as-data-structures) thus the final representation is really lightweight and does not enforce you to bring Yet Another Schema Validator For JS.
+
+It is passed as a param to the form, `<SignInForm schema>`
 
 ReForm accepts a validation schema that looks like 
 ```reason
