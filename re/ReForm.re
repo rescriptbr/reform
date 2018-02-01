@@ -1,4 +1,12 @@
 /* Validation types */
+let safeHd = lst => List.length(lst) == 0 ? None : Some(List.hd(lst));
+
+let (>>=) = (value, map) =>
+  switch value {
+  | None => None
+  | Some(value) => map(value)
+  };
+
 module Validation = {
   module I18n = {
     type dictionary = {
@@ -74,13 +82,14 @@ module Create = (Config: Config) => {
     let validateField:
       (Config.fields, values, value, schema, Validation.I18n.dictionary) =>
       option(string) =
-      (field, values, value, schema, i18n) => {
-        let fieldSchema =
-          schema
-          |> List.filter(((fieldName, _)) => fieldName === field)
-          |> List.hd;
-        Validation.getValidationError(fieldSchema, ~values, ~value, ~i18n);
-      };
+      (field, values, value, schema, i18n) =>
+        schema
+        |> List.filter(((fieldName, _)) => fieldName === field)
+        |> safeHd
+        >>= (
+          fieldSchema =>
+            Validation.getValidationError(fieldSchema, ~values, ~value, ~i18n)
+        );
     let handleChange: ((Config.fields, value), values) => values =
       ((field, value), values) => {
         let (_, _, setter) = getFieldLens(field);
@@ -207,10 +216,8 @@ module Create = (Config: Config) => {
           self.state.errors
           |> List.filter(((fieldName, _)) => fieldName === field)
           |> List.map(((_, error)) => error)
-          |> (
-            finalList =>
-              List.length(finalList) == 0 ? None : List.hd(finalList)
-          );
+          |> safeHd
+          >>= (i => i);
       children({
         form: self.state,
         handleChange,
