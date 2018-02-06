@@ -57,7 +57,7 @@ let make = (_children) => {
         (`confirmPassword, Custom(s => s.password == s.confirmPassword ? None : Some("Passwords don't match")))
       ]
     >
-    ...((~form, ~handleValidation as _, ~handleChange, ~handleSubmit, ~getErrorForField) =>
+    ...(({form, handleChange, handleSubmit, getErrorForField}) =>
       /* handleDomFormSubmit helps dealing with the DOM event for Web */
       <form onSubmit=ReForm.Helpers.handleDomFormSubmit(handleSubmit)>
        <label>
