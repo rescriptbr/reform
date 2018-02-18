@@ -50,7 +50,8 @@ let make = (_children) => {
   ...component,
   render: _self => {
     <SignUpFormContainer
-      onSubmit=((~values, ~setError, ~setSubmitting) => doWhateverYouWant(~values, ~setError, ~setSubmitting))
+      initialState={email: "", password: "", confirmPassword: ""}
+      onSubmit=((values, ~setSubmitting, ~setError) => doWhateverYouWant(~values, ~setError, ~setSubmitting))
       schema=[
         (`email, Email),
         (`password, Required),
