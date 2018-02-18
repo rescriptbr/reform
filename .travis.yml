@@ -16,7 +16,7 @@ notifications:
 stages:
   - test
   - name: deploy
-    if: $TRAVIS_BRANCH = master
+    if: head_branch = master
 
 jobs:
   include:
