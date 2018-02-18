@@ -15,10 +15,10 @@ notifications:
 
 jobs:
   include:
-    - test:
+    - stage: test
       script:
         - npm test
-    - deploy:
+    - stage: deploy
       script:
         - git config --global user.email "grsabreu@users.noreply.github.com"
         - git config --global user.name "Gabriel Bot"
