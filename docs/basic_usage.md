@@ -12,7 +12,7 @@ module SignUpFormParams = {
   /* Define the form state */
   type state = {
     password: string,
-    confirmP: string,
+    confirmPassword: string,
     email: string
   };
 
