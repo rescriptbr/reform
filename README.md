@@ -216,12 +216,12 @@ It is passed as a param to the form, `<SignInForm schema>`
 
 ReForm accepts a validation schema that looks like 
 ```reason
-(fieldName, getter, validator)
+(fieldName, validator)
 ```
 or
 
 ```reason
-(`email, s => s.email, Email)
+(`email, Email)
 ```
 
 Take a look in the demo to see it in action.
@@ -230,17 +230,17 @@ Take a look in the demo to see it in action.
 
 #### Custom(state => option(string))
 ```reason
-(`password, s => s.password, Custom(values => values.password == "123" ? Some("Really?") : None))
+(`password, Custom(values => values.password == "123" ? Some("Really?") : None))
 ```
 #### Required
 ```reason
-(`fullName, s => s.fullName, Required)
+(`fullName, Required)
 ```
 #### Email
 ```reason
-(`email, s => s.email, Email)
+(`email, Email)
 ```
 
 #### Any doubts?
 
-If you have any doubts don't hesitate to reach out the wonderful https://discord.gg/reasonml
+If you have any doubts don't hesitate to reach out the wonderful https://discord.gg/reasonml or https://reasonml.chat
