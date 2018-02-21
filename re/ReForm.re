@@ -51,7 +51,7 @@ module Value = {
 module type Config = {
   type state;
   type fields;
-  /* (fieldName, setter, getter) */
+  /* (fieldName, getter, setter) */
   let lens: list((fields, state => Value.t, (state, Value.t) => state));
 };
 
