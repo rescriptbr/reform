@@ -7,47 +7,6 @@ let (>>=) = (value, map) =>
   | Some(value) => map(value)
   };
 
-module Validation = {
-  module I18n = {
-    type dictionary = {
-      required: string,
-      email: string
-    };
-    let ptBR = {
-      required: {j|Campo obrigatório|j},
-      email: {j|Email inválido|j}
-    };
-    let en = {required: "Field is required", email: "Invalid email"};
-  };
-  type validation('values) =
-    | Required
-    | Email
-    | Custom('values => option(string));
-  let getValidationError =
-      ((_, validator), ~values, ~value, ~i18n: I18n.dictionary) =>
-    switch validator {
-    | Required => String.length(value) < 1 ? Some(i18n.required) : None
-    | Custom(fn) => fn(values)
-    | Email =>
-      Js.Re.test(value, [%bs.re {|/\S+@\S+\.\S+/|}]) ? None : Some(i18n.email)
-    };
-};
-
-module Helpers = {
-  let handleDomFormChange = (handleChange, event) =>
-    handleChange(
-      ReactDOMRe.domElementToObj(ReactEventRe.Form.target(event))##value
-    );
-  let handleDomFormSubmit = (handleSubmit, event) => {
-    ReactEventRe.Synthetic.preventDefault(event);
-    handleSubmit();
-  };
-};
-
-module Value = {
-  type t = string;
-};
-
 module type Config = {
   type state;
   type fields;
@@ -120,6 +79,7 @@ module Create = (Config: Config) => {
              ~setError: ReasonReact.Callback.t(option(string))
            ) =>
            unit,
+        ~onFormStateChange: state => unit=ignore,
         ~validate: values => option(string)=(_) => None,
         ~initialState: Config.state,
         ~schema: schema,
@@ -136,30 +96,42 @@ module Create = (Config: Config) => {
     reducer: (action, state) =>
       switch action {
       | HandleSubmitting(isSubmitting) =>
-        ReasonReact.Update({...state, isSubmitting})
+        ReasonReact.UpdateWithSideEffects(
+          {...state, isSubmitting},
+          (self => onFormStateChange(self.state))
+        )
       | HandleError(error) =>
-        ReasonReact.Update({...state, isSubmitting: false, error})
+        ReasonReact.UpdateWithSideEffects(
+          {...state, isSubmitting: false, error},
+          (self => onFormStateChange(self.state))
+        )
       | SetFieldsErrors(errors) =>
-        ReasonReact.Update({...state, isSubmitting: false, errors})
+        ReasonReact.UpdateWithSideEffects(
+          {...state, isSubmitting: false, errors},
+          (self => onFormStateChange(self.state))
+        )
       | HandleFieldValidation((field, value)) =>
-        ReasonReact.Update({
-          ...state,
-          errors:
-            state.errors
-            |> List.filter(((fieldName, _)) => fieldName !== field)
-            |> List.append([
-                 (
-                   field,
-                   Field.validateField(
+        ReasonReact.UpdateWithSideEffects(
+          {
+            ...state,
+            errors:
+              state.errors
+              |> List.filter(((fieldName, _)) => fieldName !== field)
+              |> List.append([
+                   (
                      field,
-                     state.values,
-                     value,
-                     schema,
-                     i18n
+                     Field.validateField(
+                       field,
+                       state.values,
+                       value,
+                       schema,
+                       i18n
+                     )
                    )
-                 )
-               ])
-        })
+                 ])
+          },
+          (self => onFormStateChange(self.state))
+        )
       | HandleChange((field, value)) =>
         ReasonReact.UpdateWithSideEffects(
           {...state, values: Field.handleChange((field, value), state.values)},
@@ -172,13 +144,15 @@ module Create = (Config: Config) => {
         ReasonReact.UpdateWithSideEffects(
           {...state, isSubmitting: true},
           (
-            self =>
+            self => {
               onSubmit(
                 state.values,
                 ~setSubmitting=
                   isSubmitting => self.send(HandleSubmitting(isSubmitting)),
                 ~setError=error => self.send(HandleError(error))
-              )
+              );
+              onFormStateChange(self.state);
+            }
           )
         )
       },

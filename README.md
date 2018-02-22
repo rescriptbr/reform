@@ -13,6 +13,7 @@ Reasonably making forms sound good again (pun 100% intended)
 * [API](#api)
   * [Component params](#component-params)
   * [onSubmit](#onsubmit-param)
+  * [onFormStateChange](#onformstatechange-param)
   * [Schema](#schema)
   * [Available validators](#available-validators)
   * [reform.form](#form)
@@ -167,6 +168,17 @@ let onSubmit = (values, ~setError, ~setSubmitting) => {
 
 
 <Form schema onSubmit>
+```
+
+### onFormStateChange param
+This hook if passed will be called in each case the form state changes, useful when you want to lift the form state for some reason to its parent.
+
+Its type is the same as the `reform.state` passed to the children.
+
+```reason
+<Form
+  onFormStateChange=formState => Js.log(formState)
+>
 ```
 
 ### i18n param

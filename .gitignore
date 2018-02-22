@@ -63,3 +63,4 @@ lib/
 
 # Docusaurus
 build
+.bsb.lock
