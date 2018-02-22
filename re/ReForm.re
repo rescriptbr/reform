@@ -1,3 +1,9 @@
+module Helpers = ReForm_Helpers;
+
+module Validation = ReForm_Validation;
+
+module Value = ReForm_Value;
+
 /* Validation types */
 let safeHd = lst => List.length(lst) == 0 ? None : Some(List.hd(lst));
 
