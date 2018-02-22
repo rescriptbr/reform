@@ -79,6 +79,7 @@ module Create = (Config: Config) => {
              ~setError: ReasonReact.Callback.t(option(string))
            ) =>
            unit,
+        ~onFormStateChange: state => unit=ignore,
         ~validate: values => option(string)=(_) => None,
         ~initialState: Config.state,
         ~schema: schema,
@@ -125,6 +126,7 @@ module Create = (Config: Config) => {
           (
             self => {
               self.reduce((_) => HandleFieldValidation((field, value)), ());
+              onFormStateChange(state);
             }
           )
         )
