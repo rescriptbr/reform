@@ -7,47 +7,6 @@ let (>>=) = (value, map) =>
   | Some(value) => map(value)
   };
 
-module Validation = {
-  module I18n = {
-    type dictionary = {
-      required: string,
-      email: string
-    };
-    let ptBR = {
-      required: {j|Campo obrigatório|j},
-      email: {j|Email inválido|j}
-    };
-    let en = {required: "Field is required", email: "Invalid email"};
-  };
-  type validation('values) =
-    | Required
-    | Email
-    | Custom('values => option(string));
-  let getValidationError =
-      ((_, validator), ~values, ~value, ~i18n: I18n.dictionary) =>
-    switch validator {
-    | Required => String.length(value) < 1 ? Some(i18n.required) : None
-    | Custom(fn) => fn(values)
-    | Email =>
-      Js.Re.test(value, [%bs.re {|/\S+@\S+\.\S+/|}]) ? None : Some(i18n.email)
-    };
-};
-
-module Helpers = {
-  let handleDomFormChange = (handleChange, event) =>
-    handleChange(
-      ReactDOMRe.domElementToObj(ReactEventRe.Form.target(event))##value
-    );
-  let handleDomFormSubmit = (handleSubmit, event) => {
-    ReactEventRe.Synthetic.preventDefault(event);
-    handleSubmit();
-  };
-};
-
-module Value = {
-  type t = string;
-};
-
 module type Config = {
   type state;
   type fields;
@@ -164,8 +123,9 @@ module Create = (Config: Config) => {
         ReasonReact.UpdateWithSideEffects(
           {...state, values: Field.handleChange((field, value), state.values)},
           (
-            self =>
-              self.reduce((_) => HandleFieldValidation((field, value)), ())
+            self => {
+              self.reduce((_) => HandleFieldValidation((field, value)), ());
+            }
           )
         )
       | HandleSubmit =>
