@@ -84,7 +84,7 @@ module Create = (Config: Config) => {
              ~setSubmitting: ReasonReact.Callback.t(bool),
              ~setError: ReasonReact.Callback.t(option(string))
            ) =>
-           unit,
+           unit=ignore,
         ~onFormStateChange: state => unit=ignore,
         ~validate: values => option(string)=(_) => None,
         ~initialState: Config.state,
