@@ -32,7 +32,7 @@ module SignUpForm = ReForm.Create(SignUpParams);
 /* A pattern we are using to ease the reading of function as children */
 let enhancer = mapper =>
   <SignUpForm
-    onSubmit=((values, ~setSubmitting as _, ~setError as _) => Js.log(values))
+    onSubmit=(({values}) => Js.log(values))
     initialState={email: "", password: "", confirmPassword: ""}
     schema=[
       (`email, Email),
