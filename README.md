@@ -46,69 +46,50 @@ Even the schemas we use are nothing more than constructors built-in in the langu
 Checkout `demo/src/app.re` also
 
 ```reason
-module SignUpFormParams = {
-  type state = {
-    password: string,
-    email: string
-  };
-  type fields = [ | `password | `email];
+module SignUpParams = {
+  type state = {email: string};
+  type fields = [ | `email];
   /* (fieldName, getter, setter) */
-  let lens = [
-    (`email, (s) => s.email, (s, email) => { ...s, email }),
-    (`password, (s) => s.password, (s, password) => { ...s, password }),
-  ];
+  let lens = [(`email, s => s.email, (_s, email) => {email: email})];
 };
 
-module SignUpForm = ReForm.Create(SignUpFormParams);
+module SignUpForm = ReForm.Create(SignUpParams);
 
-let component = ReasonReact.statelessComponent("SignUp");
+let component = ReasonReact.statelessComponent("Form");
 
-let make = (~signInMutation, _children) => {
+let make = _children => {
   ...component,
-  render: (_) => {
+  render: _self =>
     <SignUpForm
-      initialState={password: "", email: ""}
-      schema=[
-        (`password, Required),
-        (`email, Email),
-      ]
-      onSubmit=((values, ~setError, ~setSubmitting) => whatever(values, ~setError, ~setSubmitting))
-    >
+      onSubmit=(({values}) => Js.log(values))
+      initialState={email: ""}
+      schema=[(`email, Email)]>
       ...(
-        ({
-          form,
-          handleChange,
-          handleSubmit,
-          getErrorForField
-        }) =>
-          <FormWrapper>
-            <ErrorWarn error=form.error/>
-            <FieldsWrapper>
-              <FormField
-                fieldType=FormField.TextField
-                value=form.values.email
-                placeholder="Email"
-                style=fieldsStyle
-                placeholderTextColor=AppTheme.Colors.blackLight
-                onChangeText=handleChange(`email)
-              />
-              <ErrorText value=getErrorForField(`password)/>
-              <FormField
-                fieldType=FormField.TextField
-                placeholder="Password"
-                onChangeText=handleChange(`password)
-                value=form.values.password
-                style=fieldsStyle
-                placeholderTextColor=AppTheme.Colors.blackLight
-              />
-              etc
-            </FieldsWrapper>
-            <RaisedButton text="Sign in" onPress=handleSubmit/>
-          </FormWrapper>
-      )
-    </SignUpForm>
-  }
-}
+           ({handleSubmit, handleChange, form, getErrorForField}) =>
+             <form
+               onSubmit=(ReForm.Helpers.handleDomFormSubmit(handleSubmit))>
+               <label>
+                 <input
+                   value=form.values.email
+                   onChange=(
+                     ReForm.Helpers.handleDomFormChange(handleChange(`email))
+                   )
+                 />
+               </label>
+               <p>
+                 (
+                   getErrorForField(`email)
+                   |> Belt.Option.getWithDefault(_, "")
+                   |> ReasonReact.stringToElement
+                 )
+               </p>
+               <button _type="submit">
+                 ("Submit" |> ReasonReact.stringToElement)
+               </button>
+             </form>
+         )
+    </SignUpForm>,
+};
 ```
 
 # API
