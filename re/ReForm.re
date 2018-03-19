@@ -30,7 +30,8 @@ module Create = (Config: Config) => {
     | HandleFieldValidation((Config.fields, value))
     | HandleError(option(string))
     | HandleChange((Config.fields, value))
-    | HandleSubmit;
+    | HandleSubmit
+		| ResetFormState;
   type values = Config.state;
   type schema = list((Config.fields, Validation.validation(values)));
   module Field = {
@@ -65,7 +66,8 @@ module Create = (Config: Config) => {
 	type onSubmit = {
 		values,
 		setSubmitting: (bool) => unit,
-		setError: (option(string)) => unit
+		setError: (option(string)) => unit,
+		resetFormState: unit => unit
 	};
 
   type state = {
@@ -104,6 +106,7 @@ module Create = (Config: Config) => {
     },
     reducer: (action, state) =>
       switch action {
+			| ResetFormState => ReasonReact.UpdateWithSideEffects({...state, values: initialState, errors: [], isSubmitting: false},  (self => onFormStateChange(self.state)))	
       | HandleSubmitting(isSubmitting) =>
         ReasonReact.UpdateWithSideEffects(
           {...state, isSubmitting},
@@ -155,6 +158,7 @@ module Create = (Config: Config) => {
           (
             self => {
               onSubmit({
+								resetFormState: () => self.send(ResetFormState),
                 values: state.values,
                 setSubmitting:
                   isSubmitting => self.send(HandleSubmitting(isSubmitting)),
