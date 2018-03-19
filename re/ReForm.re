@@ -61,12 +61,20 @@ module Create = (Config: Config) => {
         setter(values, value);
       };
   };
+
+	type onSubmit = {
+		values,
+		setSubmitting: (bool) => unit,
+		setError: (option(string)) => unit
+	};
+
   type state = {
     values,
     isSubmitting: bool,
     errors: list((Config.fields, option(string))),
     error: option(string)
   };
+
   /* Type of what is given to the children */
   type reform = {
     form: state,
@@ -75,16 +83,11 @@ module Create = (Config: Config) => {
     handleSubmit: unit => unit,
     getErrorForField: Config.fields => option(string)
   };
+
   let component = ReasonReact.reducerComponent("ReForm");
   let make =
       (
-        ~onSubmit:
-           (
-             values,
-             ~setSubmitting: ReasonReact.Callback.t(bool),
-             ~setError: ReasonReact.Callback.t(option(string))
-           ) =>
-           unit,
+        ~onSubmit: onSubmit => unit,
         ~onFormStateChange: state => unit=ignore,
         ~validate: values => option(string)=(_) => None,
         ~initialState: Config.state,
@@ -151,12 +154,12 @@ module Create = (Config: Config) => {
           {...state, isSubmitting: true},
           (
             self => {
-              onSubmit(
-                state.values,
-                ~setSubmitting=
+              onSubmit({
+                values: state.values,
+                setSubmitting:
                   isSubmitting => self.send(HandleSubmitting(isSubmitting)),
-                ~setError=error => self.send(HandleError(error))
-              );
+                setError: error => self.send(HandleError(error))
+							});
               onFormStateChange(self.state);
             }
           )
