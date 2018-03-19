@@ -128,7 +128,7 @@ The returned valued of `validate` will set `reform.form.error`
 If your data is validated then `onSubmit` will be called. This should contain your POST/mutation/whatever logic into and is triggered after `handleSubmit` is called.
 
 ```reason
-let onSubmit = (values, ~setError, ~setSubmitting) => {
+let onSubmit = ({values, setError, setSubmitting, resetFormState}) => {
   Js.Promise.(
     values 
     |> convertToJS
@@ -137,6 +137,8 @@ let onSubmit = (values, ~setError, ~setSubmitting) => {
         switch(response##error |> Js.Null_undefined.to_opt) {
           | None =>
             setSubmitting(false);
+            /* if you need to reset the form state to the initialState */
+            resetFormState();
             doSomeOtherThing();
           | Some(error) =>
             setSubmitting(false);
