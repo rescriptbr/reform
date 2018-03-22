@@ -13,19 +13,29 @@
   ],
   "author": "Gabriel R. Abreu <grsabreu@gmail.com>",
   "license": "MIT",
-  "scripts": {
-    "start": "yarn bs:watch",
-    "test": "yarn bs:build",
-    "bs:build": "bsb -make-world -clean-world",
-    "bs:watch": "bsb -make-world -clean-world -w",
-    "bs:setup": "bsb -make-world"
-  },
   "peerDependencies": {
     "bs-platform": "^2.1.0",
     "reason-react": "^0.3.1"
   },
   "devDependencies": {
     "bs-platform": "^2.1.0",
+    "lint-staged": "^7.0.0",
+    "pre-commit": "^1.2.2",
     "reason-react": "^0.3.1"
+  },
+  "lint-staged": {
+    "*.re": [
+      "refmt --in-place",
+      "git add"
+    ]
+  },
+  "pre-commit": "lint:staged",
+  "scripts": {
+    "start": "yarn bs:watch",
+    "test": "yarn bs:build",
+    "bs:build": "bsb -make-world -clean-world",
+    "bs:watch": "bsb -make-world -clean-world -w",
+    "lint:staged": "lint-staged",
+    "bs:setup": "bsb -make-world"
   }
 }
