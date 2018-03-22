@@ -8,7 +8,7 @@ module Value = ReForm_Value;
 let safeHd = lst => List.length(lst) == 0 ? None : Some(List.hd(lst));
 
 let (>>=) = (value, map) =>
-  switch value {
+  switch (value) {
   | None => None
   | Some(value) => map(value)
   };
@@ -31,7 +31,7 @@ module Create = (Config: Config) => {
     | HandleError(option(string))
     | HandleChange((Config.fields, value))
     | HandleSubmit
-		| ResetFormState;
+    | ResetFormState;
   type values = Config.state;
   type schema = list((Config.fields, Validation.validation(values)));
   module Field = {
@@ -40,7 +40,7 @@ module Create = (Config: Config) => {
       (
         Config.fields,
         Config.state => value,
-        (Config.state, value) => Config.state
+        (Config.state, value) => Config.state,
       ) =
       field =>
         /* TODO handle exception */
@@ -62,30 +62,26 @@ module Create = (Config: Config) => {
         setter(values, value);
       };
   };
-
-	type onSubmit = {
-		values,
-		setSubmitting: (bool) => unit,
-		setError: (option(string)) => unit,
-		resetFormState: unit => unit
-	};
-
+  type onSubmit = {
+    values,
+    setSubmitting: bool => unit,
+    setError: option(string) => unit,
+    resetFormState: unit => unit,
+  };
   type state = {
     values,
     isSubmitting: bool,
     errors: list((Config.fields, option(string))),
-    error: option(string)
+    error: option(string),
   };
-
   /* Type of what is given to the children */
   type reform = {
     form: state,
     handleChange: (Config.fields, value) => unit,
     handleGlobalValidation: option(string) => unit,
     handleSubmit: unit => unit,
-    getErrorForField: Config.fields => option(string)
+    getErrorForField: Config.fields => option(string),
   };
-
   let component = ReasonReact.reducerComponent("ReForm");
   let make =
       (
@@ -95,32 +91,36 @@ module Create = (Config: Config) => {
         ~initialState: Config.state,
         ~schema: schema,
         ~i18n: Validation.I18n.dictionary=Validation.I18n.en,
-        children
+        children,
       ) => {
     ...component,
     initialState: () => {
       values: initialState,
       error: None,
       isSubmitting: false,
-      errors: []
+      errors: [],
     },
     reducer: (action, state) =>
-      switch action {
-			| ResetFormState => ReasonReact.UpdateWithSideEffects({...state, values: initialState, errors: [], isSubmitting: false},  (self => onFormStateChange(self.state)))	
+      switch (action) {
+      | ResetFormState =>
+        ReasonReact.UpdateWithSideEffects(
+          {...state, values: initialState, errors: [], isSubmitting: false},
+          (self => onFormStateChange(self.state)),
+        )
       | HandleSubmitting(isSubmitting) =>
         ReasonReact.UpdateWithSideEffects(
           {...state, isSubmitting},
-          (self => onFormStateChange(self.state))
+          (self => onFormStateChange(self.state)),
         )
       | HandleError(error) =>
         ReasonReact.UpdateWithSideEffects(
           {...state, isSubmitting: false, error},
-          (self => onFormStateChange(self.state))
+          (self => onFormStateChange(self.state)),
         )
       | SetFieldsErrors(errors) =>
         ReasonReact.UpdateWithSideEffects(
           {...state, isSubmitting: false, errors},
-          (self => onFormStateChange(self.state))
+          (self => onFormStateChange(self.state)),
         )
       | HandleFieldValidation((field, value)) =>
         ReasonReact.UpdateWithSideEffects(
@@ -137,20 +137,23 @@ module Create = (Config: Config) => {
                        state.values,
                        value,
                        schema,
-                       i18n
-                     )
-                   )
-                 ])
+                       i18n,
+                     ),
+                   ),
+                 ]),
           },
-          (self => onFormStateChange(self.state))
+          (self => onFormStateChange(self.state)),
         )
       | HandleChange((field, value)) =>
         ReasonReact.UpdateWithSideEffects(
-          {...state, values: Field.handleChange((field, value), state.values)},
+          {
+            ...state,
+            values: Field.handleChange((field, value), state.values),
+          },
           (
             self =>
               self.reduce((_) => HandleFieldValidation((field, value)), ())
-          )
+          ),
         )
       | HandleSubmit =>
         ReasonReact.UpdateWithSideEffects(
@@ -158,15 +161,15 @@ module Create = (Config: Config) => {
           (
             self => {
               onSubmit({
-								resetFormState: () => self.send(ResetFormState),
+                resetFormState: () => self.send(ResetFormState),
                 values: state.values,
-                setSubmitting:
-                  isSubmitting => self.send(HandleSubmitting(isSubmitting)),
-                setError: error => self.send(HandleError(error))
-							});
+                setSubmitting: isSubmitting =>
+                  self.send(HandleSubmitting(isSubmitting)),
+                setError: error => self.send(HandleError(error)),
+              });
               onFormStateChange(self.state);
             }
-          )
+          ),
         )
       },
     render: self => {
@@ -187,8 +190,8 @@ module Create = (Config: Config) => {
                    self.state.values,
                    getter(self.state.values),
                    schema,
-                   i18n
-                 )
+                   i18n,
+                 ),
                );
              })
           |> List.filter(((_, fieldError)) => fieldError !== None);
@@ -210,8 +213,8 @@ module Create = (Config: Config) => {
         handleChange,
         handleSubmit,
         handleGlobalValidation,
-        getErrorForField
+        getErrorForField,
       });
-    }
+    },
   };
 };
