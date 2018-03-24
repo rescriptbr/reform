@@ -69,7 +69,19 @@ let make = _children => {
                </div>;
              | NotCalled =>
                <PostAddForm
-                 schema=[(`title, Required), (`description, Required)]
+                 schema=[
+                   (
+                     `title,
+                     Custom(
+                       (
+                         values =>
+                           Js.String.length(values.title) > 20 ?
+                             Some("Keep it short!") : None
+                       ),
+                     ),
+                   ),
+                   (`description, Required),
+                 ]
                  onSubmit=(
                    ({values}) =>
                      PostAddMutation.make(
@@ -113,8 +125,9 @@ let make = _children => {
                             <span>
                               ("Description:" |> ReasonReact.stringToElement)
                             </span>
-                            <input
+                            <textarea
                               value=form.values.description
+                              rows=4
                               onChange=(
                                 ReForm.Helpers.handleDomFormChange(
                                   handleChange(`description),
