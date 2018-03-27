@@ -6,7 +6,7 @@ module SignUpParams = {
   type state = {
     email: string,
     confirmPassword: string,
-    password: string
+    password: string,
   };
   type fields = [ | `email | `password | `confirmPassword];
   /* (fieldName, getter, setter) */
@@ -16,14 +16,14 @@ module SignUpParams = {
     (
       `confirmPassword,
       s => s.confirmPassword,
-      (s, confirmPassword) => {...s, confirmPassword}
-    )
+      (s, confirmPassword) => {...s, confirmPassword},
+    ),
   ];
 };
 
 let defaults = (value, maybe) =>
-  switch maybe {
-  | Some(original) => original
+  switch (maybe) {
+  | Some(original) => String.concat(",", original)
   | None => value
   };
 
@@ -35,16 +35,18 @@ let enhancer = mapper =>
     onSubmit=(({values}) => Js.log(values))
     initialState={email: "", password: "", confirmPassword: ""}
     schema=[
-      (`email, Email),
-      (`password, Required),
+      (`email, [Email]),
+      (`password, [Required]),
       (
         `confirmPassword,
-        Custom(
-          s =>
-            s.confirmPassword !== s.password ?
-              Some("Passwords don't match") : None
-        )
-      )
+        [
+          Custom(
+            s =>
+              s.confirmPassword !== s.password ?
+                Some("Passwords don't match") : None,
+          ),
+        ],
+      ),
     ]>
     ...mapper
   </SignUpForm>;
@@ -114,7 +116,7 @@ let make = (~message, _children) => {
               value=form.values.confirmPassword
               onChange=(
                 ReForm.Helpers.handleDomFormChange(
-                  handleChange(`confirmPassword)
+                  handleChange(`confirmPassword),
                 )
               )
             />
@@ -131,5 +133,5 @@ let make = (~message, _children) => {
           </button>
         </form>
       </div>
-    )
+    ),
 };

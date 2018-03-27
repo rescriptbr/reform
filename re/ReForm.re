@@ -4,6 +4,8 @@ module Validation = ReForm_Validation;
 
 module Value = ReForm_Value;
 
+type validationErrors = ReForm_Validation.errors;
+
 /* Validation types */
 let safeHd = lst => List.length(lst) == 0 ? None : Some(List.hd(lst));
 
@@ -26,14 +28,14 @@ module Create = (Config: Config) => {
   /* Form actions */
   type action =
     | HandleSubmitting(bool)
-    | SetFieldsErrors(list((Config.fields, option(string))))
+    | SetFieldsErrors(list((Config.fields, validationErrors)))
     | HandleFieldValidation((Config.fields, value))
-    | HandleError(option(string))
+    | HandleError(validationErrors)
     | HandleChange((Config.fields, value))
     | HandleSubmit
     | ResetFormState;
   type values = Config.state;
-  type schema = list((Config.fields, Validation.validation(values)));
+  type schema = list((Config.fields, list(Validation.validation(values))));
   module Field = {
     let getFieldLens:
       Config.fields =>
@@ -47,14 +49,19 @@ module Create = (Config: Config) => {
         Config.lens |> List.find(((fieldName, _, _)) => fieldName === field);
     let validateField:
       (Config.fields, values, value, schema, Validation.I18n.dictionary) =>
-      option(string) =
+      validationErrors =
       (field, values, value, schema, i18n) =>
         schema
         |> List.filter(((fieldName, _)) => fieldName === field)
         |> safeHd
         >>= (
-          fieldSchema =>
-            Validation.getValidationError(fieldSchema, ~values, ~value, ~i18n)
+          ((_, fieldSchemas)) =>
+            Validation.getValidationErrors(
+              fieldSchemas,
+              ~values,
+              ~value,
+              ~i18n,
+            )
         );
     let handleChange: ((Config.fields, value), values) => values =
       ((field, value), values) => {
@@ -65,29 +72,29 @@ module Create = (Config: Config) => {
   type onSubmit = {
     values,
     setSubmitting: bool => unit,
-    setError: option(string) => unit,
+    setError: validationErrors => unit,
     resetFormState: unit => unit,
   };
   type state = {
     values,
     isSubmitting: bool,
-    errors: list((Config.fields, option(string))),
-    error: option(string),
+    errors: list((Config.fields, validationErrors)),
+    error: validationErrors,
   };
   /* Type of what is given to the children */
   type reform = {
     form: state,
     handleChange: (Config.fields, value) => unit,
-    handleGlobalValidation: option(string) => unit,
+    handleGlobalValidation: validationErrors => unit,
     handleSubmit: unit => unit,
-    getErrorForField: Config.fields => option(string),
+    getErrorForField: Config.fields => validationErrors,
   };
   let component = ReasonReact.reducerComponent("ReForm");
   let make =
       (
         ~onSubmit: onSubmit => unit,
         ~onFormStateChange: state => unit=ignore,
-        ~validate: values => option(string)=(_) => None,
+        ~validate: values => validationErrors=(_) => None,
         ~initialState: Config.state,
         ~schema: schema,
         ~i18n: Validation.I18n.dictionary=Validation.I18n.en,
@@ -201,7 +208,7 @@ module Create = (Config: Config) => {
         && List.length(fieldsValidationErrors) == 0 ?
           handleFormSubmit() : ignore();
       };
-      let getErrorForField: Config.fields => option(string) =
+      let getErrorForField: Config.fields => validationErrors =
         field =>
           self.state.errors
           |> List.filter(((fieldName, _)) => fieldName === field)
