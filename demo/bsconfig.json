@@ -6,13 +6,17 @@
   "bs-dependencies": [
     "reason-react",
     "bs-jest",
-    "bs-reform"
+    "bs-reform",
+    "reason-apollo"
   ],
   "reason": {
     "react-jsx": 2
   },
   "bsc-flags": [
     "-bs-super-errors"
+  ],
+  "ppx-flags": [
+    "graphql_ppx/ppx"
   ],
   "refmt": 3
 }

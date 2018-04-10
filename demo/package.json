@@ -3,21 +3,31 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "apollo-cache-inmemory": "^1.1.11",
+    "apollo-client": "2.2.0",
+    "apollo-link": "^1.2.1",
+    "apollo-link-context": "^1.0.7",
+    "apollo-link-error": "^1.0.7",
+    "apollo-link-http": "^1.5.3",
+    "bs-platform": "^2.2.3",
+    "graphql": "0.11.0",
+    "graphql-tag": "2.6.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
+    "reason-apollo": "^0.6.18",
     "reason-scripts": "0.8.0"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject",
-    "prepare": "npm link bs-platform"
+    "eject": "react-scripts eject"
   },
   "homepage": "https://astrocoders.github.io/reform",
   "devDependencies": {
     "bs-jest": "^0.3.2",
-    "reason-react": "^0.3.1",
-    "bs-reform": "file:../"
+    "bs-reform": "file:../",
+    "graphql_ppx": "^0.2.1",
+    "reason-react": "^0.3.1"
   }
 }
