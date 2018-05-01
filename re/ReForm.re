@@ -152,7 +152,7 @@ module Create = (Config: Config) => {
           },
           (
             self =>
-              self.reduce((_) => HandleFieldValidation((field, value)), ())
+              self.send(HandleFieldValidation((field, value)))
           ),
         )
       | HandleSubmit =>
