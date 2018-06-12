@@ -1,17 +1,4 @@
-module Helpers = ReForm_Helpers;
-
-module Validation = ReForm_Validation;
-
-module Value = ReForm_Value;
-
-/* Validation types */
-let safeHd = lst => List.length(lst) == 0 ? None : Some(List.hd(lst));
-
-let (>>=) = (value, map) =>
-  switch (value) {
-  | None => None
-  | Some(value) => map(value)
-  };
+module Helpers = Helpers;
 
 module type Config = {
   type state;
@@ -23,45 +10,27 @@ module type Config = {
 module Create = (Config: Config) => {
   /* TODO: Make a variant out of this */
   type value = Value.t;
+  type values = Config.state;
+  type schema = list((Config.fields, Validation.validation(values)));
+  module Field =
+    Field.Make(
+      {
+        type fields = Config.fields;
+        type state = Config.state;
+        type schema = list((Config.fields, Validation.validation(values)));
+        let lens = Config.lens;
+      },
+    );
   /* Form actions */
   type action =
     | HandleSubmitting(bool)
-    | SetFieldsErrors(list((Config.fields, option(string))))
+    | SetFieldStates(list((Config.fields, Field.state)))
+    | UpdateFieldState((Config.fields, Field.state))
     | HandleFieldValidation((Config.fields, value))
     | HandleError(option(string))
     | HandleChange((Config.fields, value))
     | HandleSubmit
     | ResetFormState;
-  type values = Config.state;
-  type schema = list((Config.fields, Validation.validation(values)));
-  module Field = {
-    let getFieldLens:
-      Config.fields =>
-      (
-        Config.fields,
-        Config.state => value,
-        (Config.state, value) => Config.state,
-      ) =
-      field =>
-        /* TODO handle exception */
-        Config.lens |> List.find(((fieldName, _, _)) => fieldName === field);
-    let validateField:
-      (Config.fields, values, value, schema, Validation.I18n.dictionary) =>
-      option(string) =
-      (field, values, value, schema, i18n) =>
-        schema
-        |> List.filter(((fieldName, _)) => fieldName === field)
-        |> safeHd
-        >>= (
-          fieldSchema =>
-            Validation.getValidationError(fieldSchema, ~values, ~value, ~i18n)
-        );
-    let handleChange: ((Config.fields, value), values) => values =
-      ((field, value), values) => {
-        let (_, _, setter) = getFieldLens(field);
-        setter(values, value);
-      };
-  };
   type onSubmit = {
     values,
     setSubmitting: bool => unit,
@@ -71,7 +40,7 @@ module Create = (Config: Config) => {
   type state = {
     values,
     isSubmitting: bool,
-    errors: list((Config.fields, option(string))),
+    fieldStates: list((Config.fields, Field.state)),
     error: option(string),
   };
   /* Type of what is given to the children */
@@ -80,7 +49,7 @@ module Create = (Config: Config) => {
     handleChange: (Config.fields, value) => unit,
     handleGlobalValidation: option(string) => unit,
     handleSubmit: unit => unit,
-    getErrorForField: Config.fields => option(string),
+    getFieldState: Config.fields => Field.state,
   };
   let component = ReasonReact.reducerComponent("ReForm");
   let make =
@@ -98,122 +67,117 @@ module Create = (Config: Config) => {
       values: initialState,
       error: None,
       isSubmitting: false,
-      errors: [],
+      fieldStates:
+        Config.lens |> List.map(((field, _, _)) => (field, Field.Pristine)),
     },
     reducer: (action, state) =>
       switch (action) {
       | ResetFormState =>
-        ReasonReact.UpdateWithSideEffects(
-          {...state, values: initialState, errors: [], isSubmitting: false},
+        UpdateWithSideEffects(
+          {
+            ...state,
+            values: initialState,
+            fieldStates:
+              Config.lens
+              |> List.map(((field, _, _)) => (field, Field.Pristine)),
+            isSubmitting: false,
+          },
           (self => onFormStateChange(self.state)),
         )
       | HandleSubmitting(isSubmitting) =>
-        ReasonReact.UpdateWithSideEffects(
+        UpdateWithSideEffects(
           {...state, isSubmitting},
           (self => onFormStateChange(self.state)),
         )
       | HandleError(error) =>
-        ReasonReact.UpdateWithSideEffects(
+        UpdateWithSideEffects(
           {...state, isSubmitting: false, error},
           (self => onFormStateChange(self.state)),
         )
-      | SetFieldsErrors(errors) =>
-        ReasonReact.UpdateWithSideEffects(
-          {...state, isSubmitting: false, errors},
+      | SetFieldStates(fieldStates) =>
+        UpdateWithSideEffects(
+          {...state, isSubmitting: false, fieldStates},
           (self => onFormStateChange(self.state)),
         )
-      | HandleFieldValidation((field, value)) =>
-        ReasonReact.UpdateWithSideEffects(
+      | UpdateFieldState((field, newFieldState)) =>
+        UpdateWithSideEffects(
           {
             ...state,
-            errors:
-              state.errors
+            fieldStates:
+              state.fieldStates
               |> List.filter(((fieldName, _)) => fieldName !== field)
-              |> List.append([
-                   (
-                     field,
-                     Field.validateField(
-                       field,
-                       state.values,
-                       value,
-                       schema,
-                       i18n,
-                     ),
-                   ),
-                 ]),
+              |> List.append([(field, newFieldState)]),
           },
           (self => onFormStateChange(self.state)),
         )
+      | HandleFieldValidation((field, value)) =>
+        SideEffects(
+          (
+            self => {
+              self.send(UpdateFieldState((field, Field.Validating)));
+              Js.Promise.(
+                Field.getNewFieldState(
+                  field,
+                  state.values,
+                  value,
+                  schema,
+                  i18n,
+                )
+                |. Belt.Option.map(
+                     then_(error =>
+                       self.send(UpdateFieldState((field, error))) |> resolve
+                     ),
+                   )
+                |> ignore
+              );
+            }
+          ),
+        )
       | HandleChange((field, value)) =>
-        ReasonReact.UpdateWithSideEffects(
+        UpdateWithSideEffects(
           {
             ...state,
             values: Field.handleChange((field, value), state.values),
           },
-          (
-            self =>
-              self.send(HandleFieldValidation((field, value)))
-          ),
+          (self => self.send(HandleFieldValidation((field, value)))),
         )
       | HandleSubmit =>
-        ReasonReact.UpdateWithSideEffects(
-          {...state, isSubmitting: true},
-          (
-            self => {
-              onSubmit({
-                resetFormState: () => self.send(ResetFormState),
-                values: state.values,
-                setSubmitting: isSubmitting =>
-                  self.send(HandleSubmitting(isSubmitting)),
-                setError: error => self.send(HandleError(error)),
-              });
-              onFormStateChange(self.state);
-            }
-          ),
-        )
+        state.fieldStates
+        |. Belt.List.every(((_, fieldState)) => fieldState == Valid) ?
+          UpdateWithSideEffects(
+            {...state, isSubmitting: true},
+            (
+              self => {
+                onSubmit({
+                  resetFormState: () => self.send(ResetFormState),
+                  values: state.values,
+                  setSubmitting: isSubmitting =>
+                    self.send(HandleSubmitting(isSubmitting)),
+                  setError: error => self.send(HandleError(error)),
+                });
+                onFormStateChange(self.state);
+              }
+            ),
+          ) :
+          NoUpdate
       },
     render: self => {
       let handleChange = (field, value) =>
         self.send(HandleChange((field, value)));
       let handleGlobalValidation = error => self.send(HandleError(error));
       let handleFormSubmit = (_) => self.send(HandleSubmit);
-      let handleSubmit = (_) => {
-        let globalValidationError = validate(self.state.values);
-        let fieldsValidationErrors =
-          schema
-          |> List.map(((fieldName, _)) => {
-               let (_, getter, _) = Field.getFieldLens(fieldName);
-               (
-                 fieldName,
-                 Field.validateField(
-                   fieldName,
-                   self.state.values,
-                   getter(self.state.values),
-                   schema,
-                   i18n,
-                 ),
-               );
-             })
-          |> List.filter(((_, fieldError)) => fieldError !== None);
-        self.send(SetFieldsErrors(fieldsValidationErrors));
-        handleGlobalValidation(globalValidationError);
-        globalValidationError === None
-        && List.length(fieldsValidationErrors) == 0 ?
-          handleFormSubmit() : ignore();
-      };
-      let getErrorForField: Config.fields => option(string) =
-        field =>
-          self.state.errors
-          |> List.filter(((fieldName, _)) => fieldName === field)
-          |> List.map(((_, error)) => error)
-          |> safeHd
-          >>= (i => i);
+      let getFieldState = field =>
+        self.state.fieldStates
+        |> List.filter(((fieldName, _)) => fieldName === field)
+        |> List.map(((_, error)) => error)
+        |. Belt.List.head
+        |. Belt.Option.getWithDefault(Field.Pristine);
       children({
         form: self.state,
         handleChange,
-        handleSubmit,
+        handleSubmit: handleFormSubmit,
         handleGlobalValidation,
-        getErrorForField,
+        getFieldState,
       });
     },
   };
