@@ -133,27 +133,27 @@ module Create = (Config: Config) => {
           ),
         )
       | ResetFormState =>
-        ReasonReact.UpdateWithSideEffects(
+        UpdateWithSideEffects(
           {...state, values: initialState, errors: [], isSubmitting: false},
           (self => onFormStateChange(self.state)),
         )
       | HandleSubmitting(isSubmitting) =>
-        ReasonReact.UpdateWithSideEffects(
+        UpdateWithSideEffects(
           {...state, isSubmitting},
           (self => onFormStateChange(self.state)),
         )
       | HandleError(error) =>
-        ReasonReact.UpdateWithSideEffects(
+        UpdateWithSideEffects(
           {...state, isSubmitting: false, error},
           (self => onFormStateChange(self.state)),
         )
       | SetFieldsErrors(errors) =>
-        ReasonReact.UpdateWithSideEffects(
+        UpdateWithSideEffects(
           {...state, isSubmitting: false, errors},
           (self => onFormStateChange(self.state)),
         )
       | HandleFieldValidation((field, value)) =>
-        ReasonReact.UpdateWithSideEffects(
+        UpdateWithSideEffects(
           {
             ...state,
             errors:
@@ -175,7 +175,7 @@ module Create = (Config: Config) => {
           (self => onFormStateChange(self.state)),
         )
       | HandleChange((field, value)) =>
-        ReasonReact.UpdateWithSideEffects(
+        UpdateWithSideEffects(
           {
             ...state,
             values: Field.handleChange((field, value), state.values),
@@ -183,7 +183,7 @@ module Create = (Config: Config) => {
           (self => self.send(HandleFieldValidation((field, value)))),
         )
       | HandleSubmit =>
-        ReasonReact.UpdateWithSideEffects(
+        UpdateWithSideEffects(
           {...state, isSubmitting: true},
           (
             self => {
