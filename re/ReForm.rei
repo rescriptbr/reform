@@ -11,7 +11,8 @@ module Create:
   (Config : Config) => {
                          type value = Value.t;
                          type action =
-                             HandleSubmitting(bool)
+                             TrySubmit
+                           | HandleSubmitting(bool)
                            | SetFieldsErrors(list((Config.fields,
                                                   option(string))))
                            | HandleFieldValidation((Config.fields, value))

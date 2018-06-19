@@ -25,6 +25,7 @@ module Create = (Config: Config) => {
   type value = Value.t;
   /* Form actions */
   type action =
+    | TrySubmit
     | HandleSubmitting(bool)
     | SetFieldsErrors(list((Config.fields, option(string))))
     | HandleFieldValidation((Config.fields, value))
@@ -102,6 +103,35 @@ module Create = (Config: Config) => {
     },
     reducer: (action, state) =>
       switch (action) {
+      | TrySubmit =>
+        SideEffects(
+          (
+            self => {
+              let globalValidationError = validate(self.state.values);
+              let fieldsValidationErrors =
+                schema
+                |> List.map(((fieldName, _)) => {
+                     let (_, getter, _) = Field.getFieldLens(fieldName);
+                     (
+                       fieldName,
+                       Field.validateField(
+                         fieldName,
+                         self.state.values,
+                         getter(self.state.values),
+                         schema,
+                         i18n,
+                       ),
+                     );
+                   })
+                |> List.filter(((_, fieldError)) => fieldError !== None);
+              self.send(SetFieldsErrors(fieldsValidationErrors));
+              self.send(HandleError(globalValidationError));
+              globalValidationError === None
+              && List.length(fieldsValidationErrors) == 0 ?
+                self.send(HandleSubmit) : ();
+            }
+          ),
+        )
       | ResetFormState =>
         ReasonReact.UpdateWithSideEffects(
           {...state, values: initialState, errors: [], isSubmitting: false},
@@ -150,10 +180,7 @@ module Create = (Config: Config) => {
             ...state,
             values: Field.handleChange((field, value), state.values),
           },
-          (
-            self =>
-              self.send(HandleFieldValidation((field, value)))
-          ),
+          (self => self.send(HandleFieldValidation((field, value)))),
         )
       | HandleSubmit =>
         ReasonReact.UpdateWithSideEffects(
@@ -176,31 +203,7 @@ module Create = (Config: Config) => {
       let handleChange = (field, value) =>
         self.send(HandleChange((field, value)));
       let handleGlobalValidation = error => self.send(HandleError(error));
-      let handleFormSubmit = (_) => self.send(HandleSubmit);
-      let handleSubmit = (_) => {
-        let globalValidationError = validate(self.state.values);
-        let fieldsValidationErrors =
-          schema
-          |> List.map(((fieldName, _)) => {
-               let (_, getter, _) = Field.getFieldLens(fieldName);
-               (
-                 fieldName,
-                 Field.validateField(
-                   fieldName,
-                   self.state.values,
-                   getter(self.state.values),
-                   schema,
-                   i18n,
-                 ),
-               );
-             })
-          |> List.filter(((_, fieldError)) => fieldError !== None);
-        self.send(SetFieldsErrors(fieldsValidationErrors));
-        handleGlobalValidation(globalValidationError);
-        globalValidationError === None
-        && List.length(fieldsValidationErrors) == 0 ?
-          handleFormSubmit() : ignore();
-      };
+      let handleSubmit = (_) => self.send(TrySubmit);
       let getErrorForField: Config.fields => option(string) =
         field =>
           self.state.errors
