@@ -13,14 +13,12 @@ module Create = (Config: Config) => {
   type values = Config.state;
   type schema = list((Config.fields, Validation.validation(values)));
   module Field =
-    Field.Make(
-      {
-        type fields = Config.fields;
-        type state = Config.state;
-        type schema = list((Config.fields, Validation.validation(values)));
-        let lens = Config.lens;
-      },
-    );
+    Field.Make({
+      type fields = Config.fields;
+      type state = Config.state;
+      type schema = list((Config.fields, Validation.validation(values)));
+      let lens = Config.lens;
+    });
   /* Form actions */
   type action =
     | HandleSubmitting(bool)
@@ -56,7 +54,6 @@ module Create = (Config: Config) => {
       (
         ~onSubmit: onSubmit => unit,
         ~onFormStateChange: state => unit=ignore,
-        ~validate: values => option(string)=(_) => None,
         ~initialState: Config.state,
         ~schema: schema,
         ~i18n: Validation.I18n.dictionary=Validation.I18n.en,
@@ -165,7 +162,7 @@ module Create = (Config: Config) => {
       let handleChange = (field, value) =>
         self.send(HandleChange((field, value)));
       let handleGlobalValidation = error => self.send(HandleError(error));
-      let handleFormSubmit = (_) => self.send(HandleSubmit);
+      let handleFormSubmit = _ => self.send(HandleSubmit);
       let getFieldState = field =>
         self.state.fieldStates
         |> List.filter(((fieldName, _)) => fieldName === field)
