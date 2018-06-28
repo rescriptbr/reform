@@ -23,13 +23,21 @@ let getValidationError =
   Js.Promise.(
     switch (validator) {
     | Required =>
-      resolve(String.length(value) < 1 ? Some(i18n.required) : None)
+      switch (value) {
+      | Value.String(value) =>
+        resolve(String.length(value) < 1 ? Some(i18n.required) : None)
+      | _ => resolve(Some(i18n.required))
+      }
     | Custom(fn) => resolve(fn(values))
     | CustomAsync(fn) => fn(values)
     | Email =>
-      resolve(
-        Js.Re.test(value, [%bs.re {|/\S+@\S+\.\S+/|}]) ?
-          None : Some(i18n.email),
-      )
+      switch (value) {
+      | Value.String(value) =>
+        resolve(
+          Js.Re.test(value, [%bs.re {|/\S+@\S+\.\S+/|}]) ?
+            None : Some(i18n.email),
+        )
+      | _ => resolve(Some(i18n.required))
+      }
     }
   );
