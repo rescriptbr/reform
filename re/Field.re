@@ -34,6 +34,7 @@ module Make = (Config: Config) => {
            |> Js.Promise.resolve
          ),
        );
+  /* Set value to field in the provided values using the provide lens for the field */
   let handleChange = ((field, value), values) => {
     let (_, _, setter) = getFieldLens(field);
     setter(values, value);
