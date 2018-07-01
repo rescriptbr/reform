@@ -27,6 +27,7 @@ module Create = (Config: Config) => {
     | HandleFieldValidation((Config.fields, value))
     | HandleError(option(string))
     | HandleChange((Config.fields, value))
+    | TrySubmit
     | HandleSubmit
     | ResetFormState;
   type onSubmit = {
@@ -42,7 +43,7 @@ module Create = (Config: Config) => {
     error: option(string),
   };
   /* Type of what is given to the children */
-  type reform = {
+  type api = {
     form: state,
     handleChange: (Config.fields, value) => unit,
     handleGlobalValidation: option(string) => unit,
@@ -139,36 +140,91 @@ module Create = (Config: Config) => {
           (self => self.send(HandleFieldValidation((field, value)))),
         )
       | HandleSubmit =>
-        state.fieldStates
-        |. Belt.List.every(((_, fieldState)) => fieldState == Valid) ?
-          UpdateWithSideEffects(
-            {...state, isSubmitting: true},
+        UpdateWithSideEffects(
+          {...state, isSubmitting: true},
+          (
+            self => {
+              onSubmit({
+                resetFormState: () => self.send(ResetFormState),
+                values: state.values,
+                setSubmitting: isSubmitting =>
+                  self.send(HandleSubmitting(isSubmitting)),
+                setError: error => self.send(HandleError(error)),
+              });
+              onFormStateChange(self.state);
+            }
+          ),
+        )
+      | TrySubmit =>
+        /* Before submitting the form we need to know if all fields were validated first and in sequence check if they are valid */
+        Js.Promise.(
+          SideEffects(
             (
-              self => {
-                onSubmit({
-                  resetFormState: () => self.send(ResetFormState),
-                  values: state.values,
-                  setSubmitting: isSubmitting =>
-                    self.send(HandleSubmitting(isSubmitting)),
-                  setError: error => self.send(HandleError(error)),
-                });
-                onFormStateChange(self.state);
-              }
+              self =>
+                all(
+                  /* Here we'll loop through all fields using their stored states and then fetch their getter lenses and
+                   ** attempt to get their new state using `Field.getNewFieldState`
+                   */
+                  self.state.fieldStates
+                  |> List.map(((fieldName, fieldState)) =>
+                       switch (fieldState) {
+                       /* If the field is `Pristine` means that it was not changed by any events, so we validate now */
+                       | Field.Pristine =>
+                         let (_, getter, _) = Field.getFieldLens(fieldName);
+                         Field.getNewFieldState(
+                           fieldName,
+                           state.values,
+                           getter(self.state.values),
+                           schema,
+                           i18n,
+                         )
+                         |. Belt.Option.map(
+                              then_(newFieldState =>
+                                resolve((fieldName, newFieldState))
+                              ),
+                            )
+                         |. Belt.Option.getWithDefault(
+                              resolve((fieldName, Field.Pristine)),
+                            );
+                       /* If it is on any other state we'll let the current field state for the next state */
+                       | _ => resolve((fieldName, fieldState))
+                       }
+                     )
+                  |> Array.of_list,
+                )
+                |> then_(newFieldStates => {
+                     self.send(
+                       SetFieldStates(Array.to_list(newFieldStates)),
+                     );
+                     newFieldStates
+                     |> Array.to_list
+                     |. Belt.List.every(((_, fieldState)) =>
+                          fieldState == Field.Valid
+                        )
+                     |> (
+                       fun
+                       | true => self.send(HandleSubmit)
+                       | false => ()
+                     )
+                     |> resolve;
+                   })
+                |> ignore
             ),
-          ) :
-          NoUpdate
+          )
+        )
       },
     render: self => {
       let handleChange = (field, value) =>
         self.send(HandleChange((field, value)));
       let handleGlobalValidation = error => self.send(HandleError(error));
-      let handleFormSubmit = _ => self.send(HandleSubmit);
+      let handleFormSubmit = _ => self.send(TrySubmit);
       let getFieldState = field =>
         self.state.fieldStates
         |> List.filter(((fieldName, _)) => fieldName === field)
         |> List.map(((_, error)) => error)
         |. Belt.List.head
         |. Belt.Option.getWithDefault(Field.Pristine);
+
       children({
         form: self.state,
         handleChange,
