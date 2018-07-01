@@ -1,7 +1,7 @@
 module PostAddFormParams = {
   type state = {
-    description: string,
-    title: string,
+    description: BsReform.Value.t,
+    title: BsReform.Value.t,
   };
   type fields = [ | `title | `description];
   /* (fieldName, getter, setter) */
@@ -15,7 +15,7 @@ module PostAddFormParams = {
   ];
 };
 
-module PostAddForm = ReForm.Create(PostAddFormParams);
+module PostAddForm = BsReform.ReForm.Create(PostAddFormParams);
 
 module PostAddMutation = [%graphql
   {|
@@ -75,8 +75,13 @@ let make = _children => {
                      Custom(
                        (
                          values =>
-                           Js.String.length(values.title) > 20 ?
-                             Some("Keep it short!") : None
+                           switch (values.title) {
+                           | String(title) =>
+                             Js.String.length(title)
+                             |> (value => value > 20 || value < 5) ?
+                               Some("Invalid title") : None
+                           | _ => Some("Invalid")
+                           }
                        ),
                      ),
                    ),
@@ -85,15 +90,16 @@ let make = _children => {
                  onSubmit=(
                    ({values}) =>
                      PostAddMutation.make(
-                       ~title=values.title,
-                       ~description=values.description,
+                       ~title=BsReform.Value.unwrapString(values.title, ""),
+                       ~description=
+                         BsReform.Value.unwrapString(values.description, ""),
                        (),
                      )
                      |> mutate
                  )
-                 initialState={title: "", description: ""}>
+                 initialState={title: String(""), description: String("")}>
                  ...(
-                      ({form, handleChange, handleSubmit, getErrorForField}) =>
+                      ({form, handleChange, handleSubmit, getFieldState}) =>
                         <form
                           onSubmit=(
                             event => {
@@ -106,16 +112,26 @@ let make = _children => {
                               ("Title:" |> ReasonReact.stringToElement)
                             </span>
                             <input
-                              value=form.values.title
+                              value=(
+                                BsReform.Value.unwrapString(
+                                  form.values.title,
+                                  "",
+                                )
+                              )
                               onChange=(
-                                ReForm.Helpers.handleDomFormChange(
+                                BsReform.Helpers.handleStringChange(
                                   handleChange(`title),
                                 )
                               )
                             />
                             <p>
                               (
-                                getErrorForField(`title)
+                                getFieldState(`title)
+                                |> (
+                                  fun
+                                  | Error(error) => Some(error)
+                                  | _ => None
+                                )
                                 |> Belt.Option.getWithDefault(_, "")
                                 |> ReasonReact.stringToElement
                               )
@@ -126,17 +142,27 @@ let make = _children => {
                               ("Description:" |> ReasonReact.stringToElement)
                             </span>
                             <textarea
-                              value=form.values.description
+                              value=(
+                                BsReform.Value.unwrapString(
+                                  form.values.description,
+                                  "",
+                                )
+                              )
                               rows=4
                               onChange=(
-                                ReForm.Helpers.handleDomFormChange(
+                                BsReform.ReForm.Helpers.handleStringChange(
                                   handleChange(`description),
                                 )
                               )
                             />
                             <p>
                               (
-                                getErrorForField(`description)
+                                getFieldState(`description)
+                                |> (
+                                  fun
+                                  | Error(error) => Some(error)
+                                  | _ => None
+                                )
                                 |> Belt.Option.getWithDefault(_, "")
                                 |> ReasonReact.stringToElement
                               )
