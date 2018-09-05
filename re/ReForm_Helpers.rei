@@ -1,2 +1,2 @@
-let handleDomFormChange: (('a) => 'b, ReactEventRe.Form.t) => 'b;
-let handleDomFormSubmit: ((unit) => 'a, ReactEventRe.synthetic('b)) => 'a;
+let handleDomFormChange: ('a => 'b, ReactEvent.Form.t) => 'b;
+let handleDomFormSubmit: (unit => 'a, ReactEvent.synthetic('b)) => 'a;
