@@ -14,14 +14,14 @@
   "author": "Gabriel R. Abreu <grsabreu@gmail.com>",
   "license": "MIT",
   "peerDependencies": {
-    "bs-platform": "^2.2.3",
-    "reason-react": "^0.3.4"
+    "bs-platform": "^4.0.5",
+    "reason-react": "^0.5.3"
   },
   "devDependencies": {
-    "bs-platform": "^2.2.3",
+    "bs-platform": "^4.0.5",
     "lint-staged": "^7.0.0",
     "pre-commit": "^1.2.2",
-    "reason-react": "^0.3.4"
+    "reason-react": "^0.5.3"
   },
   "lint-staged": {
     "*.re": [
