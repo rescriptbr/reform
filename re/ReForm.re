@@ -87,8 +87,9 @@ module Create = (Config: Config) => {
   let make =
       (
         ~onSubmit: onSubmit => unit,
+        ~onSubmitFail: list((Config.fields, option(string))) => unit=ignore,
         ~onFormStateChange: state => unit=ignore,
-        ~validate: values => option(string)=(_) => None,
+        ~validate: values => option(string)=_ => None,
         ~initialState: Config.state,
         ~schema: schema,
         ~i18n: Validation.I18n.dictionary=Validation.I18n.en,
@@ -128,7 +129,8 @@ module Create = (Config: Config) => {
               self.send(HandleError(globalValidationError));
               globalValidationError === None
               && List.length(fieldsValidationErrors) == 0 ?
-                self.send(HandleSubmit) : ();
+                self.send(HandleSubmit) :
+                onSubmitFail(fieldsValidationErrors);
             }
           ),
         )
@@ -203,7 +205,7 @@ module Create = (Config: Config) => {
       let handleChange = (field, value) =>
         self.send(HandleChange((field, value)));
       let handleGlobalValidation = error => self.send(HandleError(error));
-      let handleSubmit = (_) => self.send(TrySubmit);
+      let handleSubmit = _ => self.send(TrySubmit);
       let getErrorForField: Config.fields => option(string) =
         field =>
           self.state.errors
