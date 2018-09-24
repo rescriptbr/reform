@@ -13,6 +13,7 @@ Reasonably making forms sound good again (pun 100% intended)
 * [API](#api)
   * [Component params](#component-params)
   * [onSubmit](#onsubmit-param)
+  * [onSubmitFail](#onsubmitfail-param)
   * [onFormStateChange](#onformstatechange-param)
   * [Schema](#schema)
   * [Available validators](#available-validators)
@@ -151,6 +152,20 @@ let onSubmit = ({values, setError, setSubmitting, resetFormState}) => {
 
 
 <Form schema onSubmit>
+```
+
+### onSubmitFail param
+If the validation of your data fails then `onSubmitFail` will be called
+
+```reason
+let onSubmitFail = listOfErrors => {
+  switch(Belt.List.head(listOfErrors)) {
+    | Some((_field, error)) => Js.log(error)
+    | None => ()
+  }
+}
+
+<Form schema onSubmitFail>
 ```
 
 ### onFormStateChange param
