@@ -22,6 +22,7 @@ Reasonably making forms sound good again (pun 100% intended)
   * [reform.handleSubmit](#handlesubmit-unit--unit)
   * [reform.handleChange](#handlechange-configfields-string--unit)
   * [reform.handleGlobalValidation](#handleglobalvalidation-optionstring--unit)
+  * [reform.resetFormState](#resetFormState-unit--unit)
 
 ## Installation
 
@@ -190,7 +191,8 @@ type reform = {
   handleChange: (Config.fields, value) => unit,
   handleGlobalValidation: option(string) => unit,
   handleSubmit: unit => unit,
-  getErrorForField: Config.fields => option(string)
+  getErrorForField: Config.fields => option(string),
+  resetFormState: unit => unit,
 };
 ```
 ### form: Params.state
@@ -217,6 +219,9 @@ Returns the (optional) validation error for the field in question
 
 ### handleGlobalValidation: option(string) => unit
 Handles the global error value at `reform.form.error`
+
+### resetFormState: unit => unit
+Reset the form to the initial state
 
 ## Schema
 
