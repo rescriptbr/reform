@@ -82,6 +82,7 @@ module Create = (Config: Config) => {
     handleGlobalValidation: option(string) => unit,
     handleSubmit: unit => unit,
     getErrorForField: Config.fields => option(string),
+    resetFormState: unit => unit,
   };
   let component = ReasonReact.reducerComponent("ReForm");
   let make =
@@ -206,6 +207,7 @@ module Create = (Config: Config) => {
         self.send(HandleChange((field, value)));
       let handleGlobalValidation = error => self.send(HandleError(error));
       let handleSubmit = _ => self.send(TrySubmit);
+      let resetFormState = _ => self.send(ResetFormState);
       let getErrorForField: Config.fields => option(string) =
         field =>
           self.state.errors
@@ -219,6 +221,7 @@ module Create = (Config: Config) => {
         handleSubmit,
         handleGlobalValidation,
         getErrorForField,
+        resetFormState,
       });
     },
   };

@@ -52,6 +52,7 @@ module Create:
       handleGlobalValidation: option(string) => unit,
       handleSubmit: unit => unit,
       getErrorForField: Config.fields => option(string),
+      resetFormState: unit => unit,
     };
     let component:
       ReasonReact.componentSpec(
