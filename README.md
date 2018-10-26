@@ -23,8 +23,8 @@ Reasonably making forms sound good again (pun 100% intended)
   * [reform.handleChange](#handlechange-configfields-string--unit)
   * [reform.handleGlobalValidation](#handleglobalvalidation-optionstring--unit)
   * [reform.resetFormState](#resetformstate-unit--unit)
-  * [reform.setFocusedField](#setfocusedfield-configfields-unit)
-  * [reform.focusedField](#focusedField-configfields)
+  * [reform.setFocusedField](#setfocusedfield-configfields--unit)
+  * [reform.focusedField](#focusedfield-optionconfigfields)
 
 ## Installation
 
