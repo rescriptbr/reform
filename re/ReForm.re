@@ -33,7 +33,8 @@ module Create = (Config: Config) => {
     | HandleChange((Config.fields, value))
     | HandleSubmit
     | ResetFormState
-    | HandleFocusedField(Config.fields);
+    | HandleSetFocusedField(Config.fields)
+    | HandleUnsetFocusedField;
   type values = Config.state;
   type schema = list((Config.fields, Validation.validation(values)));
   module Field = {
@@ -86,6 +87,7 @@ module Create = (Config: Config) => {
     getErrorForField: Config.fields => option(string),
     resetFormState: unit => unit,
     setFocusedField: Config.fields => unit,
+    unsetFocusedField: unit => unit,
     focusedField: option(Config.fields),
   };
   let component = ReasonReact.reducerComponent("ReForm");
@@ -206,9 +208,14 @@ module Create = (Config: Config) => {
             }
           ),
         )
-      | HandleFocusedField(focusedField) =>
+      | HandleSetFocusedField(focusedField) =>
         UpdateWithSideEffects(
           {...state, focusedField: Some(focusedField)},
+          (self => onFormStateChange(self.state)),
+        )
+      | HandleUnsetFocusedField =>
+        UpdateWithSideEffects(
+          {...state, focusedField: None},
           (self => onFormStateChange(self.state)),
         )
       },
@@ -225,7 +232,8 @@ module Create = (Config: Config) => {
           |> List.map(((_, error)) => error)
           |> safeHd
           >>= (i => i);
-      let setFocusedField = field => self.send(HandleFocusedField(field));
+      let setFocusedField = field => self.send(HandleSetFocusedField(field));
+      let unsetFocusedField = () => self.send(HandleUnsetFocusedField);
       children({
         form: self.state,
         handleChange,
@@ -234,6 +242,7 @@ module Create = (Config: Config) => {
         getErrorForField,
         resetFormState,
         setFocusedField,
+        unsetFocusedField,
         focusedField: self.state.focusedField,
       });
     },

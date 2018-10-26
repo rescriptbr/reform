@@ -19,7 +19,8 @@ module Create:
       | HandleChange((Config.fields, value))
       | HandleSubmit
       | ResetFormState
-      | HandleFocusedField(Config.fields);
+      | HandleSetFocusedField(Config.fields)
+      | HandleUnsetFocusedField;
     type values = Config.state;
     type schema = list((Config.fields, Validation.validation(values)));
     module Field: {
@@ -56,6 +57,7 @@ module Create:
       getErrorForField: Config.fields => option(string),
       resetFormState: unit => unit,
       setFocusedField: Config.fields => unit,
+      unsetFocusedField: unit => unit,
       focusedField: option(Config.fields),
     };
     let component:
