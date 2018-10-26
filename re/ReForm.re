@@ -32,7 +32,9 @@ module Create = (Config: Config) => {
     | HandleError(option(string))
     | HandleChange((Config.fields, value))
     | HandleSubmit
-    | ResetFormState;
+    | ResetFormState
+    | HandleSetFocusedField(Config.fields)
+    | HandleUnsetFocusedField;
   type values = Config.state;
   type schema = list((Config.fields, Validation.validation(values)));
   module Field = {
@@ -74,6 +76,7 @@ module Create = (Config: Config) => {
     isSubmitting: bool,
     errors: list((Config.fields, option(string))),
     error: option(string),
+    focusedField: option(Config.fields),
   };
   /* Type of what is given to the children */
   type reform = {
@@ -83,6 +86,9 @@ module Create = (Config: Config) => {
     handleSubmit: unit => unit,
     getErrorForField: Config.fields => option(string),
     resetFormState: unit => unit,
+    setFocusedField: Config.fields => unit,
+    unsetFocusedField: unit => unit,
+    focusedField: option(Config.fields),
   };
   let component = ReasonReact.reducerComponent("ReForm");
   let make =
@@ -102,6 +108,7 @@ module Create = (Config: Config) => {
       error: None,
       isSubmitting: false,
       errors: [],
+      focusedField: None,
     },
     reducer: (action, state) =>
       switch (action) {
@@ -201,6 +208,16 @@ module Create = (Config: Config) => {
             }
           ),
         )
+      | HandleSetFocusedField(focusedField) =>
+        UpdateWithSideEffects(
+          {...state, focusedField: Some(focusedField)},
+          (self => onFormStateChange(self.state)),
+        )
+      | HandleUnsetFocusedField =>
+        UpdateWithSideEffects(
+          {...state, focusedField: None},
+          (self => onFormStateChange(self.state)),
+        )
       },
     render: self => {
       let handleChange = (field, value) =>
@@ -215,6 +232,8 @@ module Create = (Config: Config) => {
           |> List.map(((_, error)) => error)
           |> safeHd
           >>= (i => i);
+      let setFocusedField = field => self.send(HandleSetFocusedField(field));
+      let unsetFocusedField = () => self.send(HandleUnsetFocusedField);
       children({
         form: self.state,
         handleChange,
@@ -222,6 +241,9 @@ module Create = (Config: Config) => {
         handleGlobalValidation,
         getErrorForField,
         resetFormState,
+        setFocusedField,
+        unsetFocusedField,
+        focusedField: self.state.focusedField,
       });
     },
   };

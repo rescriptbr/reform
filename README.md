@@ -17,12 +17,15 @@ Reasonably making forms sound good again (pun 100% intended)
   * [onFormStateChange](#onformstatechange-param)
   * [Schema](#schema)
   * [Available validators](#available-validators)
-  * [reform.form](#form)
+  * [reform.form](#form-paramsstate)
   * [reform.getErrorForField](#geterrorforfield-configfields--optionsstring)
   * [reform.handleSubmit](#handlesubmit-unit--unit)
   * [reform.handleChange](#handlechange-configfields-string--unit)
   * [reform.handleGlobalValidation](#handleglobalvalidation-optionstring--unit)
-  * [reform.resetFormState](#resetFormState-unit--unit)
+  * [reform.resetFormState](#resetformstate-unit--unit)
+  * [reform.setFocusedField](#setfocusedfield-configfields--unit)
+  * [reform.unsetFocusedField](#unsetfocusedfield-unit--unit)
+  * [reform.focusedField](#focusedfield-optionconfigfields)
 
 ## Installation
 
@@ -222,6 +225,15 @@ Handles the global error value at `reform.form.error`
 
 ### resetFormState: unit => unit
 Reset the form to the initial state
+
+### setFocusedField: Config.fields => unit
+Set the currently focused field. You could connect this to the onFocus of an input.
+
+### unsetFocusedField: unit => unit
+Unsets the focused field. Useful for onBlur on an input.
+
+### focusedField: option(Config.fields)
+The currently focused field. For example usable to only show the error message when the field is not focused.
 
 ## Schema
 
