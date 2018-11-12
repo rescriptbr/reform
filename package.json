@@ -1,6 +1,6 @@
 {
   "name": "bs-reform",
-  "version": "5.1.1-beta.6",
+  "version": "6.0.0-gadt.1",
   "description": "Reasonably making forms sound good again",
   "repository": "git@github.com:Astrocoders/reform.git",
   "homepage": "https://github.com/Astrocoders/reform#readme",
