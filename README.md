@@ -88,7 +88,7 @@ let make = _children => {
                    |> ReasonReact.stringToElement
                  )
                </p>
-               <button _type="submit">
+               <button type_="submit">
                  ("Submit" |> ReasonReact.stringToElement)
                </button>
              </form>
