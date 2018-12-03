@@ -98,7 +98,11 @@ let make = _children => {
 ```
 
 # API
-We made the API simple yet powerful and thus avoided a lot of quirks
+We tried to made the API as simple as possible
+
+## Caveats
+
+Unfortunately, due to type limitations, currently on `string` types are supported.
 
 ## Component params
 Each ReForm module is a ReasonReact component
