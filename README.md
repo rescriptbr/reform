@@ -102,7 +102,7 @@ We tried to made the API as simple as possible
 
 ## Caveats
 
-Unfortunately, due to type limitations, currently on `string` types are supported.
+Unfortunately, due to type limitations, currently only `string` types are supported. But don't worry we'll address this issue soon.
 
 ## Component params
 Each ReForm module is a ReasonReact component
