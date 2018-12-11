@@ -50,6 +50,13 @@ module Make = (Config: Config) => {
       );
   };
 
+  type formState =
+    | Dirty
+    | Submitting
+    | Pristine
+    | Errored
+    | Valid;
+
   type action =
     | ValidateAll
     | TrySubmit
@@ -59,10 +66,11 @@ module Make = (Config: Config) => {
     | FieldChangeValue(Config.field('a), 'a): action
     | FieldArrayAdd(Config.field(array('a)), 'a): action
     | FieldArrayRemove(Config.field(array('a)), int): action
-    | FieldArrayRemoveBy(Config.field(array('a)), 'a => bool): action;
+    | FieldArrayRemoveBy(Config.field(array('a)), 'a => bool): action
+    | SetFormState(formState);
 
   type state = {
-    submitting: bool,
+    formState,
     values: Config.state,
     fieldsState: array((field, fieldState)),
   };
@@ -74,13 +82,13 @@ module Make = (Config: Config) => {
     initialState: () => {
       fieldsState: getFieldsState(~schema, ~values=initialState),
       values: initialState,
-      submitting: false,
+      formState: Pristine,
     },
     reducer: (action, state) =>
       switch (action) {
       | Submit =>
         UpdateWithSideEffects(
-          {...state, submitting: true},
+          {...state, formState: Submitting},
           (self => onSubmit(~send=self.send, ~state=self.state)),
         )
       | TrySubmit =>
@@ -90,13 +98,16 @@ module Make = (Config: Config) => {
               let fieldsState =
                 getFieldsState(~schema, ~values=self.state.values);
 
+              self.send(SetFieldsState(fieldsState));
+
               if (fieldsState
                   ->Belt.Array.every(((_, fieldState)) =>
                       fieldState == Valid
                     )) {
+                self.send(SetFormState(Valid));
                 self.send(Submit);
               } else {
-                self.send(SetFieldsState(fieldsState));
+                self.send(SetFormState(Errored));
               };
             }
           ),
@@ -108,7 +119,14 @@ module Make = (Config: Config) => {
           fieldsState: getFieldsState(~schema, ~values=state.values),
         })
       | FieldChangeValue(field, value) =>
-        Update({...state, values: Config.set(state.values, field, value)})
+        UpdateWithSideEffects(
+          {
+            ...state,
+            formState: state.formState == Errored ? Errored : Dirty,
+            values: Config.set(state.values, field, value),
+          },
+          (self => self.send(ValidateAll)),
+        )
       | FieldChangeState(_, _) => NoUpdate
       | FieldArrayAdd(field, entry) =>
         Update({
@@ -142,6 +160,7 @@ module Make = (Config: Config) => {
               ->Belt.Array.keep(entry => !predicate(entry)),
             ),
         })
+      | SetFormState(newState) => Update({...state, formState: newState})
       },
     render: self => children(~send=self.send, ~state=self.state),
   };
