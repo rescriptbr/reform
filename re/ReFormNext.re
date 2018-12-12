@@ -151,21 +151,7 @@ module Make = (Config: Config) => {
                 | None => [||]
                 },
               ),
-          formState:
-            fieldValidated
-            |> (
-              fieldState =>
-                switch (fieldState) {
-                | Some((_, fieldStatus)) =>
-                  fieldStatus
-                  ->(
-                      fun
-                      | Error(_) => Errored
-                      | _ => state.formState
-                    )
-                | None => state.formState
-                }
-            ),
+          formState: Dirty,
         });
       | ValidateAll =>
         let fieldsState = getFieldsState(~schema, ~values=state.values);
