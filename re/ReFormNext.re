@@ -128,9 +128,20 @@ module Make = (Config: Config) => {
         SideEffects(
           (
             self => {
-              self.send(ValidateAll);
-              self.state.formState == Valid ?
-                self.send(Submit) : self.send(SetFormState(Errored));
+              let fieldsState =
+                getFieldsState(~schema, ~values=self.state.values);
+
+              self.send(SetFieldsState(fieldsState));
+
+              if (fieldsState
+                  ->Belt.Array.every(((_, fieldState)) =>
+                      fieldState == Valid
+                    )) {
+                self.send(SetFormState(Valid));
+                self.send(Submit);
+              } else {
+                self.send(SetFormState(Errored));
+              };
             }
           ),
         )
