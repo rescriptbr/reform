@@ -274,4 +274,4 @@ For more details, look at the [demo](https://github.com/Astrocoders/reform/tree/
 
 #### Support
 
-The authors regularly hand out at the wonderful https://discord.gg/reasonml or https://reasonml.chat so feel free to visit us there.
+The authors regularly hang out at the wonderful https://discord.gg/reasonml or https://reasonml.chat so feel free to visit us there.
