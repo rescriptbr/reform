@@ -125,7 +125,7 @@ module Make = (Config: Config) => {
         ~initialState,
         ~schema: Validation.schema,
         ~onSubmit,
-        ~onSubmitFail,
+        ~onSubmitFail=ignore,
         children,
       ) => {
     ...component,
