@@ -113,10 +113,21 @@ module Make = (Config: Config) => {
     state,
     getFieldState: field => fieldState,
   };
+  type onSubmitAPI = {
+    send: action => unit,
+    state,
+  };
 
   let component = ReasonReact.reducerComponent("ReForm");
 
-  let make = (~initialState, ~schema: Validation.schema, ~onSubmit, children) => {
+  let make =
+      (
+        ~initialState,
+        ~schema: Validation.schema,
+        ~onSubmit,
+        ~onSubmitFail,
+        children,
+      ) => {
     ...component,
     initialState: () => {
       fieldsState: getInitialFieldsState(~schema),
@@ -128,7 +139,7 @@ module Make = (Config: Config) => {
       | Submit =>
         UpdateWithSideEffects(
           {...state, formState: Submitting},
-          (self => onSubmit(~send=self.send, ~state=self.state)),
+          (self => onSubmit({send: self.send, state: self.state})),
         )
       | TrySubmit =>
         SideEffects(
@@ -146,6 +157,7 @@ module Make = (Config: Config) => {
                 self.send(SetFormState(Valid));
                 self.send(Submit);
               } else {
+                onSubmitFail({send: self.send, state: self.state});
                 self.send(SetFormState(Errored));
               };
             }
