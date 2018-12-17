@@ -108,6 +108,12 @@ module Make = (Config: Config) => {
     fieldsState: array((field, fieldState)),
   };
 
+  type api = {
+    send: action => unit,
+    state,
+    getFieldState: field => fieldState,
+  };
+
   let component = ReasonReact.reducerComponent("ReForm");
 
   let make = (~initialState, ~schema: Validation.schema, ~onSubmit, children) => {
@@ -243,7 +249,7 @@ module Make = (Config: Config) => {
             }
         );
 
-      children(~send=self.send, ~state=self.state, ~getFieldState);
+      children({send: self.send, state: self.state, getFieldState});
     },
   };
 };
