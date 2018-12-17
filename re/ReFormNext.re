@@ -14,13 +14,13 @@ module Make = (Config: Config) => {
     | Error(string);
 
   module Validation = {
-    type t('a) =
-      | Email(Config.field(string))
-      | Optional(Config.field('a))
-      | Min(Config.field(int), int)
-      | Custom(Config.field('a), Config.state => fieldState);
+    type t =
+      | Email(Config.field(string)): t
+      | Optional(Config.field('a)): t
+      | Min(Config.field(int), int): t
+      | Custom(Config.field('a), Config.state => fieldState): t;
     type schema =
-      | Schema(array(t('a))): schema;
+      | Schema(array(t)): schema;
   };
 
   let filterFieldsStateByField = (~validators, ~fieldFilter) =>
