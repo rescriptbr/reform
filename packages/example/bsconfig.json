@@ -16,7 +16,8 @@
     "-bs-super-errors"
   ],
   "ppx-flags": [
-    "graphql_ppx/ppx"
+    "graphql_ppx/ppx",
+    "lenses-ppx/ppx"
   ],
   "refmt": 3
 }
