@@ -1,7 +1,6 @@
 {
-  "name": "reform",
+  "name": "bs-reform",
   "version": "6.0.0-gadt.5",
-  "private": true,
   "description": "Reasonably making forms sound good again",
   "repository": "git@github.com:Astrocoders/reform.git",
   "homepage": "https://github.com/Astrocoders/reform#readme",
@@ -12,25 +11,21 @@
     "react",
     "form"
   ],
-  "author": "Gabriel R. Abreu <grsabreu@gmail.com>",
+  "author": "Astrocoders <astrocoders.com>",
   "license": "MIT",
+  "peerDependencies": {
+    "bs-platform": "^4.0.5",
+    "reason-react": "^0.5.3"
+  },
   "devDependencies": {
-    "lerna": "^3.8.1",
-    "lint-staged": "^7.0.0",
-    "pre-commit": "^1.2.2"
+    "bs-platform": "^4.0.5",
+    "reason-react": "^0.5.3"
   },
-  "lint-staged": {
-    "*.re": [
-      "refmt --in-place",
-      "git add"
-    ]
-  },
-  "pre-commit": "lint:staged",
   "scripts": {
     "start": "yarn bs:watch",
     "test": "yarn bs:build",
-    "bs:build": "lerna run bs:build",
-    "bs:watch": "lerna run bs:watch",
+    "bs:build": "bsb -make-world -clean-world",
+    "bs:watch": "bsb -make-world -clean-world -w",
     "lint:staged": "lint-staged",
     "bs:setup": "bsb -make-world"
   }

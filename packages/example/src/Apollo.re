@@ -18,14 +18,9 @@ let httpLink =
     (),
   );
 
-module Client =
-  ReasonApollo.CreateClient(
-    {
-      let apolloClient =
-        ReasonApollo.createApolloClient(
-          ~cache=inMemoryCache /* restore method can be piped e.g. inMemoryCache |> restore(window.__APOLLO__) */,
-          ~link=httpLink,
-          (),
-        );
-    },
+let client =
+  ReasonApollo.createApolloClient(
+    ~cache=inMemoryCache /* restore method can be piped e.g. inMemoryCache |> restore(window.__APOLLO__) */,
+    ~link=httpLink,
+    (),
   );

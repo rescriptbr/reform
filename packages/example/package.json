@@ -1,5 +1,5 @@
 {
-  "name": "demo",
+  "name": "example",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -9,16 +9,17 @@
     "apollo-link-context": "^1.0.7",
     "apollo-link-error": "^1.0.7",
     "apollo-link-http": "^1.5.3",
-    "bs-platform": "^2.2.3",
+    "bs-platform": "^4.0.14",
+    "bs-reform": "^6.0.0-gadt.5",
     "graphql": "0.11.0",
     "graphql-tag": "2.6.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "reason-apollo": "^0.6.18",
-    "reason-scripts": "0.8.0"
+    "reason-apollo": "^0.15.1"
   },
   "scripts": {
     "start": "react-scripts start",
+    "bs:watch": "bsb -make-world -w",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
@@ -26,8 +27,15 @@
   "homepage": "https://astrocoders.github.io/reform",
   "devDependencies": {
     "bs-jest": "^0.3.2",
-    "bs-reform": "file:../",
     "graphql_ppx": "^0.2.1",
-    "reason-react": "^0.3.1"
-  }
+    "react-scripts": "^2.1.2",
+    "lenses-ppx": "^1.0.0",
+    "reason-react": "^0.5.3"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }

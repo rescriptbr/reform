@@ -29,7 +29,7 @@ module PostAddMutation = [%graphql
 |}
 ];
 
-module MutationContainer = Apollo.Client.Mutation;
+module MutationContainer = ReasonApollo.CreateMutation(PostAddMutation);
 
 let component = ReasonReact.statelessComponent("PostAdd");
 
@@ -38,15 +38,14 @@ let make = _children => {
   render: _self =>
     <MutationContainer>
       ...(
-           (mutate, result) =>
+           (mutate, { result }) =>
              switch (result) {
-             | Loading => <p> (ReasonReact.stringToElement("Loading...")) </p>
-             | Failed(_error) =>
+             | Loading => <p> (ReasonReact.string("Loading...")) </p>
+             | Error(_error) =>
                <p>
-                 (ReasonReact.stringToElement("Something went wrong..."))
+                 (ReasonReact.string("Something went wrong..."))
                </p>
-             | Loaded(result) =>
-               let data = PostAddMutation.parse(result);
+             | Data(data) =>
                <div>
                  <h2>
                    (
@@ -55,7 +54,7 @@ let make = _children => {
                           "Post#" ++ post##id ++ " " ++ post##title
                         )
                      |> Belt.Option.getWithDefault(_, "")
-                     |> ReasonReact.stringToElement
+                     |> ReasonReact.string
                    )
                  </h2>
                  <p>
@@ -63,7 +62,7 @@ let make = _children => {
                      data##createPost
                      |> Belt.Option.map(_, post => post##description)
                      |> Belt.Option.getWithDefault(_, "")
-                     |> ReasonReact.stringToElement
+                     |> ReasonReact.string
                    )
                  </p>
                </div>;
@@ -84,12 +83,15 @@ let make = _children => {
                  ]
                  onSubmit=(
                    ({values}) =>
-                     PostAddMutation.make(
+                   mutate(
+
+                     ~variables=PostAddMutation.make(
                        ~title=values.title,
                        ~description=values.description,
                        (),
-                     )
-                     |> mutate
+                     )##variables,
+                     ()
+                   ) |> ignore
                  )
                  initialState={title: "", description: ""}>
                  ...(
@@ -97,13 +99,13 @@ let make = _children => {
                         <form
                           onSubmit=(
                             event => {
-                              ReactEventRe.Synthetic.preventDefault(event);
+                              ReactEvent.Synthetic.preventDefault(event);
                               handleSubmit();
                             }
                           )>
                           <label>
                             <span>
-                              ("Title:" |> ReasonReact.stringToElement)
+                              ("Title:" |> ReasonReact.string)
                             </span>
                             <input
                               value=form.values.title
@@ -117,13 +119,13 @@ let make = _children => {
                               (
                                 getErrorForField(`title)
                                 |> Belt.Option.getWithDefault(_, "")
-                                |> ReasonReact.stringToElement
+                                |> ReasonReact.string
                               )
                             </p>
                           </label>
                           <label>
                             <span>
-                              ("Description:" |> ReasonReact.stringToElement)
+                              ("Description:" |> ReasonReact.string)
                             </span>
                             <textarea
                               value=form.values.description
@@ -138,12 +140,12 @@ let make = _children => {
                               (
                                 getErrorForField(`description)
                                 |> Belt.Option.getWithDefault(_, "")
-                                |> ReasonReact.stringToElement
+                                |> ReasonReact.string
                               )
                             </p>
                           </label>
-                          <button _type="submit">
-                            ("Submit" |> ReasonReact.stringToElement)
+                          <button type_="submit">
+                            ("Submit" |> ReasonReact.string)
                           </button>
                         </form>
                     )
