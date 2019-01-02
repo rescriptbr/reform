@@ -21,6 +21,8 @@ let make = (~message, _children) => {
           {ReasonReact.string("Say hello to ReForm")}
         </p>
         <PostAdd />
+        <h1>{ReasonReact.string("ReFormNext demo")}</h1>
+        <PostAddNext/>
       </div>
     </ReasonApollo.Provider>,
 };

@@ -19,5 +19,13 @@
     "graphql_ppx/ppx",
     "lenses-ppx/ppx"
   ],
-  "refmt": 3
+  "refmt": 3,
+  "package-specs": {
+    "module": "commonjs",
+    "in-source": true
+  },
+  "warnings": {
+    "error": "+8"
+  },
+  "suffix": ".bs.js"
 }
