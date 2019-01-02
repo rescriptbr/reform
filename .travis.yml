@@ -17,4 +17,5 @@ jobs:
   include:
     - stage: test
       script:
+        - yarn lerna bootstrap
         - npm test
