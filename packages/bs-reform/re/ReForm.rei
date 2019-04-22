@@ -78,6 +78,6 @@ module Create:
         ~initialState: Config.state,
         ~schema: schema,
         ~i18n: Validation.I18n.dictionary=?,
-        ~children: reform => React.element
+        ~children: reform => ReasonReact.reactElement
       ) => React.element
   };
