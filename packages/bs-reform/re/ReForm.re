@@ -91,6 +91,8 @@ module Create = (Config: Config) => {
     focusedField: option(Config.fields),
   };
   let component = ReasonReact.reducerComponent("ReForm");
+
+  [@react.component]
   let make =
       (
         ~onSubmit: onSubmit => unit,
@@ -100,151 +102,153 @@ module Create = (Config: Config) => {
         ~initialState: Config.state,
         ~schema: schema,
         ~i18n: Validation.I18n.dictionary=Validation.I18n.en,
-        children,
-      ) => {
-    ...component,
-    initialState: () => {
-      values: initialState,
-      error: None,
-      isSubmitting: false,
-      errors: [],
-      focusedField: None,
-    },
-    reducer: (action, state) =>
-      switch (action) {
-      | TrySubmit =>
-        SideEffects(
-          (
-            self => {
-              let globalValidationError = validate(self.state.values);
-              let fieldsValidationErrors =
-                schema
-                |> List.map(((fieldName, _)) => {
-                     let (_, getter, _) = Field.getFieldLens(fieldName);
-                     (
-                       fieldName,
-                       Field.validateField(
+        ~children,
+      ) =>
+    ReactCompat.useRecordApi({
+      ...component,
+      initialState: () => {
+        values: initialState,
+        error: None,
+        isSubmitting: false,
+        errors: [],
+        focusedField: None,
+      },
+      reducer: (action, state) =>
+        switch (action) {
+        | TrySubmit =>
+          SideEffects(
+            (
+              self => {
+                let globalValidationError = validate(self.state.values);
+                let fieldsValidationErrors =
+                  schema
+                  |> List.map(((fieldName, _)) => {
+                       let (_, getter, _) = Field.getFieldLens(fieldName);
+                       (
                          fieldName,
-                         self.state.values,
-                         getter(self.state.values),
+                         Field.validateField(
+                           fieldName,
+                           self.state.values,
+                           getter(self.state.values),
+                           schema,
+                           i18n,
+                         ),
+                       );
+                     })
+                  |> List.filter(((_, fieldError)) => fieldError !== None);
+                self.send(SetFieldsErrors(fieldsValidationErrors));
+                self.send(HandleError(globalValidationError));
+                globalValidationError === None
+                && List.length(fieldsValidationErrors) == 0 ?
+                  self.send(HandleSubmit) :
+                  onSubmitFail(fieldsValidationErrors);
+              }
+            ),
+          )
+        | ResetFormState =>
+          UpdateWithSideEffects(
+            {...state, values: initialState, errors: [], isSubmitting: false},
+            (self => onFormStateChange(self.state)),
+          )
+        | HandleSubmitting(isSubmitting) =>
+          UpdateWithSideEffects(
+            {...state, isSubmitting},
+            (self => onFormStateChange(self.state)),
+          )
+        | HandleError(error) =>
+          UpdateWithSideEffects(
+            {...state, isSubmitting: false, error},
+            (self => onFormStateChange(self.state)),
+          )
+        | SetFieldsErrors(errors) =>
+          UpdateWithSideEffects(
+            {...state, isSubmitting: false, errors},
+            (self => onFormStateChange(self.state)),
+          )
+        | HandleFieldValidation((field, value)) =>
+          UpdateWithSideEffects(
+            {
+              ...state,
+              errors:
+                state.errors
+                |> List.filter(((fieldName, _)) => fieldName !== field)
+                |> List.append([
+                     (
+                       field,
+                       Field.validateField(
+                         field,
+                         state.values,
+                         value,
                          schema,
                          i18n,
                        ),
-                     );
-                   })
-                |> List.filter(((_, fieldError)) => fieldError !== None);
-              self.send(SetFieldsErrors(fieldsValidationErrors));
-              self.send(HandleError(globalValidationError));
-              globalValidationError === None
-              && List.length(fieldsValidationErrors) == 0 ?
-                self.send(HandleSubmit) :
-                onSubmitFail(fieldsValidationErrors);
-            }
-          ),
-        )
-      | ResetFormState =>
-        UpdateWithSideEffects(
-          {...state, values: initialState, errors: [], isSubmitting: false},
-          (self => onFormStateChange(self.state)),
-        )
-      | HandleSubmitting(isSubmitting) =>
-        UpdateWithSideEffects(
-          {...state, isSubmitting},
-          (self => onFormStateChange(self.state)),
-        )
-      | HandleError(error) =>
-        UpdateWithSideEffects(
-          {...state, isSubmitting: false, error},
-          (self => onFormStateChange(self.state)),
-        )
-      | SetFieldsErrors(errors) =>
-        UpdateWithSideEffects(
-          {...state, isSubmitting: false, errors},
-          (self => onFormStateChange(self.state)),
-        )
-      | HandleFieldValidation((field, value)) =>
-        UpdateWithSideEffects(
-          {
-            ...state,
-            errors:
-              state.errors
-              |> List.filter(((fieldName, _)) => fieldName !== field)
-              |> List.append([
-                   (
-                     field,
-                     Field.validateField(
-                       field,
-                       state.values,
-                       value,
-                       schema,
-                       i18n,
                      ),
-                   ),
-                 ]),
-          },
-          (self => onFormStateChange(self.state)),
-        )
-      | HandleChange((field, value)) =>
-        UpdateWithSideEffects(
-          {
-            ...state,
-            values: Field.handleChange((field, value), state.values),
-          },
-          (self => self.send(HandleFieldValidation((field, value)))),
-        )
-      | HandleSubmit =>
-        UpdateWithSideEffects(
-          {...state, isSubmitting: true},
-          (
-            self => {
-              onSubmit({
-                resetFormState: () => self.send(ResetFormState),
-                values: state.values,
-                setSubmitting: isSubmitting =>
-                  self.send(HandleSubmitting(isSubmitting)),
-                setError: error => self.send(HandleError(error)),
-              });
-              onFormStateChange(self.state);
-            }
-          ),
-        )
-      | HandleSetFocusedField(focusedField) =>
-        UpdateWithSideEffects(
-          {...state, focusedField: Some(focusedField)},
-          (self => onFormStateChange(self.state)),
-        )
-      | HandleUnsetFocusedField =>
-        UpdateWithSideEffects(
-          {...state, focusedField: None},
-          (self => onFormStateChange(self.state)),
-        )
+                   ]),
+            },
+            (self => onFormStateChange(self.state)),
+          )
+        | HandleChange((field, value)) =>
+          UpdateWithSideEffects(
+            {
+              ...state,
+              values: Field.handleChange((field, value), state.values),
+            },
+            (self => self.send(HandleFieldValidation((field, value)))),
+          )
+        | HandleSubmit =>
+          UpdateWithSideEffects(
+            {...state, isSubmitting: true},
+            (
+              self => {
+                onSubmit({
+                  resetFormState: () => self.send(ResetFormState),
+                  values: state.values,
+                  setSubmitting: isSubmitting =>
+                    self.send(HandleSubmitting(isSubmitting)),
+                  setError: error => self.send(HandleError(error)),
+                });
+                onFormStateChange(self.state);
+              }
+            ),
+          )
+        | HandleSetFocusedField(focusedField) =>
+          UpdateWithSideEffects(
+            {...state, focusedField: Some(focusedField)},
+            (self => onFormStateChange(self.state)),
+          )
+        | HandleUnsetFocusedField =>
+          UpdateWithSideEffects(
+            {...state, focusedField: None},
+            (self => onFormStateChange(self.state)),
+          )
+        },
+      render: self => {
+        let handleChange = (field, value) =>
+          self.send(HandleChange((field, value)));
+        let handleGlobalValidation = error => self.send(HandleError(error));
+        let handleSubmit = _ => self.send(TrySubmit);
+        let resetFormState = _ => self.send(ResetFormState);
+        let getErrorForField: Config.fields => option(string) =
+          field =>
+            self.state.errors
+            |> List.filter(((fieldName, _)) => fieldName === field)
+            |> List.map(((_, error)) => error)
+            |> safeHd
+            >>= (i => i);
+        let setFocusedField = field =>
+          self.send(HandleSetFocusedField(field));
+        let unsetFocusedField = () => self.send(HandleUnsetFocusedField);
+        children({
+          form: self.state,
+          handleChange,
+          handleSubmit,
+          handleGlobalValidation,
+          getErrorForField,
+          resetFormState,
+          setFocusedField,
+          unsetFocusedField,
+          focusedField: self.state.focusedField,
+        });
       },
-    render: self => {
-      let handleChange = (field, value) =>
-        self.send(HandleChange((field, value)));
-      let handleGlobalValidation = error => self.send(HandleError(error));
-      let handleSubmit = _ => self.send(TrySubmit);
-      let resetFormState = _ => self.send(ResetFormState);
-      let getErrorForField: Config.fields => option(string) =
-        field =>
-          self.state.errors
-          |> List.filter(((fieldName, _)) => fieldName === field)
-          |> List.map(((_, error)) => error)
-          |> safeHd
-          >>= (i => i);
-      let setFocusedField = field => self.send(HandleSetFocusedField(field));
-      let unsetFocusedField = () => self.send(HandleUnsetFocusedField);
-      children({
-        form: self.state,
-        handleChange,
-        handleSubmit,
-        handleGlobalValidation,
-        getErrorForField,
-        resetFormState,
-        setFocusedField,
-        unsetFocusedField,
-        focusedField: self.state.focusedField,
-      });
-    },
-  };
+    });
 };

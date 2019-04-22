@@ -60,14 +60,15 @@ module Create:
       unsetFocusedField: unit => unit,
       focusedField: option(Config.fields),
     };
-    let component:
-      ReasonReact.componentSpec(
-        state,
-        ReasonReact.stateless,
-        ReasonReact.noRetainedProps,
-        ReasonReact.noRetainedProps,
-        action,
-      );
+    /* let component: */
+    /*   ReasonReact.componentSpec( */
+    /*     state, */
+    /*     ReasonReact.stateless, */
+    /*     ReasonReact.noRetainedProps, */
+    /*     ReasonReact.noRetainedProps, */
+    /*     action, */
+    /*   ); */
+    [@react.component]
     let make:
       (
         ~onSubmit: onSubmit => unit,
@@ -77,13 +78,6 @@ module Create:
         ~initialState: Config.state,
         ~schema: schema,
         ~i18n: Validation.I18n.dictionary=?,
-        reform => ReasonReact.reactElement
-      ) =>
-      ReasonReact.componentSpec(
-        state,
-        state,
-        ReasonReact.noRetainedProps,
-        ReasonReact.noRetainedProps,
-        action,
-      );
+        ~children: reform => React.element
+      ) => React.element
   };
