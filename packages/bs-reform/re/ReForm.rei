@@ -60,14 +60,6 @@ module Create:
       unsetFocusedField: unit => unit,
       focusedField: option(Config.fields),
     };
-    /* let component: */
-    /*   ReasonReact.componentSpec( */
-    /*     state, */
-    /*     ReasonReact.stateless, */
-    /*     ReasonReact.noRetainedProps, */
-    /*     ReasonReact.noRetainedProps, */
-    /*     action, */
-    /*   ); */
     [@react.component]
     let make:
       (
