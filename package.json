@@ -33,5 +33,8 @@
     "bs:watch": "lerna run bs:watch",
     "lint:staged": "lint-staged",
     "bs:setup": "bsb -make-world"
+  },
+  "dependencies": {
+    "reason-react-compat": "^0.2.0"
   }
 }
