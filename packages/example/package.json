@@ -9,13 +9,17 @@
     "apollo-link-context": "^1.0.7",
     "apollo-link-error": "^1.0.7",
     "apollo-link-http": "^1.5.3",
-    "bs-platform": "^4.0.14",
-    "bs-reform": "^6.0.0-gadt.5",
+    "bs-platform": "^5.0.3",
+    "bs-reform": "^7.0.0",
     "graphql": "0.11.0",
     "graphql-tag": "2.6.1",
-    "react": "^16.2.0",
-    "react-dom": "^16.2.0",
-    "reason-apollo": "^0.15.1"
+    "react": "^16.8.6",
+    "react-apollo-hooks": "^0.4.5",
+    "react-dom": "^16.8.6",
+    "reason-apollo": "^0.15.2",
+    "reason-apollo-hooks": "^0.2.0-beta.3",
+    "reason-react": "^0.7.0",
+    "yarn": "^1.15.2"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -28,9 +32,8 @@
   "devDependencies": {
     "bs-jest": "^0.3.2",
     "graphql_ppx": "^0.2.1",
-    "react-scripts": "^2.1.2",
     "lenses-ppx": "^1.0.0",
-    "reason-react": "^0.5.3"
+    "react-scripts": "^2.1.2"
   },
   "browserslist": [
     ">0.2%",

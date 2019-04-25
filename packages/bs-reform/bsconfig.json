@@ -3,12 +3,12 @@
   "reason": {
     "react-jsx": 3
   },
-  "bs-dependencies": ["reason-react", "reason-react-compat"],
+  "bs-dependencies": ["reason-react", "reason-react-compat", "reason-react-update"],
   "refmt": 3,
   "bsc-flags": ["-bs-super-errors"],
   "sources": [
     {
-      "dir": "re"
+      "dir": "src"
     }
   ]
 }

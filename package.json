@@ -1,6 +1,6 @@
 {
   "name": "reform",
-  "version": "6.0.0-gadt.5",
+  "version": "0.0.0",
   "private": true,
   "description": "Reasonably making forms sound good again",
   "repository": "git@github.com:Astrocoders/reform.git",
@@ -21,11 +21,26 @@
   },
   "lint-staged": {
     "*.re": [
-      "refmt --in-place",
+      "bsrefmt --in-place",
       "git add"
     ]
   },
   "pre-commit": "lint:staged",
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ],
+    "nohoist": [
+      "**/mim-de-papai",
+      "**/mim-de-papai/**",
+
+      "**/graphql_ppx",
+      "**/graphql_ppx/**",
+
+      "**/lenses_ppx",
+      "**/lenses_ppx/**"
+    ]
+  },
   "scripts": {
     "start": "yarn bs:watch",
     "test": "yarn bs:build",
@@ -33,8 +48,5 @@
     "bs:watch": "lerna run bs:watch",
     "lint:staged": "lint-staged",
     "bs:setup": "bsb -make-world"
-  },
-  "dependencies": {
-    "reason-react-compat": "^0.2.0"
   }
 }

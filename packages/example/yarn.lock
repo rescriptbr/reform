@@ -2205,15 +2205,17 @@ bs-jest@^0.3.2:
   dependencies:
     jest "^22.0.4"
 
-bs-platform@^4.0.14:
-  version "4.0.14"
-  resolved "https://registry.yarnpkg.com/bs-platform/-/bs-platform-4.0.14.tgz#1d9e9622d59ebf4d39408d07b41997201c5f9750"
-  integrity sha512-bxeMwZPnJ90r48SavF60pkzGn7heaoHn7IF7fpPdh5L8WZfCzf76AikH2zWJii4QahUeInvRN1tNPWQt3ckKJQ==
+bs-platform@^5.0.3:
+  version "5.0.3"
+  resolved "https://registry.yarnpkg.com/bs-platform/-/bs-platform-5.0.3.tgz#2b167603ef52574cb9534fabab702f6013715e6c"
+  integrity sha512-GAeypBebeDGTay5kJ3v5Z3Whp1Q4zQ0hAttflVtPG3zps88xDZnVAlS3JGIIBDmJFEMyNtv5947a/IWKvWXcPw==
 
-bs-reform@^6.0.0-gadt.5:
-  version "6.0.0-gadt.5"
-  resolved "https://registry.yarnpkg.com/bs-reform/-/bs-reform-6.0.0-gadt.5.tgz#76c8f26ac6709fcc07b5d75f4e94257582c86bbd"
-  integrity sha512-KdBgBHTf0KCpOMfWvMfTfz9bW8vU73NSKV8MunygDrUozNMmwkHD6gmuUmtrjshSYq00DQz5X/qK8A4y0luODg==
+bs-reform@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/bs-reform/-/bs-reform-7.0.0.tgz#f803923fb5d0dc643562c3ff232153073e0d9273"
+  integrity sha512-SzGKFz8/3n/nr/c1+yID0X53cEtjDcAiISkVyKcaMsxp4EXHzwPNJvT1K9Uw8BD7oj29IruRKvOSrRe+mZGkvw==
+  dependencies:
+    reason-react-compat "^0.2.0"
 
 bsb-native@^4.0.7000:
   version "4.0.7000"
@@ -8723,6 +8725,13 @@ rc@^1.2.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
+react-apollo-hooks@^0.4.5:
+  version "0.4.5"
+  resolved "https://registry.yarnpkg.com/react-apollo-hooks/-/react-apollo-hooks-0.4.5.tgz#7fe6a8ddfdc92df2da664d399ea77a0da4a10bad"
+  integrity sha512-fq04h88hg4ONtlzxYInmv7Okqqstzk3UCp55jHWOlIO2lFKoZPhQrtCz7A+TrcRu8GGwtG1SsioRKN8kIQaAOQ==
+  dependencies:
+    lodash "^4.17.11"
+
 react-apollo@2.3.2:
   version "2.3.2"
   resolved "https://registry.yarnpkg.com/react-apollo/-/react-apollo-2.3.2.tgz#b8e287d2813722b9e0a886cabf8149ab3b84a3b7"
@@ -8776,14 +8785,15 @@ react-dev-utils@^7.0.0:
     strip-ansi "4.0.0"
     text-table "0.2.0"
 
-"react-dom@>=15.0.0 || >=16.0.0", react-dom@^16.2.0:
-  version "16.2.0"
-  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.2.0.tgz#69003178601c0ca19b709b33a83369fe6124c044"
+react-dom@>=16.8.1, react-dom@^16.8.1, react-dom@^16.8.6:
+  version "16.8.6"
+  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.8.6.tgz#71d6303f631e8b0097f56165ef608f051ff6e10f"
+  integrity sha512-1nL7PIq9LTL3fthPqwkvr2zY7phIPjYrT0jp4HjyEQrEROnw4dG41VVwi/wfoCneoleqrNX7iAD+pXebJZwrwA==
   dependencies:
-    fbjs "^0.8.16"
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
-    prop-types "^15.6.0"
+    prop-types "^15.6.2"
+    scheduler "^0.13.6"
 
 react-error-overlay@^5.1.1:
   version "5.1.1"
@@ -8850,14 +8860,15 @@ react-scripts@^2.1.2:
   optionalDependencies:
     fsevents "1.2.4"
 
-"react@>=15.0.0 || >=16.0.0", react@^16.2.0:
-  version "16.2.0"
-  resolved "https://registry.yarnpkg.com/react/-/react-16.2.0.tgz#a31bd2dab89bff65d42134fa187f24d054c273ba"
+react@>=16.8.1, react@^16.8.1, react@^16.8.6:
+  version "16.8.6"
+  resolved "https://registry.yarnpkg.com/react/-/react-16.8.6.tgz#ad6c3a9614fd3a4e9ef51117f54d888da01f2bbe"
+  integrity sha512-pC0uMkhLaHm11ZSJULfOBqV4tIZkx87ZLvbbQYunNixAAvjnC+snJCg0XQXn9VIsttVsbZP/H/ewzgsd5fxKXw==
   dependencies:
-    fbjs "^0.8.16"
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
-    prop-types "^15.6.0"
+    prop-types "^15.6.2"
+    scheduler "^0.13.6"
 
 read-pkg-up@^1.0.1:
   version "1.0.1"
@@ -8938,10 +8949,20 @@ realpath-native@^1.0.0:
   dependencies:
     util.promisify "^1.0.0"
 
-reason-apollo@^0.15.1:
-  version "0.15.1"
-  resolved "https://registry.yarnpkg.com/reason-apollo/-/reason-apollo-0.15.1.tgz#a16d83c969f728bc1b9f466ec678fe76a6a7d0bd"
-  integrity sha512-rmyFw8GgOjKReGnHFB2TIhd/VmM0kTQ7owh4AJJkGAM0AQUz7kjG7vRwrwOJUkFA2P+FQIL3G2wO5Ra31hXIMw==
+reason-apollo-hooks@^0.2.0-beta.3:
+  version "0.2.0-beta.3"
+  resolved "https://registry.yarnpkg.com/reason-apollo-hooks/-/reason-apollo-hooks-0.2.0-beta.3.tgz#b2c420e7387e68e8390aebd65de00b9c71b2a09e"
+  integrity sha512-J3/w8dkZEuBBPrXT5x6MU09hkkVxj6qu/5yhHFO2oupbUL8vxQxsigXuDj/tm0XQvVL91zP/AzimaafW+BbGLQ==
+  dependencies:
+    react "^16.8.1"
+    react-apollo-hooks "^0.4.5"
+    react-dom "^16.8.1"
+    reason-react ">=0.7.0"
+
+reason-apollo@^0.15.2:
+  version "0.15.2"
+  resolved "https://registry.yarnpkg.com/reason-apollo/-/reason-apollo-0.15.2.tgz#0452196fc07915907cc0d629679aa56a8c16933c"
+  integrity sha512-L0S6u2yHrBOgnZGz4WY2svjCXgbqM9+h8uirPEAj9mWLMuUGszmiR0aO/77ZNpfTrQL9JZ3Dxu6zyVUWdM5xuQ==
   dependencies:
     apollo-cache-inmemory "1.3.11"
     apollo-client "2.4.7"
@@ -8957,13 +8978,18 @@ reason-apollo@^0.15.1:
     react-apollo "2.3.2"
     subscriptions-transport-ws "0.9.0"
 
-reason-react@^0.5.3:
-  version "0.5.3"
-  resolved "https://registry.yarnpkg.com/reason-react/-/reason-react-0.5.3.tgz#10601809742fd991109ec9d69ad4baf2c3f17540"
-  integrity sha512-dUkoqXrP/gOjkmkW+k/otEUP+yeXH5+QfdxNT5EW60MXM3zbCdFhbNzKBbjYOZ6x96UbxK869CObjX04BdJEDg==
+reason-react-compat@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/reason-react-compat/-/reason-react-compat-0.2.0.tgz#1caf4ec72e7c5ad523dd68b485ac265ca6497c01"
+  integrity sha512-wfnod0z9g+HkXhEqDj3Fq9hVUuOtLN7AgUj5XR1VVzldzzz4eepBGaTPAfqugTKHFqLDplN9b5TOFge148mYcg==
+
+reason-react@>=0.7.0, reason-react@^0.7.0:
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/reason-react/-/reason-react-0.7.0.tgz#46a975c321e81cd51310d7b1a02418ca7667b0d6"
+  integrity sha512-czR/f0lY5iyLCki9gwftOFF5Zs40l7ZSFmpGK/Z6hx2jBVeFDmIiXB8bAQW/cO6IvtuEt97OmsYueiuOYG9XjQ==
   dependencies:
-    react ">=15.0.0 || >=16.0.0"
-    react-dom ">=15.0.0 || >=16.0.0"
+    react ">=16.8.1"
+    react-dom ">=16.8.1"
 
 recursive-readdir@2.2.2:
   version "2.2.2"
@@ -9410,6 +9436,14 @@ saxes@^3.1.4:
   integrity sha512-GVZmLJnkS4Vl8Pe9o4nc5ALZ615VOVxCmea8Cs0l+8GZw3RQ5XGOSUomIUfuZuk4Todo44v4y+HY1EATkDDiZg==
   dependencies:
     xmlchars "^1.3.1"
+
+scheduler@^0.13.6:
+  version "0.13.6"
+  resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.13.6.tgz#466a4ec332467b31a91b9bf74e5347072e4cd889"
+  integrity sha512-IWnObHt413ucAYKsD9J1QShUKkbKLQQHdxRyw73sw4FN26iWr3DY/H34xGPe4nmL1DwXyWmSWmMrA9TfQbE/XQ==
+  dependencies:
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
 
 schema-utils@^0.4.4, schema-utils@^0.4.5:
   version "0.4.7"
@@ -11096,6 +11130,11 @@ yargs@~3.10.0:
     cliui "^2.1.0"
     decamelize "^1.0.0"
     window-size "0.1.0"
+
+yarn@^1.15.2:
+  version "1.15.2"
+  resolved "https://registry.yarnpkg.com/yarn/-/yarn-1.15.2.tgz#7a064ca81ca34235f16376ad2f796ed432f9e285"
+  integrity sha512-DhqaGe2FcYKduO42d2hByXk7y8k2k42H3uzYdWBMTvcNcgWKx7xCkJWsVAQikXvaEQN2GyJNrz8CboqUmaBRrw==
 
 yauzl@^2.9.1:
   version "2.10.0"

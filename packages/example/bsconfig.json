@@ -7,10 +7,11 @@
     "reason-react",
     "bs-jest",
     "bs-reform",
-    "reason-apollo"
+    "reason-apollo",
+    "reason-apollo-hooks"
   ],
   "reason": {
-    "react-jsx": 2
+    "react-jsx": 3
   },
   "bsc-flags": [
     "-bs-super-errors"
