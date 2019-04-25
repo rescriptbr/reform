@@ -3020,6 +3020,13 @@ bs-platform@^5.0.0, bs-platform@^5.0.3:
   resolved "https://registry.yarnpkg.com/bs-platform/-/bs-platform-5.0.3.tgz#2b167603ef52574cb9534fabab702f6013715e6c"
   integrity sha512-GAeypBebeDGTay5kJ3v5Z3Whp1Q4zQ0hAttflVtPG3zps88xDZnVAlS3JGIIBDmJFEMyNtv5947a/IWKvWXcPw==
 
+bs-reform@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/bs-reform/-/bs-reform-7.0.0.tgz#f803923fb5d0dc643562c3ff232153073e0d9273"
+  integrity sha512-SzGKFz8/3n/nr/c1+yID0X53cEtjDcAiISkVyKcaMsxp4EXHzwPNJvT1K9Uw8BD7oj29IruRKvOSrRe+mZGkvw==
+  dependencies:
+    reason-react-compat "^0.2.0"
+
 bsb-native@^4.0.7000:
   version "4.0.7000"
   resolved "https://registry.yarnpkg.com/bsb-native/-/bsb-native-4.0.7000.tgz#04031ae81a3cd53d48868593fe059c1d5752403b"

@@ -43,7 +43,7 @@ Checkout `packages/example/src/PostAddNext.re` also
 module PostAddForm = ReFormNext.Make(StateLenses);
 
 [@react.component]
-let make = _children => {
+let make = () => {
   let {state, submit, getFieldState, handleChange}: PostAddForm.api =
     PostAddForm.use(
       ~schema={
