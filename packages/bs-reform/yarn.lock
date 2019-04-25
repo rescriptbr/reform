@@ -57,6 +57,11 @@ reason-react-compat@^0.2.0:
   resolved "https://registry.yarnpkg.com/reason-react-compat/-/reason-react-compat-0.2.0.tgz#1caf4ec72e7c5ad523dd68b485ac265ca6497c01"
   integrity sha512-wfnod0z9g+HkXhEqDj3Fq9hVUuOtLN7AgUj5XR1VVzldzzz4eepBGaTPAfqugTKHFqLDplN9b5TOFge148mYcg==
 
+reason-react-update@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/reason-react-update/-/reason-react-update-0.1.1.tgz#ea51c2e24fef7a061bb419496c0941f19f773924"
+  integrity sha512-wuP4MD79Gv0HLRy365vMa1JMXEqVQNNtq3ilB0Jw2ha8z9HR2Lzg/R+wPVWorXSnvoHkbE/vHaCRIA7ggn5WEA==
+
 reason-react@^0.7.0:
   version "0.7.0"
   resolved "https://registry.yarnpkg.com/reason-react/-/reason-react-0.7.0.tgz#46a975c321e81cd51310d7b1a02418ca7667b0d6"

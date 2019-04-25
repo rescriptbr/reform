@@ -26,6 +26,21 @@
     ]
   },
   "pre-commit": "lint:staged",
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ],
+    "nohoist": [
+      "**/mim-de-papai",
+      "**/mim-de-papai/**",
+
+      "**/graphql_ppx",
+      "**/graphql_ppx/**",
+
+      "**/lenses_ppx",
+      "**/lenses_ppx/**"
+    ]
+  },
   "scripts": {
     "start": "yarn bs:watch",
     "test": "yarn bs:build",
