@@ -24,15 +24,14 @@ module Make = (Config: Config) => {
   };
 
   let filterFieldsStateByField = (~validators, ~fieldFilter) =>
-    validators
-    ->Belt.Array.keep(validator =>
-        switch (validator) {
-        | Validation.Min(field, _) => Field(field) == fieldFilter
-        | Validation.Email(field) => Field(field) == fieldFilter
-        | Validation.Optional(field) => Field(field) == fieldFilter
-        | Validation.Custom(field, _) => Field(field) == fieldFilter
-        }
-      );
+    validators->Belt.Array.keep(validator =>
+      switch (validator) {
+      | Validation.Min(field, _) => Field(field) == fieldFilter
+      | Validation.Email(field) => Field(field) == fieldFilter
+      | Validation.Optional(field) => Field(field) == fieldFilter
+      | Validation.Custom(field, _) => Field(field) == fieldFilter
+      }
+    );
 
   let validateField = (~validator, ~values) =>
     switch (validator) {
@@ -42,8 +41,8 @@ module Make = (Config: Config) => {
       )
     | Validation.Email(field) => (
         Field(field),
-        Js.Re.test(Config.get(values, field), [%bs.re {|/\S+@\S+\.\S+/|}]) ?
-          Valid : Error("invalid email"),
+        Js.Re.test(Config.get(values, field), [%bs.re {|/\S+@\S+\.\S+/|}])
+          ? Valid : Error("invalid email"),
       )
     | Validation.Optional(field) => (Field(field), Valid)
     | Validation.Custom(field, predicate) => (
@@ -55,22 +54,22 @@ module Make = (Config: Config) => {
   let getInitialFieldsState = (~schema: Validation.schema) => {
     let Validation.Schema(validators) = schema;
 
-    validators
-    ->Belt.Array.map(validator =>
-        switch (validator) {
-        | Validation.Min(field, _min) => (Field(field), Pristine)
-        | Validation.Email(field) => (Field(field), Pristine)
-        | Validation.Optional(field) => (Field(field), Pristine)
-        | Validation.Custom(field, _predicate) => (Field(field), Pristine)
-        }
-      );
+    validators->Belt.Array.map(validator =>
+      switch (validator) {
+      | Validation.Min(field, _min) => (Field(field), Pristine)
+      | Validation.Email(field) => (Field(field), Pristine)
+      | Validation.Optional(field) => (Field(field), Pristine)
+      | Validation.Custom(field, _predicate) => (Field(field), Pristine)
+      }
+    );
   };
 
   let getFieldsState = (~schema: Validation.schema, ~values: Config.state) => {
     let Validation.Schema(validators) = schema;
 
-    validators
-    ->Belt.Array.map(validator => validateField(~validator, ~values));
+    validators->Belt.Array.map(validator =>
+      validateField(~validator, ~values)
+    );
   };
 
   let getFieldState =
@@ -139,29 +138,26 @@ module Make = (Config: Config) => {
       | Submit =>
         UpdateWithSideEffects(
           {...state, formState: Submitting},
-          (self => onSubmit({send: self.send, state: self.state})),
+          self => onSubmit({send: self.send, state: self.state}),
         )
       | TrySubmit =>
         SideEffects(
-          (
-            self => {
-              let fieldsState =
-                getFieldsState(~schema, ~values=self.state.values);
+          self => {
+            let fieldsState =
+              getFieldsState(~schema, ~values=self.state.values);
 
-              self.send(SetFieldsState(fieldsState));
+            self.send(SetFieldsState(fieldsState));
 
-              if (fieldsState
-                  ->Belt.Array.every(((_, fieldState)) =>
-                      fieldState == Valid
-                    )) {
-                self.send(SetFormState(Valid));
-                self.send(Submit);
-              } else {
-                onSubmitFail({send: self.send, state: self.state});
-                self.send(SetFormState(Errored));
-              };
-            }
-          ),
+            if (fieldsState->Belt.Array.every(((_, fieldState)) =>
+                  fieldState == Valid
+                )) {
+              self.send(SetFormState(Valid));
+              self.send(Submit);
+            } else {
+              onSubmitFail({send: self.send, state: self.state});
+              self.send(SetFormState(Errored));
+            };
+          },
         )
       | SetFieldsState(fieldsState) => Update({...state, fieldsState})
       | ValidateField(field) =>
@@ -188,16 +184,15 @@ module Make = (Config: Config) => {
           ...state,
           fieldsState,
           formState:
-            fieldsState
-            ->Belt.Array.some(((_, fieldState)) =>
-                fieldState
-                |> (
-                  fun
-                  | Error(_) => true
-                  | _ => false
-                )
-              ) ?
-              Errored : Valid,
+            fieldsState->Belt.Array.some(((_, fieldState)) =>
+              fieldState
+              |> (
+                fun
+                | Error(_) => true
+                | _ => false
+              )
+            )
+              ? Errored : Valid,
         });
       | FieldChangeValue(field, value) =>
         UpdateWithSideEffects(
@@ -206,7 +201,7 @@ module Make = (Config: Config) => {
             formState: state.formState == Errored ? Errored : Dirty,
             values: Config.set(state.values, field, value),
           },
-          (self => self.send(ValidateField(Field(field)))),
+          self => self.send(ValidateField(Field(field))),
         )
       | FieldChangeState(_, _) => NoUpdate
       | FieldArrayAdd(field, entry) =>

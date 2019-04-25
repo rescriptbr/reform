@@ -117,53 +117,51 @@ module Create = (Config: Config) => {
         switch (action) {
         | TrySubmit =>
           SideEffects(
-            (
-              self => {
-                let globalValidationError = validate(self.state.values);
-                let fieldsValidationErrors =
-                  schema
-                  |> List.map(((fieldName, _)) => {
-                       let (_, getter, _) = Field.getFieldLens(fieldName);
-                       (
+            self => {
+              let globalValidationError = validate(self.state.values);
+              let fieldsValidationErrors =
+                schema
+                |> List.map(((fieldName, _)) => {
+                     let (_, getter, _) = Field.getFieldLens(fieldName);
+                     (
+                       fieldName,
+                       Field.validateField(
                          fieldName,
-                         Field.validateField(
-                           fieldName,
-                           self.state.values,
-                           getter(self.state.values),
-                           schema,
-                           i18n,
-                         ),
-                       );
-                     })
-                  |> List.filter(((_, fieldError)) => fieldError !== None);
-                self.send(SetFieldsErrors(fieldsValidationErrors));
-                self.send(HandleError(globalValidationError));
-                globalValidationError === None
-                && List.length(fieldsValidationErrors) == 0 ?
-                  self.send(HandleSubmit) :
-                  onSubmitFail(fieldsValidationErrors);
-              }
-            ),
+                         self.state.values,
+                         getter(self.state.values),
+                         schema,
+                         i18n,
+                       ),
+                     );
+                   })
+                |> List.filter(((_, fieldError)) => fieldError !== None);
+              self.send(SetFieldsErrors(fieldsValidationErrors));
+              self.send(HandleError(globalValidationError));
+              globalValidationError === None
+              && List.length(fieldsValidationErrors) == 0
+                ? self.send(HandleSubmit)
+                : onSubmitFail(fieldsValidationErrors);
+            },
           )
         | ResetFormState =>
           UpdateWithSideEffects(
             {...state, values: initialState, errors: [], isSubmitting: false},
-            (self => onFormStateChange(self.state)),
+            self => onFormStateChange(self.state),
           )
         | HandleSubmitting(isSubmitting) =>
           UpdateWithSideEffects(
             {...state, isSubmitting},
-            (self => onFormStateChange(self.state)),
+            self => onFormStateChange(self.state),
           )
         | HandleError(error) =>
           UpdateWithSideEffects(
             {...state, isSubmitting: false, error},
-            (self => onFormStateChange(self.state)),
+            self => onFormStateChange(self.state),
           )
         | SetFieldsErrors(errors) =>
           UpdateWithSideEffects(
             {...state, isSubmitting: false, errors},
-            (self => onFormStateChange(self.state)),
+            self => onFormStateChange(self.state),
           )
         | HandleFieldValidation((field, value)) =>
           UpdateWithSideEffects(
@@ -185,7 +183,7 @@ module Create = (Config: Config) => {
                      ),
                    ]),
             },
-            (self => onFormStateChange(self.state)),
+            self => onFormStateChange(self.state),
           )
         | HandleChange((field, value)) =>
           UpdateWithSideEffects(
@@ -193,33 +191,31 @@ module Create = (Config: Config) => {
               ...state,
               values: Field.handleChange((field, value), state.values),
             },
-            (self => self.send(HandleFieldValidation((field, value)))),
+            self => self.send(HandleFieldValidation((field, value))),
           )
         | HandleSubmit =>
           UpdateWithSideEffects(
             {...state, isSubmitting: true},
-            (
-              self => {
-                onSubmit({
-                  resetFormState: () => self.send(ResetFormState),
-                  values: state.values,
-                  setSubmitting: isSubmitting =>
-                    self.send(HandleSubmitting(isSubmitting)),
-                  setError: error => self.send(HandleError(error)),
-                });
-                onFormStateChange(self.state);
-              }
-            ),
+            self => {
+              onSubmit({
+                resetFormState: () => self.send(ResetFormState),
+                values: state.values,
+                setSubmitting: isSubmitting =>
+                  self.send(HandleSubmitting(isSubmitting)),
+                setError: error => self.send(HandleError(error)),
+              });
+              onFormStateChange(self.state);
+            },
           )
         | HandleSetFocusedField(focusedField) =>
           UpdateWithSideEffects(
             {...state, focusedField: Some(focusedField)},
-            (self => onFormStateChange(self.state)),
+            self => onFormStateChange(self.state),
           )
         | HandleUnsetFocusedField =>
           UpdateWithSideEffects(
             {...state, focusedField: None},
-            (self => onFormStateChange(self.state)),
+            self => onFormStateChange(self.state),
           )
         },
       render: self => {

@@ -3692,6 +3692,11 @@ readdir-scoped-modules@^1.0.0:
     graceful-fs "^4.1.2"
     once "^1.3.0"
 
+reason-react-compat@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/reason-react-compat/-/reason-react-compat-0.2.0.tgz#1caf4ec72e7c5ad523dd68b485ac265ca6497c01"
+  integrity sha512-wfnod0z9g+HkXhEqDj3Fq9hVUuOtLN7AgUj5XR1VVzldzzz4eepBGaTPAfqugTKHFqLDplN9b5TOFge148mYcg==
+
 redent@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/redent/-/redent-1.0.0.tgz#cf916ab1fd5f1f16dfb20822dd6ec7f730c2afde"

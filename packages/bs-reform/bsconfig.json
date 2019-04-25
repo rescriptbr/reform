@@ -8,7 +8,7 @@
   "bsc-flags": ["-bs-super-errors"],
   "sources": [
     {
-      "dir": "re"
+      "dir": "src"
     }
   ]
 }
