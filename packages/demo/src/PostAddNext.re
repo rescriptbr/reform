@@ -1,4 +1,4 @@
-[%lenses
+module StateLenses = [%lenses
   type state = {
     description: string,
     title: string,
@@ -24,7 +24,11 @@ module PostAddMutation =
 
 [@react.component]
 let make = () => {
-  let mutate = PostAddMutation.use();
+  let mutate =
+    PostAddMutation.use(
+      ~options=PostAddMutation.options(~client=Apollo.client, ()),
+      (),
+    );
   let (result: option(PostAddMutation.result), setResult) =
     React.useState(() => None);
 
@@ -54,13 +58,15 @@ let make = () => {
       ~onSubmit=
         ({state}) => {
           mutate(
-            ~variables=
-              PostAddMutationConfig.make(
-                ~title=state.values.title,
-                ~description=state.values.description,
-                (),
-              )##variables,
-            (),
+            PostAddMutation.options(
+              ~variables=
+                PostAddMutationConfig.make(
+                  ~title=state.values.title,
+                  ~description=state.values.description,
+                  (),
+                )##variables,
+              (),
+            ),
           )
           |> Js.Promise.then_(result =>
                setResult(_ => Some(result)) |> Js.Promise.resolve
@@ -160,7 +166,9 @@ let make = () => {
            |> ReasonReact.string}
         </p>
       </label>
-      <button type_="submit"> {"Submit" |> ReasonReact.string} </button>
+      {state.formState == Submitting
+         ? <p> {React.string("Saving...")} </p>
+         : <button type_="submit"> {"Submit" |> ReasonReact.string} </button>}
     </form>
   };
 };

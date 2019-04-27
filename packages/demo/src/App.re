@@ -1,14 +1,10 @@
-[%bs.raw {|require('./app.css')|}];
-
-[@bs.module] external logo: string = "./logo.svg";
-
 [@react.component]
 let make = (~message) => {
   <ReasonApolloHooks.ApolloProvider client=Apollo.client>
     <div className="App">
       <div className="App-header">
         <img
-          src="https://astrocoders.com/images/hero/logo.png"
+          src="https://astrocoders.com/panel.png"
           className="App-logo"
           alt="logo"
         />
@@ -17,7 +13,6 @@ let make = (~message) => {
       <p className="App-intro">
         {ReasonReact.string("Say hello to ReForm")}
       </p>
-      <PostAdd />
       <h1> {ReasonReact.string("ReFormNext demo")} </h1>
       <PostAddNext />
     </div>

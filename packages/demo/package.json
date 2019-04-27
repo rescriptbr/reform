@@ -1,0 +1,44 @@
+{
+  "name": "demo",
+  "version": "0.1.0",
+  "scripts": {
+    "build": "bsb -make-world",
+    "start": "bsb -make-world -w",
+    "clean": "bsb -clean-world",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "webpack": "webpack -w",
+    "webpack:production": "NODE_ENV=production webpack",
+    "server": "webpack-dev-server"
+  },
+  "keywords": [
+    "BuckleScript"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "apollo-cache-inmemory": "^1.1.11",
+    "apollo-client": "2.5.1",
+    "apollo-link": "^1.2.1",
+    "apollo-link-context": "^1.0.7",
+    "apollo-link-error": "^1.0.7",
+    "apollo-link-http": "^1.5.3",
+    "bs-reform": "^8.0.0",
+    "graphql": "14.2.1",
+    "graphql-tag": "2.10.1",
+    "react": "^16.8.1",
+    "react-apollo-hooks": "^0.4.5",
+    "react-dom": "^16.8.1",
+    "reason-apollo": "^0.16.0",
+    "reason-apollo-hooks": "1.0.2-beta.1",
+    "reason-react": ">=0.7.0"
+  },
+  "devDependencies": {
+    "bs-platform": "^5.0.2",
+    "graphql_ppx": "^0.2.1",
+    "html-webpack-plugin": "^3.2.0",
+    "lenses-ppx": "^2.0.0",
+    "webpack": "^4.0.1",
+    "webpack-cli": "^3.1.1",
+    "webpack-dev-server": "^3.1.8"
+  }
+}

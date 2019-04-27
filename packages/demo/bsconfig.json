@@ -5,7 +5,6 @@
   ],
   "bs-dependencies": [
     "reason-react",
-    "bs-jest",
     "bs-reform",
     "reason-apollo",
     "reason-apollo-hooks"

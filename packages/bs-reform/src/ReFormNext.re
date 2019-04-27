@@ -111,6 +111,9 @@ module Make = (Config: Config) => {
     state,
     getFieldState: field => fieldState,
     handleChange: 'a. (Config.field('a), 'a) => unit,
+    arrayPush: 'a. (Config.field(array('a)), 'a) => unit,
+    arrayRemoveByIndex: 'a. (Config.field(array('a)), int) => unit,
+    arrayRemoveBy: 'a. (Config.field(array('a)), 'a => bool) => unit,
     submit: unit => unit,
   };
   type onSubmitAPI = {
@@ -247,6 +250,7 @@ module Make = (Config: Config) => {
         | SetFormState(newState) => Update({...state, formState: newState})
         }
       );
+
     let getFieldState = field =>
       state.fieldsState
       ->Array.to_list
@@ -269,6 +273,12 @@ module Make = (Config: Config) => {
       submit: () => send(TrySubmit),
       getFieldState,
       handleChange: (field, value) => send(FieldChangeValue(field, value)),
+
+      arrayPush: (field, value) => send(FieldArrayAdd(field, value)),
+      arrayRemoveBy: (field, predicate) =>
+        send(FieldArrayRemoveBy(field, predicate)),
+      arrayRemoveByIndex: (field, index) =>
+        send(FieldArrayRemove(field, index)),
     };
 
     interface;

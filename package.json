@@ -15,7 +15,6 @@
   "author": "Gabriel R. Abreu <grsabreu@gmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "lerna": "^3.8.1",
     "lint-staged": "^7.0.0",
     "pre-commit": "^1.2.2"
   },
@@ -31,12 +30,8 @@
       "packages/*"
     ],
     "nohoist": [
-      "**/mim-de-papai",
-      "**/mim-de-papai/**",
-
       "**/graphql_ppx",
       "**/graphql_ppx/**",
-
       "**/lenses_ppx",
       "**/lenses_ppx/**"
     ]
