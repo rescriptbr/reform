@@ -30,10 +30,10 @@ Even the schemas we use are nothing more than constructors built-in in the langu
 
 ## Usage with hooks
 
-Checkout `packages/example/src/PostAddNext.re` also
+Checkout `packages/demo/src/PostAddNext.re` also
 
 ```reason
-[%lenses
+module StateLenses = [%lenses
   type state = {
     description: string,
     title: string,
