@@ -97,6 +97,7 @@ module Make = (Config: Config) => {
     | FieldChangeState(field, fieldState)
     | FieldChangeValue(Config.field('a), 'a): action
     | FieldArrayAdd(Config.field(array('a)), 'a): action
+    | FieldArrayUpdateByIndex(Config.field(array('a)), 'a, int): action
     | FieldArrayRemove(Config.field(array('a)), int): action
     | FieldArrayRemoveBy(Config.field(array('a)), 'a => bool): action
     | SetFormState(formState);
@@ -112,6 +113,10 @@ module Make = (Config: Config) => {
     getFieldState: field => fieldState,
     handleChange: 'a. (Config.field('a), 'a) => unit,
     arrayPush: 'a. (Config.field(array('a)), 'a) => unit,
+    arrayUpdateByIndex:
+      'a.
+      (~field: Config.field(array('a)), ~index: int, 'a) => unit,
+
     arrayRemoveByIndex: 'a. (Config.field(array('a)), int) => unit,
     arrayRemoveBy: 'a. (Config.field(array('a)), 'a => bool) => unit,
     submit: unit => unit,
@@ -220,8 +225,8 @@ module Make = (Config: Config) => {
                 state.values,
                 field,
                 Belt.Array.concat(
-                  [|entry|],
                   Config.get(state.values, field),
+                  [|entry|],
                 ),
               ),
           })
@@ -245,6 +250,19 @@ module Make = (Config: Config) => {
                 field,
                 Config.get(state.values, field)
                 ->Belt.Array.keep(entry => !predicate(entry)),
+              ),
+          })
+        | FieldArrayUpdateByIndex(field, value, index) =>
+          Update({
+            ...state,
+            values:
+              Config.set(
+                state.values,
+                field,
+                Config.get(state.values, field)
+                ->Belt.Array.mapWithIndex((i, currentValue) =>
+                    i == index ? value : currentValue
+                  ),
               ),
           })
         | SetFormState(newState) => Update({...state, formState: newState})
@@ -275,6 +293,8 @@ module Make = (Config: Config) => {
       handleChange: (field, value) => send(FieldChangeValue(field, value)),
 
       arrayPush: (field, value) => send(FieldArrayAdd(field, value)),
+      arrayUpdateByIndex: (~field, ~index, value) =>
+        send(FieldArrayUpdateByIndex(field, value, index)),
       arrayRemoveBy: (field, predicate) =>
         send(FieldArrayRemoveBy(field, predicate)),
       arrayRemoveByIndex: (field, index) =>
