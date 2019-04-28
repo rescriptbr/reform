@@ -91,6 +91,9 @@ let make = () => {
 };
 ```
 
+#### Alternatives
+- The great https://github.com/alexfedoseev/re-formality 
+
 #### Support
 
-The authors regularly hang out at the wonderful https://discord.gg/reasonml or https://reasonml.chat so feel free to visit us there.
+We usually hang out at https://discord.gg/reasonml or https://reasonml.chat so feel free to ask anything there.
