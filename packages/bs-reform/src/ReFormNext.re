@@ -41,8 +41,13 @@ module Make = (Config: Config) => {
       )
     | Validation.Email(field) => (
         Field(field),
-        Js.Re.test(Config.get(values, field), [%bs.re {|/\S+@\S+\.\S+/|}])
-          ? Valid : Error("invalid email"),
+        Js.Re.test(
+          Config.get(values, field),
+          [%bs.re
+            "/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/"
+          ],
+        )
+          ? Valid : Error("Invalid email"),
       )
     | Validation.Optional(field) => (Field(field), Valid)
     | Validation.Custom(field, predicate) => (
