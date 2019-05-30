@@ -4,14 +4,14 @@ module type Config = {
   let set: (state, field('a), 'a) => state;
   let get: (state, field('a)) => 'a;
 };
+type fieldState =
+| Pristine
+| Valid
+| Error(string);
 /* This is the abstraction, the user won't know about it */
 module Make = (Config: Config) => {
   type field =
     | Field(Config.field('a)): field;
-  type fieldState =
-    | Pristine
-    | Valid
-    | Error(string);
 
   module Validation = {
     type t =
