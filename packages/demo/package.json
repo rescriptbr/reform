@@ -23,7 +23,7 @@
     "apollo-link-context": "^1.0.7",
     "apollo-link-error": "^1.0.7",
     "apollo-link-http": "^1.5.3",
-    "bs-reform": "^8.2.0",
+    "bs-reform": "^8.3.0",
     "graphql": "14.2.1",
     "graphql-tag": "2.10.1",
     "react": "^16.8.1",
