@@ -15,6 +15,7 @@
   "author": "Gabriel R. Abreu <grsabreu@gmail.com>",
   "license": "MIT",
   "devDependencies": {
+    "lerna": "^3.14.1",
     "lint-staged": "^7.0.0",
     "pre-commit": "^1.2.2"
   },
