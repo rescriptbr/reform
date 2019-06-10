@@ -5,9 +5,9 @@ module type Config = {
   let get: (state, field('a)) => 'a;
 };
 type fieldState =
-| Pristine
-| Valid
-| Error(string);
+  | Pristine
+  | Valid
+  | Error(string);
 /* This is the abstraction, the user won't know about it */
 module Make = (Config: Config) => {
   type field =
@@ -105,7 +105,8 @@ module Make = (Config: Config) => {
     | FieldArrayUpdateByIndex(Config.field(array('a)), 'a, int): action
     | FieldArrayRemove(Config.field(array('a)), int): action
     | FieldArrayRemoveBy(Config.field(array('a)), 'a => bool): action
-    | SetFormState(formState);
+    | SetFormState(formState)
+    | ResetForm;
 
   type state = {
     formState,
@@ -125,6 +126,7 @@ module Make = (Config: Config) => {
     arrayRemoveByIndex: 'a. (Config.field(array('a)), int) => unit,
     arrayRemoveBy: 'a. (Config.field(array('a)), 'a => bool) => unit,
     submit: unit => unit,
+    resetForm: unit => unit,
   };
   type onSubmitAPI = {
     send: action => unit,
@@ -271,6 +273,12 @@ module Make = (Config: Config) => {
               ),
           })
         | SetFormState(newState) => Update({...state, formState: newState})
+        | ResetForm =>
+          Update({
+            fieldsState: getInitialFieldsState(~schema),
+            values: initialState,
+            formState: Pristine,
+          })
         }
       );
 
@@ -294,6 +302,7 @@ module Make = (Config: Config) => {
     let interface: api = {
       state,
       submit: () => send(TrySubmit),
+      resetForm: () => send(ResetForm),
       getFieldState,
       handleChange: (field, value) => send(FieldChangeValue(field, value)),
 
