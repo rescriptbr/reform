@@ -30,7 +30,7 @@
     "bs:setup": "bsb -make-world"
   },
   "dependencies": {
-    "reason-react-compat": "^0.2.0",
+    "reason-react-compat": "^0.4.0",
     "reason-react-update": "^0.1.1"
   }
 }
