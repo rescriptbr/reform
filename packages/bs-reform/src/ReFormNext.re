@@ -86,6 +86,24 @@ module Make = (Config: Config) => {
     ->Belt.Array.get(0);
   };
 
+  let setInitialValues =
+      (
+        ~initial: Config.state,
+        ~values: Config.state,
+        ~fieldsState: array((field, fieldState)),
+      ) => {
+    let newValues = ref(values);
+    fieldsState->Belt.Array.forEach(((f, fs)) =>
+      switch (f, fs) {
+      | (Field(f_), Pristine) =>
+        let newFieldValue = Config.get(initial, f_);
+        newValues := Config.set(newValues^, f_, newFieldValue);
+      | _ => ()
+      }
+    );
+    newValues^;
+  };
+
   type formState =
     | Dirty
     | Submitting
@@ -106,9 +124,11 @@ module Make = (Config: Config) => {
     | FieldArrayRemove(Config.field(array('a)), int): action
     | FieldArrayRemoveBy(Config.field(array('a)), 'a => bool): action
     | SetFormState(formState)
-    | ResetForm;
+    | ResetForm
+    | SetInitial(Config.state);
 
   type state = {
+    initValues: Config.state,
     formState,
     values: Config.state,
     fieldsState: array((field, fieldState)),
@@ -127,6 +147,7 @@ module Make = (Config: Config) => {
     arrayRemoveBy: 'a. (Config.field(array('a)), 'a => bool) => unit,
     submit: unit => unit,
     resetForm: unit => unit,
+    setInitialState: Config.state => unit,
   };
   type onSubmitAPI = {
     send: action => unit,
@@ -144,6 +165,7 @@ module Make = (Config: Config) => {
     let (state, send) =
       ReactUpdate.useReducer(
         {
+          initValues: initialState,
           fieldsState: getInitialFieldsState(~schema),
           values: initialState,
           formState: Pristine,
@@ -275,9 +297,21 @@ module Make = (Config: Config) => {
         | SetFormState(newState) => Update({...state, formState: newState})
         | ResetForm =>
           Update({
+            ...state,
             fieldsState: getInitialFieldsState(~schema),
-            values: initialState,
+            values: state.initValues,
             formState: Pristine,
+          })
+        | SetInitial(newInitial) =>
+          Update({
+            ...state,
+            initValues: newInitial,
+            values:
+              setInitialValues(
+                ~initial=newInitial,
+                ~values=state.values,
+                ~fieldsState=state.fieldsState,
+              ),
           })
         }
       );
@@ -303,6 +337,7 @@ module Make = (Config: Config) => {
       state,
       submit: () => send(TrySubmit),
       resetForm: () => send(ResetForm),
+      setInitialState: initial => send(SetInitial(initial)),
       getFieldState,
       handleChange: (field, value) => send(FieldChangeValue(field, value)),
 
