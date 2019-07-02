@@ -24,13 +24,15 @@ module PostAddMutation =
 
 [@react.component]
 let make = () => {
-  let mutate =
-    PostAddMutation.use(
-      ~options=PostAddMutation.options(~client=Apollo.client, ()),
-      (),
-    );
-  let (result: option(PostAddMutation.result), setResult) =
+  /* Both variant and records available */
+  let (postMutation, _simple, _full) = PostAddMutation.use();
+  open ReasonApolloHooks.Mutation;
+  let (
+    result: option(ReasonApolloHooks.Mutation.controledVariantResult('a)),
+    setResult,
+  ) =
     React.useState(() => None);
+  let mutate = (~variables) => postMutation(~variables, ());
 
   let {state, submit, getFieldState, handleChange}: PostAddForm.api =
     PostAddForm.use(
@@ -57,17 +59,13 @@ let make = () => {
       },
       ~onSubmit=
         ({state}) => {
-          mutate(
-            PostAddMutation.options(
-              ~variables=
-                PostAddMutationConfig.make(
-                  ~title=state.values.title,
-                  ~description=state.values.description,
-                  (),
-                )##variables,
+          let variables =
+            PostAddMutationConfig.make(
+              ~title=state.values.title,
+              ~description=state.values.description,
               (),
-            ),
-          )
+            )##variables;
+          mutate(~variables)
           |> Js.Promise.then_(result =>
                setResult(_ => Some(result)) |> Js.Promise.resolve
              )
@@ -78,11 +76,12 @@ let make = () => {
       ~initialState={title: "", description: "", acceptTerms: false},
       (),
     );
-
   switch (result) {
   | Some(Error(_error)) =>
     <p> {ReasonReact.string("Something went wrong...")} </p>
   | Some(NoData) => <p> {ReasonReact.string("Something went wrong...")} </p>
+  | Some(Loading) => <p> {ReasonReact.string("Something Loading...")} </p>
+  | Some(Called) => <p> {ReasonReact.string("Something Called...")} </p>
   | Some(Data(data)) =>
     <div>
       <h2>
