@@ -41,11 +41,11 @@ module Make = (Config: Config) => {
       )
     | Validation.Email(field) => (
         Field(field),
-        Js.Re.test(
-          Config.get(values, field),
+        Js.Re.test_(
           [%bs.re
             "/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/"
           ],
+          Config.get(values, field),
         )
           ? Valid : Error("Invalid email"),
       )
@@ -86,24 +86,6 @@ module Make = (Config: Config) => {
     ->Belt.Array.get(0);
   };
 
-  let setInitialValues =
-      (
-        ~initial: Config.state,
-        ~values: Config.state,
-        ~fieldsState: array((field, fieldState)),
-      ) => {
-    let newValues = ref(values);
-    fieldsState->Belt.Array.forEach(((f, fs)) =>
-      switch (f, fs) {
-      | (Field(f_), Pristine) =>
-        let newFieldValue = Config.get(initial, f_);
-        newValues := Config.set(newValues^, f_, newFieldValue);
-      | _ => ()
-      }
-    );
-    newValues^;
-  };
-
   type formState =
     | Dirty
     | Submitting
@@ -125,10 +107,10 @@ module Make = (Config: Config) => {
     | FieldArrayRemoveBy(Config.field(array('a)), 'a => bool): action
     | SetFormState(formState)
     | ResetForm
-    | SetInitial(Config.state);
+    | SetValues(Config.state)
+    | SetFieldValue(Config.field('a), 'a): action;
 
   type state = {
-    initValues: Config.state,
     formState,
     values: Config.state,
     fieldsState: array((field, fieldState)),
@@ -147,7 +129,11 @@ module Make = (Config: Config) => {
     arrayRemoveBy: 'a. (Config.field(array('a)), 'a => bool) => unit,
     submit: unit => unit,
     resetForm: unit => unit,
-    setInitialState: Config.state => unit,
+    setValues: Config.state => unit,
+    setFieldValue:
+      'a.
+      (Config.field('a), 'a, ~shouldValidate: bool=?, unit) => unit,
+
   };
   type onSubmitAPI = {
     send: action => unit,
@@ -165,7 +151,6 @@ module Make = (Config: Config) => {
     let (state, send) =
       ReactUpdate.useReducer(
         {
-          initValues: initialState,
           fieldsState: getInitialFieldsState(~schema),
           values: initialState,
           formState: Pristine,
@@ -297,22 +282,13 @@ module Make = (Config: Config) => {
         | SetFormState(newState) => Update({...state, formState: newState})
         | ResetForm =>
           Update({
-            ...state,
             fieldsState: getInitialFieldsState(~schema),
-            values: state.initValues,
+            values: initialState,
             formState: Pristine,
           })
-        | SetInitial(newInitial) =>
-          Update({
-            ...state,
-            initValues: newInitial,
-            values:
-              setInitialValues(
-                ~initial=newInitial,
-                ~values=state.values,
-                ~fieldsState=state.fieldsState,
-              ),
-          })
+        | SetValues(values) => Update({...state, values})
+        | SetFieldValue(field, value) =>
+          Update({...state, values: Config.set(state.values, field, value)})
         }
       );
 
@@ -337,7 +313,12 @@ module Make = (Config: Config) => {
       state,
       submit: () => send(TrySubmit),
       resetForm: () => send(ResetForm),
-      setInitialState: initial => send(SetInitial(initial)),
+      setValues: values => send(SetValues(values)),
+      setFieldValue: (field, value, ~shouldValidate=true, ()) => {
+        shouldValidate
+          ? send(FieldChangeValue(field, value))
+          : send(SetFieldValue(field, value));
+      },
       getFieldState,
       handleChange: (field, value) => send(FieldChangeValue(field, value)),
 
