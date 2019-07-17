@@ -17,6 +17,7 @@ module Make = (Config: Config) => {
     type t =
       | Email(Config.field(string)): t
       | Optional(Config.field('a)): t
+      | StringNonEmpty(Config.field(string)): t
       | Min(Config.field(int), int): t
       | Custom(Config.field('a), Config.state => fieldState): t;
     type schema =
@@ -29,6 +30,7 @@ module Make = (Config: Config) => {
       | Validation.Min(field, _) => Field(field) == fieldFilter
       | Validation.Email(field) => Field(field) == fieldFilter
       | Validation.Optional(field) => Field(field) == fieldFilter
+      | Validation.StringNonEmpty(field) => Field(field) == fieldFilter
       | Validation.Custom(field, _) => Field(field) == fieldFilter
       }
     );
@@ -41,15 +43,20 @@ module Make = (Config: Config) => {
       )
     | Validation.Email(field) => (
         Field(field),
-        Js.Re.test(
-          Config.get(values, field),
+        Js.Re.test_(
           [%bs.re
             "/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/"
           ],
+          Config.get(values, field),
         )
           ? Valid : Error("Invalid email"),
       )
     | Validation.Optional(field) => (Field(field), Valid)
+    | Validation.StringNonEmpty(field) => (
+        Field(field),
+        Config.get(values, field) === ""
+          ? Error("String must not be empty") : Valid,
+      )
     | Validation.Custom(field, predicate) => (
         Field(field),
         predicate(values),
@@ -64,6 +71,7 @@ module Make = (Config: Config) => {
       | Validation.Min(field, _min) => (Field(field), Pristine)
       | Validation.Email(field) => (Field(field), Pristine)
       | Validation.Optional(field) => (Field(field), Pristine)
+      | Validation.StringNonEmpty(field) => (Field(field), Pristine)
       | Validation.Custom(field, _predicate) => (Field(field), Pristine)
       }
     );
@@ -106,7 +114,9 @@ module Make = (Config: Config) => {
     | FieldArrayRemove(Config.field(array('a)), int): action
     | FieldArrayRemoveBy(Config.field(array('a)), 'a => bool): action
     | SetFormState(formState)
-    | ResetForm;
+    | ResetForm
+    | SetValues(Config.state)
+    | SetFieldValue(Config.field('a), 'a): action;
 
   type state = {
     formState,
@@ -127,6 +137,11 @@ module Make = (Config: Config) => {
     arrayRemoveBy: 'a. (Config.field(array('a)), 'a => bool) => unit,
     submit: unit => unit,
     resetForm: unit => unit,
+    setValues: Config.state => unit,
+    setFieldValue:
+      'a.
+      (Config.field('a), 'a, ~shouldValidate: bool=?, unit) => unit,
+
   };
   type onSubmitAPI = {
     send: action => unit,
@@ -279,6 +294,9 @@ module Make = (Config: Config) => {
             values: initialState,
             formState: Pristine,
           })
+        | SetValues(values) => Update({...state, values})
+        | SetFieldValue(field, value) =>
+          Update({...state, values: Config.set(state.values, field, value)})
         }
       );
 
@@ -303,6 +321,12 @@ module Make = (Config: Config) => {
       state,
       submit: () => send(TrySubmit),
       resetForm: () => send(ResetForm),
+      setValues: values => send(SetValues(values)),
+      setFieldValue: (field, value, ~shouldValidate=true, ()) => {
+        shouldValidate
+          ? send(FieldChangeValue(field, value))
+          : send(SetFieldValue(field, value));
+      },
       getFieldState,
       handleChange: (field, value) => send(FieldChangeValue(field, value)),
 

@@ -42,11 +42,7 @@ let make = () => {
               Js.String.length(values.title) > 20
                 ? Error("Keep it short!") : Valid,
           ),
-          Custom(
-            Description,
-            values =>
-              values.description == "" ? Error("Can't be empty") : Valid,
-          ),
+          StringNonEmpty(Description),
           Custom(
             AcceptTerms,
             values =>
