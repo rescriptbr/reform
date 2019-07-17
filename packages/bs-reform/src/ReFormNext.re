@@ -41,11 +41,11 @@ module Make = (Config: Config) => {
       )
     | Validation.Email(field) => (
         Field(field),
-        Js.Re.test(
-          Config.get(values, field),
+        Js.Re.test_(
           [%bs.re
             "/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/"
           ],
+          Config.get(values, field),
         )
           ? Valid : Error("Invalid email"),
       )
@@ -106,7 +106,9 @@ module Make = (Config: Config) => {
     | FieldArrayRemove(Config.field(array('a)), int): action
     | FieldArrayRemoveBy(Config.field(array('a)), 'a => bool): action
     | SetFormState(formState)
-    | ResetForm;
+    | ResetForm
+    | SetValues(Config.state)
+    | SetFieldValue(Config.field('a), 'a): action;
 
   type state = {
     formState,
@@ -127,6 +129,11 @@ module Make = (Config: Config) => {
     arrayRemoveBy: 'a. (Config.field(array('a)), 'a => bool) => unit,
     submit: unit => unit,
     resetForm: unit => unit,
+    setValues: Config.state => unit,
+    setFieldValue:
+      'a.
+      (Config.field('a), 'a, ~shouldValidate: bool=?, unit) => unit,
+
   };
   type onSubmitAPI = {
     send: action => unit,
@@ -279,6 +286,9 @@ module Make = (Config: Config) => {
             values: initialState,
             formState: Pristine,
           })
+        | SetValues(values) => Update({...state, values})
+        | SetFieldValue(field, value) =>
+          Update({...state, values: Config.set(state.values, field, value)})
         }
       );
 
@@ -303,6 +313,12 @@ module Make = (Config: Config) => {
       state,
       submit: () => send(TrySubmit),
       resetForm: () => send(ResetForm),
+      setValues: values => send(SetValues(values)),
+      setFieldValue: (field, value, ~shouldValidate=true, ()) => {
+        shouldValidate
+          ? send(FieldChangeValue(field, value))
+          : send(SetFieldValue(field, value));
+      },
       getFieldState,
       handleChange: (field, value) => send(FieldChangeValue(field, value)),
 
