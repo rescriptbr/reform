@@ -7,8 +7,7 @@ module type Config = {
 type fieldState =
   | Pristine
   | Valid
-  | Error(string);
-/* This is the abstraction, the user won't know about it */
+  | Error(string) /* This is the abstraction, the user won't know about it */;
 module Make = (Config: Config) => {
   type field =
     | Field(Config.field('a)): field;
@@ -16,7 +15,8 @@ module Make = (Config: Config) => {
   module Validation = {
     type t =
       | Email(Config.field(string)): t
-      | Optional(Config.field('a)): t
+      | NoValidation(Config.field('a)): t
+      | StringNonEmpty(Config.field(string)): t
       | Min(Config.field(int), int): t
       | Custom(Config.field('a), Config.state => fieldState): t;
     type schema =
@@ -28,7 +28,8 @@ module Make = (Config: Config) => {
       switch (validator) {
       | Validation.Min(field, _) => Field(field) == fieldFilter
       | Validation.Email(field) => Field(field) == fieldFilter
-      | Validation.Optional(field) => Field(field) == fieldFilter
+      | Validation.NoValidation(field) => Field(field) == fieldFilter
+      | Validation.StringNonEmpty(field) => Field(field) == fieldFilter
       | Validation.Custom(field, _) => Field(field) == fieldFilter
       }
     );
@@ -49,7 +50,12 @@ module Make = (Config: Config) => {
         )
           ? Valid : Error("Invalid email"),
       )
-    | Validation.Optional(field) => (Field(field), Valid)
+    | Validation.NoValidation(field) => (Field(field), Valid)
+    | Validation.StringNonEmpty(field) => (
+        Field(field),
+        Config.get(values, field) === ""
+          ? Error("String must not be empty") : Valid,
+      )
     | Validation.Custom(field, predicate) => (
         Field(field),
         predicate(values),
@@ -63,7 +69,8 @@ module Make = (Config: Config) => {
       switch (validator) {
       | Validation.Min(field, _min) => (Field(field), Pristine)
       | Validation.Email(field) => (Field(field), Pristine)
-      | Validation.Optional(field) => (Field(field), Pristine)
+      | Validation.NoValidation(field) => (Field(field), Pristine)
+      | Validation.StringNonEmpty(field) => (Field(field), Pristine)
       | Validation.Custom(field, _predicate) => (Field(field), Pristine)
       }
     );
