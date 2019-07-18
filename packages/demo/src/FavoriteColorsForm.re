@@ -47,7 +47,7 @@ let make = () => {
                 ? Error("Invalid colors") : Valid;
             },
           ),
-          IntMin(NumberOfFavoriteColors, 1),
+          IntMax(NumberOfFavoriteColors, 3),
         |]);
       },
       ~onSubmit=({state}) => None,

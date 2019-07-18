@@ -18,6 +18,7 @@ module Make = (Config: Config) => {
       | NoValidation(Config.field('a)): t
       | StringNonEmpty(Config.field(string)): t
       | IntMin(Config.field(int), int): t
+      | IntMax(Config.field(int), int): t
       | Custom(Config.field('a), Config.state => fieldState): t;
     type schema =
       | Schema(array(t)): schema;
@@ -27,6 +28,7 @@ module Make = (Config: Config) => {
     validators->Belt.Array.keep(validator =>
       switch (validator) {
       | Validation.IntMin(field, _) => Field(field) == fieldFilter
+      | Validation.IntMax(field, _) => Field(field) == fieldFilter
       | Validation.Email(field) => Field(field) == fieldFilter
       | Validation.NoValidation(field) => Field(field) == fieldFilter
       | Validation.StringNonEmpty(field) => Field(field) == fieldFilter
@@ -39,6 +41,10 @@ module Make = (Config: Config) => {
     | Validation.IntMin(field, min) => (
         Field(field),
         Config.get(values, field) > min ? Valid : Error("Below minimum"),
+      )
+    | Validation.IntMax(field, max) => (
+        Field(field),
+        Config.get(values, field) <= max ? Valid : Error("Above maximum"),
       )
     | Validation.Email(field) => (
         Field(field),
@@ -68,6 +74,7 @@ module Make = (Config: Config) => {
     validators->Belt.Array.map(validator =>
       switch (validator) {
       | Validation.IntMin(field, _min) => (Field(field), Pristine)
+      | Validation.IntMax(field, _max) => (Field(field), Pristine)
       | Validation.Email(field) => (Field(field), Pristine)
       | Validation.NoValidation(field) => (Field(field), Pristine)
       | Validation.StringNonEmpty(field) => (Field(field), Pristine)
