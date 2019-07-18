@@ -40,7 +40,7 @@ module Make = (Config: Config) => {
     switch (validator) {
     | Validation.IntMin(field, min) => (
         Field(field),
-        Config.get(values, field) > min ? Valid : Error("Below minimum"),
+        Config.get(values, field) >= min ? Valid : Error("Below minimum"),
       )
     | Validation.IntMax(field, max) => (
         Field(field),
