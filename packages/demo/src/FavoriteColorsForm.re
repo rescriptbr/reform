@@ -2,7 +2,6 @@ module FavoriteColorsLenses = [%lenses
   type t = {
     name: string,
     hex: string,
-    numberOfFavoriteColors: int,
   }
 ];
 
@@ -48,7 +47,7 @@ let make = () => {
                 ? Error("Invalid colors") : Valid;
             },
           ),
-          IntMin(NumberOfFavoriteColors, 1),
+          IntMax(NumberOfFavoriteColors, 3),
         |]);
       },
       ~onSubmit=({state}) => None,
@@ -82,13 +81,7 @@ let make = () => {
          |> ReasonReact.string}
       </p>
     </label>
-    <button
-      onClick={_ =>
-        arrayPush(
-          FavoriteColors,
-          {name: "", hex: "", numberOfFavoriteColors: 0},
-        )
-      }>
+    <button onClick={_ => arrayPush(FavoriteColors, {name: "", hex: ""})}>
       {React.string("Add color")}
     </button>
     {state.values.favoriteColors
