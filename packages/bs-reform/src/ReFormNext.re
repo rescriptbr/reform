@@ -40,11 +40,21 @@ module Make = (Config: Config) => {
     switch (validator) {
     | Validation.IntMin(field, min) => (
         Field(field),
-        Config.get(values, field) >= min ? Valid : Error("Below minimum"),
+        Config.get(values, field) >= min
+          ? Valid
+          : Error(
+              "This value must be greater than or equal to "
+              ++ string_of_int(min),
+            ),
       )
     | Validation.IntMax(field, max) => (
         Field(field),
-        Config.get(values, field) <= max ? Valid : Error("Above maximum"),
+        Config.get(values, field) <= max
+          ? Valid
+          : Error(
+              "This value must be less than or equal to "
+              ++ string_of_int(max),
+            ),
       )
     | Validation.Email(field) => (
         Field(field),
