@@ -2,6 +2,7 @@ module FavoriteColorsLenses = [%lenses
   type t = {
     name: string,
     hex: string,
+    numberOfFavoriteColors: int,
   }
 ];
 
@@ -9,6 +10,7 @@ module StateLenses = [%lenses
   type state = {
     name: string,
     favoriteColors: array(FavoriteColorsLenses.t),
+    numberOfFavoriteColors: int,
   }
 ];
 
@@ -46,10 +48,15 @@ let make = () => {
                 ? Error("Invalid colors") : Valid;
             },
           ),
+          IntMin(NumberOfFavoriteColors, 1),
         |]);
       },
       ~onSubmit=({state}) => None,
-      ~initialState={name: "", favoriteColors: [||]},
+      ~initialState={
+        name: "",
+        favoriteColors: [||],
+        numberOfFavoriteColors: 0,
+      },
       (),
     );
 
@@ -75,7 +82,13 @@ let make = () => {
          |> ReasonReact.string}
       </p>
     </label>
-    <button onClick={_ => arrayPush(FavoriteColors, {name: "", hex: ""})}>
+    <button
+      onClick={_ =>
+        arrayPush(
+          FavoriteColors,
+          {name: "", hex: "", numberOfFavoriteColors: 0},
+        )
+      }>
       {React.string("Add color")}
     </button>
     {state.values.favoriteColors
@@ -115,5 +128,25 @@ let make = () => {
          </>
        )
      ->React.array}
+    <label>
+      <span> {"Number of favorite colors:" |> ReasonReact.string} </span>
+      <input
+        value={string_of_int(state.values.numberOfFavoriteColors)}
+        type_="number"
+        onChange={ReForm.Helpers.handleDomFormChange(
+          handleChange(NumberOfFavoriteColors),
+        )}
+      />
+      <p>
+        {getFieldState(Field(NumberOfFavoriteColors))
+         |> (
+           fun
+           | Error(error) => Some(error)
+           | _ => None
+         )
+         |> Belt.Option.getWithDefault(_, "")
+         |> ReasonReact.string}
+      </p>
+    </label>
   </form>;
 };
