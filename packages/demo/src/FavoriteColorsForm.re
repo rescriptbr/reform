@@ -48,7 +48,7 @@ let make = () => {
                 ? Error("Invalid colors") : Valid;
             },
           ),
-          FloatMin(OpacityOfColors, 0.2),
+          FloatMax(OpacityOfColors, 1.0),
           IntMax(NumberOfFavoriteColors, 3),
         |]);
       },
