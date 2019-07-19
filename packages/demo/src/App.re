@@ -16,10 +16,13 @@ let make = (~message) => {
       <a href="/new-post"> "New post form demo "->React.string </a>
       <br />
       <a href="/fav-colors"> "Form with array field demo"->React.string </a>
+      <br />
+      <a href="/basic-usage"> "Form - Basic Usage"->React.string </a>
       <div style={ReactDOMRe.Style.make(~padding="100px", ())}>
         {switch (url.path) {
          | ["new-post"] => <PostAddNext />
          | ["fav-colors"] => <FavoriteColorsForm />
+         | ["basic-usage"] => <BasicUsage />
          | _ =>
            <p className="App-intro">
              {ReasonReact.string("Say hello to ReForm")}
