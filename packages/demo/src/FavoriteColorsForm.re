@@ -30,7 +30,7 @@ let make = () => {
     Form.use(
       ~schema={
         Form.Validation.Schema([|
-          StringMax(Name, 4),
+          StringRegExp(Name, "^[a-zA-Z\s]*$"),
           Custom(
             FavoriteColors,
             ({favoriteColors}) => {
