@@ -29,7 +29,7 @@ let make = () => {
     Form.use(
       ~schema={
         Form.Validation.Schema([|
-          StringMin(Name, 5),
+          StringMax(Name, 4),
           Custom(
             FavoriteColors,
             ({favoriteColors}) => {
