@@ -30,12 +30,7 @@ let make = () => {
     Form.use(
       ~schema={
         Form.Validation.Schema([|
-          Custom(
-            Name,
-            values =>
-              Js.String.length(values.name) < 5
-                ? Error("Invalid name") : Valid,
-          ),
+          StringMax(Name, 4),
           Custom(
             FavoriteColors,
             ({favoriteColors}) => {

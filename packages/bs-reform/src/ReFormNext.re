@@ -17,6 +17,8 @@ module Make = (Config: Config) => {
       | Email(Config.field(string)): t
       | NoValidation(Config.field('a)): t
       | StringNonEmpty(Config.field(string)): t
+      | StringMin(Config.field(string), int): t
+      | StringMax(Config.field(string), int): t
       | IntMin(Config.field(int), int): t
       | IntMax(Config.field(int), int): t
       | FloatMin(Config.field(float), float): t
@@ -36,6 +38,8 @@ module Make = (Config: Config) => {
       | Validation.Email(field) => Field(field) == fieldFilter
       | Validation.NoValidation(field) => Field(field) == fieldFilter
       | Validation.StringNonEmpty(field) => Field(field) == fieldFilter
+      | Validation.StringMin(field, _) => Field(field) == fieldFilter
+      | Validation.StringMax(field, _) => Field(field) == fieldFilter
       | Validation.Custom(field, _) => Field(field) == fieldFilter
       }
     );
@@ -94,6 +98,26 @@ module Make = (Config: Config) => {
         Config.get(values, field) === ""
           ? Error("String must not be empty") : Valid,
       )
+    | Validation.StringMin(field, min) => (
+        Field(field),
+        Js.String.length(Config.get(values, field)) >= min
+          ? Valid
+          : Error(
+              "This value must be at least "
+              ++ string_of_int(min)
+              ++ " characters",
+            ),
+      )
+    | Validation.StringMax(field, max) => (
+        Field(field),
+        Js.String.length(Config.get(values, field)) <= max
+          ? Valid
+          : Error(
+              "This value must be at most "
+              ++ string_of_int(max)
+              ++ " characters",
+            ),
+      )
     | Validation.Custom(field, predicate) => (
         Field(field),
         predicate(values),
@@ -112,6 +136,8 @@ module Make = (Config: Config) => {
       | Validation.Email(field) => (Field(field), Pristine)
       | Validation.NoValidation(field) => (Field(field), Pristine)
       | Validation.StringNonEmpty(field) => (Field(field), Pristine)
+      | Validation.StringMin(field, _min) => (Field(field), Pristine)
+      | Validation.StringMax(field, _max) => (Field(field), Pristine)
       | Validation.Custom(field, _predicate) => (Field(field), Pristine)
       }
     );
