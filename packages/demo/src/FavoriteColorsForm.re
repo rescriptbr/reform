@@ -10,6 +10,7 @@ module StateLenses = [%lenses
     name: string,
     favoriteColors: array(FavoriteColorsLenses.t),
     numberOfFavoriteColors: int,
+    opacityOfColors: float,
   }
 ];
 
@@ -42,6 +43,7 @@ let make = () => {
                 ? Error("Invalid colors") : Valid;
             },
           ),
+          FloatMax(OpacityOfColors, 1.0),
           IntMax(NumberOfFavoriteColors, 3),
         |]);
       },
@@ -50,6 +52,7 @@ let make = () => {
         name: "",
         favoriteColors: [||],
         numberOfFavoriteColors: 0,
+        opacityOfColors: 0.0,
       },
       (),
     );
@@ -127,6 +130,27 @@ let make = () => {
       />
       <p>
         {getFieldState(Field(NumberOfFavoriteColors))
+         |> (
+           fun
+           | Error(error) => Some(error)
+           | _ => None
+         )
+         |> Belt.Option.getWithDefault(_, "")
+         |> ReasonReact.string}
+      </p>
+    </label>
+    <label>
+      <span> {"Opacity of colors:" |> ReasonReact.string} </span>
+      <input
+        value={Js.Float.toString(state.values.opacityOfColors)}
+        type_="number"
+        step=0.1
+        onChange={ReForm.Helpers.handleDomFormChange(
+          handleChange(OpacityOfColors),
+        )}
+      />
+      <p>
+        {getFieldState(Field(OpacityOfColors))
          |> (
            fun
            | Error(error) => Some(error)

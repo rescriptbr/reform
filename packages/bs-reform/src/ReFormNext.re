@@ -21,6 +21,8 @@ module Make = (Config: Config) => {
       | StringMax(Config.field(string), int): t
       | IntMin(Config.field(int), int): t
       | IntMax(Config.field(int), int): t
+      | FloatMin(Config.field(float), float): t
+      | FloatMax(Config.field(float), float): t
       | Custom(Config.field('a), Config.state => fieldState): t;
     type schema =
       | Schema(array(t)): schema;
@@ -31,6 +33,8 @@ module Make = (Config: Config) => {
       switch (validator) {
       | Validation.IntMin(field, _) => Field(field) == fieldFilter
       | Validation.IntMax(field, _) => Field(field) == fieldFilter
+      | Validation.FloatMin(field, _) => Field(field) == fieldFilter
+      | Validation.FloatMax(field, _) => Field(field) == fieldFilter
       | Validation.Email(field) => Field(field) == fieldFilter
       | Validation.NoValidation(field) => Field(field) == fieldFilter
       | Validation.StringNonEmpty(field) => Field(field) == fieldFilter
@@ -58,6 +62,24 @@ module Make = (Config: Config) => {
           : Error(
               "This value must be less than or equal to "
               ++ string_of_int(max),
+            ),
+      )
+    | Validation.FloatMin(field, min) => (
+        Field(field),
+        Config.get(values, field) >= min
+          ? Valid
+          : Error(
+              "This value must be greater than or equal to "
+              ++ Js.Float.toString(min),
+            ),
+      )
+    | Validation.FloatMax(field, max) => (
+        Field(field),
+        Config.get(values, field) <= max
+          ? Valid
+          : Error(
+              "This value must be less than or equal to "
+              ++ Js.Float.toString(max),
             ),
       )
     | Validation.Email(field) => (
@@ -109,6 +131,8 @@ module Make = (Config: Config) => {
       switch (validator) {
       | Validation.IntMin(field, _min) => (Field(field), Pristine)
       | Validation.IntMax(field, _max) => (Field(field), Pristine)
+      | Validation.FloatMin(field, _min) => (Field(field), Pristine)
+      | Validation.FloatMax(field, _max) => (Field(field), Pristine)
       | Validation.Email(field) => (Field(field), Pristine)
       | Validation.NoValidation(field) => (Field(field), Pristine)
       | Validation.StringNonEmpty(field) => (Field(field), Pristine)
