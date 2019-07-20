@@ -21,7 +21,7 @@ let make = () => {
   let {
     state,
     submit,
-    getFieldState,
+    getFieldError,
     handleChange,
     arrayPush,
     arrayUpdateByIndex,
@@ -69,14 +69,9 @@ let make = () => {
         onChange={ReForm.Helpers.handleDomFormChange(handleChange(Name))}
       />
       <p>
-        {getFieldState(Field(Name))
-         |> (
-           fun
-           | Error(error) => Some(error)
-           | _ => None
-         )
-         |> Belt.Option.getWithDefault(_, "")
-         |> ReasonReact.string}
+        {getFieldError(Field(Name))
+         ->Belt.Option.getWithDefault("")
+         ->ReasonReact.string}
       </p>
     </label>
     <button onClick={_ => arrayPush(FavoriteColors, {name: "", hex: ""})}>
@@ -129,14 +124,9 @@ let make = () => {
         )}
       />
       <p>
-        {getFieldState(Field(NumberOfFavoriteColors))
-         |> (
-           fun
-           | Error(error) => Some(error)
-           | _ => None
-         )
-         |> Belt.Option.getWithDefault(_, "")
-         |> ReasonReact.string}
+        {getFieldError(Field(NumberOfFavoriteColors))
+         ->Belt.Option.getWithDefault("")
+         ->ReasonReact.string}
       </p>
     </label>
     <label>
@@ -150,14 +140,9 @@ let make = () => {
         )}
       />
       <p>
-        {getFieldState(Field(OpacityOfColors))
-         |> (
-           fun
-           | Error(error) => Some(error)
-           | _ => None
-         )
-         |> Belt.Option.getWithDefault(_, "")
-         |> ReasonReact.string}
+        {getFieldError(Field(OpacityOfColors))
+         ->Belt.Option.getWithDefault("")
+         ->ReasonReact.string}
       </p>
     </label>
   </form>;

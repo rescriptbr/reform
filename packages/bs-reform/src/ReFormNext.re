@@ -202,6 +202,7 @@ module Make = (Config: Config) => {
   type api = {
     state,
     getFieldState: field => fieldState,
+    getFieldError: field => option(string),
     handleChange: 'a. (Config.field('a), 'a) => unit,
     arrayPush: 'a. (Config.field(array('a)), 'a) => unit,
     arrayUpdateByIndex:
@@ -392,6 +393,14 @@ module Make = (Config: Config) => {
           }
       );
 
+    let getFieldError = field =>
+      getFieldState(field)
+      |> (
+        fun
+        | Error(error) => Some(error)
+        | _ => None
+      );
+
     let interface: api = {
       state,
       submit: () => send(TrySubmit),
@@ -403,6 +412,7 @@ module Make = (Config: Config) => {
           : send(SetFieldValue(field, value));
       },
       getFieldState,
+      getFieldError,
       handleChange: (field, value) => send(FieldChangeValue(field, value)),
 
       arrayPush: (field, value) => send(FieldArrayAdd(field, value)),
