@@ -1,0 +1,37 @@
+open Jest;
+
+module ProfileLenses = {
+  type state = {
+    email: string,
+    age: int,
+  };
+  type field(_) =
+    | Email: field(string)
+    | Age: field(int);
+  let get: type value. (state, field(value)) => value =
+    (state, field) =>
+      switch (field) {
+      | Email => state.email
+      | Age => state.age
+      };
+  let set: type value. (state, field(value), value) => state =
+    (state, field, value) =>
+      switch (field) {
+      | Email => {...state, email: value}
+      | Age => {...state, age: value}
+      };
+};
+
+test("should validate a correct record", () => {
+  open Expect;
+
+  let user = ProfileLenses.{email: "gameplayt", age: 0};
+
+  module ProfileValidation = ReSchema.Make(ProfileLenses);
+
+  let schema =
+    ProfileValidation.Validation.Schema([|Email(Email), IntMin(Age, 18)|]);
+
+  expect(schema |> ProfileValidation.validate(user))
+  |> toBe(ReSchema.Errors([||]));
+});
