@@ -9,6 +9,8 @@ module StateLenses = [%lenses
   type state = {
     name: string,
     favoriteColors: array(FavoriteColorsLenses.t),
+    numberOfFavoriteColors: int,
+    opacityOfColors: float,
   }
 ];
 
@@ -19,7 +21,7 @@ let make = () => {
   let {
     state,
     submit,
-    getFieldState,
+    getFieldError,
     handleChange,
     arrayPush,
     arrayUpdateByIndex,
@@ -28,12 +30,7 @@ let make = () => {
     Form.use(
       ~schema={
         Form.Validation.Schema([|
-          Custom(
-            Name,
-            values =>
-              Js.String.length(values.name) < 5
-                ? Error("Invalid name") : Valid,
-          ),
+          StringRegExp(Name, "^[a-zA-Z\s]*$"),
           Custom(
             FavoriteColors,
             ({favoriteColors}) => {
@@ -46,10 +43,17 @@ let make = () => {
                 ? Error("Invalid colors") : Valid;
             },
           ),
+          FloatMax(OpacityOfColors, 1.0),
+          IntMax(NumberOfFavoriteColors, 3),
         |]);
       },
       ~onSubmit=({state}) => None,
-      ~initialState={name: "", favoriteColors: [||]},
+      ~initialState={
+        name: "",
+        favoriteColors: [||],
+        numberOfFavoriteColors: 0,
+        opacityOfColors: 0.0,
+      },
       (),
     );
 
@@ -65,14 +69,9 @@ let make = () => {
         onChange={ReForm.Helpers.handleDomFormChange(handleChange(Name))}
       />
       <p>
-        {getFieldState(Field(Name))
-         |> (
-           fun
-           | Error(error) => Some(error)
-           | _ => None
-         )
-         |> Belt.Option.getWithDefault(_, "")
-         |> ReasonReact.string}
+        {getFieldError(Field(Name))
+         ->Belt.Option.getWithDefault("")
+         ->ReasonReact.string}
       </p>
     </label>
     <button onClick={_ => arrayPush(FavoriteColors, {name: "", hex: ""})}>
@@ -115,5 +114,36 @@ let make = () => {
          </>
        )
      ->React.array}
+    <label>
+      <span> {"Number of favorite colors:" |> ReasonReact.string} </span>
+      <input
+        value={string_of_int(state.values.numberOfFavoriteColors)}
+        type_="number"
+        onChange={ReForm.Helpers.handleDomFormChange(
+          handleChange(NumberOfFavoriteColors),
+        )}
+      />
+      <p>
+        {getFieldError(Field(NumberOfFavoriteColors))
+         ->Belt.Option.getWithDefault("")
+         ->ReasonReact.string}
+      </p>
+    </label>
+    <label>
+      <span> {"Opacity of colors:" |> ReasonReact.string} </span>
+      <input
+        value={Js.Float.toString(state.values.opacityOfColors)}
+        type_="number"
+        step=0.1
+        onChange={ReForm.Helpers.handleDomFormChange(
+          handleChange(OpacityOfColors),
+        )}
+      />
+      <p>
+        {getFieldError(Field(OpacityOfColors))
+         ->Belt.Option.getWithDefault("")
+         ->ReasonReact.string}
+      </p>
+    </label>
   </form>;
 };

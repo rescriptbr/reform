@@ -7,8 +7,7 @@ module type Config = {
 type fieldState =
   | Pristine
   | Valid
-  | Error(string);
-/* This is the abstraction, the user won't know about it */
+  | Error(string) /* This is the abstraction, the user won't know about it */;
 module Make = (Config: Config) => {
   type field =
     | Field(Config.field('a)): field;
@@ -16,8 +15,15 @@ module Make = (Config: Config) => {
   module Validation = {
     type t =
       | Email(Config.field(string)): t
-      | Optional(Config.field('a)): t
-      | Min(Config.field(int), int): t
+      | NoValidation(Config.field('a)): t
+      | StringNonEmpty(Config.field(string)): t
+      | StringRegExp(Config.field(string), string): t
+      | StringMin(Config.field(string), int): t
+      | StringMax(Config.field(string), int): t
+      | IntMin(Config.field(int), int): t
+      | IntMax(Config.field(int), int): t
+      | FloatMin(Config.field(float), float): t
+      | FloatMax(Config.field(float), float): t
       | Custom(Config.field('a), Config.state => fieldState): t;
     type schema =
       | Schema(array(t)): schema;
@@ -26,18 +32,57 @@ module Make = (Config: Config) => {
   let filterFieldsStateByField = (~validators, ~fieldFilter) =>
     validators->Belt.Array.keep(validator =>
       switch (validator) {
-      | Validation.Min(field, _) => Field(field) == fieldFilter
+      | Validation.IntMin(field, _) => Field(field) == fieldFilter
+      | Validation.IntMax(field, _) => Field(field) == fieldFilter
+      | Validation.FloatMin(field, _) => Field(field) == fieldFilter
+      | Validation.FloatMax(field, _) => Field(field) == fieldFilter
       | Validation.Email(field) => Field(field) == fieldFilter
-      | Validation.Optional(field) => Field(field) == fieldFilter
+      | Validation.NoValidation(field) => Field(field) == fieldFilter
+      | Validation.StringNonEmpty(field) => Field(field) == fieldFilter
+      | Validation.StringRegExp(field, _) => Field(field) == fieldFilter
+      | Validation.StringMin(field, _) => Field(field) == fieldFilter
+      | Validation.StringMax(field, _) => Field(field) == fieldFilter
       | Validation.Custom(field, _) => Field(field) == fieldFilter
       }
     );
 
   let validateField = (~validator, ~values) =>
     switch (validator) {
-    | Validation.Min(field, min) => (
+    | Validation.IntMin(field, min) => (
         Field(field),
-        Config.get(values, field) > min ? Valid : Error("Below minimum"),
+        Config.get(values, field) >= min
+          ? Valid
+          : Error(
+              "This value must be greater than or equal to "
+              ++ string_of_int(min),
+            ),
+      )
+    | Validation.IntMax(field, max) => (
+        Field(field),
+        Config.get(values, field) <= max
+          ? Valid
+          : Error(
+              "This value must be less than or equal to "
+              ++ string_of_int(max),
+            ),
+      )
+    | Validation.FloatMin(field, min) => (
+        Field(field),
+        Config.get(values, field) >= min
+          ? Valid
+          : Error(
+              "This value must be greater than or equal to "
+              ++ Js.Float.toString(min),
+            ),
+      )
+    | Validation.FloatMax(field, max) => (
+        Field(field),
+        Config.get(values, field) <= max
+          ? Valid
+          : Error(
+              "This value must be less than or equal to "
+              ++ Js.Float.toString(max),
+            ),
       )
     | Validation.Email(field) => (
         Field(field),
@@ -49,7 +94,38 @@ module Make = (Config: Config) => {
         )
           ? Valid : Error("Invalid email"),
       )
-    | Validation.Optional(field) => (Field(field), Valid)
+    | Validation.NoValidation(field) => (Field(field), Valid)
+    | Validation.StringNonEmpty(field) => (
+        Field(field),
+        Config.get(values, field) === ""
+          ? Error("String must not be empty") : Valid,
+      )
+    | Validation.StringRegExp(field, regexp) => (
+        Field(field),
+        Js.Re.test_(Js.Re.fromString(regexp), Config.get(values, field))
+          ? Valid
+          : Error("This value must match the following: /" ++ regexp ++ "/"),
+      )
+    | Validation.StringMin(field, min) => (
+        Field(field),
+        Js.String.length(Config.get(values, field)) >= min
+          ? Valid
+          : Error(
+              "This value must be at least "
+              ++ string_of_int(min)
+              ++ " characters",
+            ),
+      )
+    | Validation.StringMax(field, max) => (
+        Field(field),
+        Js.String.length(Config.get(values, field)) <= max
+          ? Valid
+          : Error(
+              "This value must be at most "
+              ++ string_of_int(max)
+              ++ " characters",
+            ),
+      )
     | Validation.Custom(field, predicate) => (
         Field(field),
         predicate(values),
@@ -61,9 +137,16 @@ module Make = (Config: Config) => {
 
     validators->Belt.Array.map(validator =>
       switch (validator) {
-      | Validation.Min(field, _min) => (Field(field), Pristine)
+      | Validation.IntMin(field, _min) => (Field(field), Pristine)
+      | Validation.IntMax(field, _max) => (Field(field), Pristine)
+      | Validation.FloatMin(field, _min) => (Field(field), Pristine)
+      | Validation.FloatMax(field, _max) => (Field(field), Pristine)
       | Validation.Email(field) => (Field(field), Pristine)
-      | Validation.Optional(field) => (Field(field), Pristine)
+      | Validation.NoValidation(field) => (Field(field), Pristine)
+      | Validation.StringNonEmpty(field) => (Field(field), Pristine)
+      | Validation.StringRegExp(field, _regexp) => (Field(field), Pristine)
+      | Validation.StringMin(field, _min) => (Field(field), Pristine)
+      | Validation.StringMax(field, _max) => (Field(field), Pristine)
       | Validation.Custom(field, _predicate) => (Field(field), Pristine)
       }
     );
@@ -119,6 +202,7 @@ module Make = (Config: Config) => {
   type api = {
     state,
     getFieldState: field => fieldState,
+    getFieldError: field => option(string),
     handleChange: 'a. (Config.field('a), 'a) => unit,
     arrayPush: 'a. (Config.field(array('a)), 'a) => unit,
     arrayUpdateByIndex:
@@ -309,6 +393,14 @@ module Make = (Config: Config) => {
           }
       );
 
+    let getFieldError = field =>
+      getFieldState(field)
+      |> (
+        fun
+        | Error(error) => Some(error)
+        | _ => None
+      );
+
     let interface: api = {
       state,
       submit: () => send(TrySubmit),
@@ -320,6 +412,7 @@ module Make = (Config: Config) => {
           : send(SetFieldValue(field, value));
       },
       getFieldState,
+      getFieldError,
       handleChange: (field, value) => send(FieldChangeValue(field, value)),
 
       arrayPush: (field, value) => send(FieldArrayAdd(field, value)),
