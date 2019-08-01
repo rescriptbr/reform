@@ -47,17 +47,8 @@ let make = () => {
     PostAddForm.use(
       ~schema={
         PostAddForm.Validation.Schema([|
-          Custom(
-            Title,
-            values =>
-              Js.String.length(values.title) > 20
-                ? Error("Keep it short!") : Valid,
-          ),
-          Custom(
-            Description,
-            values =>
-              values.description == "" ? Error("Can't be empty") : Valid,
-          ),
+          StringMin(Title, 20),
+          StringNonEmpty(Description),
           Custom(
             AcceptTerms,
             values =>
