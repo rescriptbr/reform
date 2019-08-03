@@ -120,6 +120,32 @@ module Make = (Lenses: Lenses) => {
       )
     };
 
+  let getFieldValidator = (~validators, ~fieldName) =>
+    validators
+    ->Belt.Array.keep(validator =>
+        switch (validator) {
+        | Validation.IntMin(field, _) => Field(field) == fieldName
+        | Validation.IntMax(field, _) => Field(field) == fieldName
+        | Validation.FloatMin(field, _) => Field(field) == fieldName
+        | Validation.FloatMax(field, _) => Field(field) == fieldName
+        | Validation.Email(field) => Field(field) == fieldName
+        | Validation.NoValidation(field) => Field(field) == fieldName
+        | Validation.StringNonEmpty(field) => Field(field) == fieldName
+        | Validation.StringRegExp(field, _) => Field(field) == fieldName
+        | Validation.StringMin(field, _) => Field(field) == fieldName
+        | Validation.StringMax(field, _) => Field(field) == fieldName
+        | Validation.Custom(field, _) => Field(field) == fieldName
+        }
+      )
+    ->Belt.Array.get(0);
+
+  let validateOne = (~field, ~values, schema: Validation.schema) => {
+    let Validation.Schema(validators) = schema;
+
+    getFieldValidator(~validators, ~fieldName=field)
+    ->Belt.Option.map(validator => validateField(~validator, ~values));
+  };
+
   let validate = (values: Lenses.state, schema: Validation.schema) => {
     let Validation.Schema(validators) = schema;
 

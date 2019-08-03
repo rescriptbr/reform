@@ -25,7 +25,7 @@ module ProfileLenses = {
 test("should validate a correct record", () => {
   open Expect;
 
-  let user = ProfileLenses.{email: "gameplayt", age: 0};
+  let user = ProfileLenses.{email: "teste@mail.com", age: 18};
 
   module ProfileValidation = ReSchema.Make(ProfileLenses);
 
