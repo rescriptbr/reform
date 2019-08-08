@@ -1,0 +1,23 @@
+{
+  "name": "reschema",
+  "version": "1.0.0",
+  "description": "",
+  "repository": "git@github.com:Astrocoders/reform.git",
+  "homepage": "https://github.com/Astrocoders/reform#readme",
+  "bugs": "https://github.com/Astrocoders/reform/issues",
+  "author": "Astrocoders <astrocoders.com>",
+  "main": "ReSchema.js",
+  "scripts": {
+    "start": "yarn bs:watch",
+    "test": "yarn bs:build",
+    "test:watch": "jest --watch",
+    "bs:build": "bsb -make-world -clean-world",
+    "bs:watch": "bsb -make-world -clean-world -w",
+    "lint:staged": "lint-staged",
+    "bs:setup": "bsb -make-world"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "bs-platform": "^5.0.6"
+  }
+}

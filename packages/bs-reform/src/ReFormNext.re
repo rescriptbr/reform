@@ -7,7 +7,7 @@ module type Config = {
 type fieldState =
   | Pristine
   | Valid
-  | Error(string) /* This is the abstraction, the user won't know about it */;
+  | Error(string);
 module Make = (Config: Config) => {
   module ReSchema = ReSchema.Make(Config);
   module Validation = ReSchema.Validation;

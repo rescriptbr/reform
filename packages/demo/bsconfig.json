@@ -4,10 +4,11 @@
     "src"
   ],
   "bs-dependencies": [
-    "reason-react",
     "bs-reform",
+    "reason-react",
     "reason-apollo",
-    "reason-apollo-hooks"
+    "reason-apollo-hooks",
+    "reschema"
   ],
   "reason": {
     "react-jsx": 3

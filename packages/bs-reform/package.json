@@ -18,8 +18,8 @@
     "reason-react": "^0.7.0"
   },
   "devDependencies": {
-    "@glennsl/bs-jest": "^0.4.8",
-    "bs-platform": "^5.0.0",
+    "@glennsl/bs-jest": "^0.4.9",
+    "bs-platform": "^5.0.6",
     "reason-react": "^0.7.0"
   },
   "scripts": {
@@ -33,6 +33,7 @@
   },
   "dependencies": {
     "reason-react-compat": "^0.4.0",
-    "reason-react-update": "^0.1.1"
+    "reason-react-update": "^0.1.1",
+    "reschema": "^1.0.0"
   }
 }
