@@ -7,167 +7,12 @@ module type Config = {
 type fieldState =
   | Pristine
   | Valid
-  | Error(string) /* This is the abstraction, the user won't know about it */;
+  | Error(string);
 module Make = (Config: Config) => {
-  type field =
-    | Field(Config.field('a)): field;
+  module ReSchema = ReSchema.Make(Config);
+  module Validation = ReSchema.Validation;
 
-  module Validation = {
-    type t =
-      | Email(Config.field(string)): t
-      | NoValidation(Config.field('a)): t
-      | StringNonEmpty(Config.field(string)): t
-      | StringRegExp(Config.field(string), string): t
-      | StringMin(Config.field(string), int): t
-      | StringMax(Config.field(string), int): t
-      | IntMin(Config.field(int), int): t
-      | IntMax(Config.field(int), int): t
-      | FloatMin(Config.field(float), float): t
-      | FloatMax(Config.field(float), float): t
-      | Custom(Config.field('a), Config.state => fieldState): t;
-    type schema =
-      | Schema(array(t)): schema;
-  };
-
-  let filterFieldsStateByField = (~validators, ~fieldFilter) =>
-    validators->Belt.Array.keep(validator =>
-      switch (validator) {
-      | Validation.IntMin(field, _) => Field(field) == fieldFilter
-      | Validation.IntMax(field, _) => Field(field) == fieldFilter
-      | Validation.FloatMin(field, _) => Field(field) == fieldFilter
-      | Validation.FloatMax(field, _) => Field(field) == fieldFilter
-      | Validation.Email(field) => Field(field) == fieldFilter
-      | Validation.NoValidation(field) => Field(field) == fieldFilter
-      | Validation.StringNonEmpty(field) => Field(field) == fieldFilter
-      | Validation.StringRegExp(field, _) => Field(field) == fieldFilter
-      | Validation.StringMin(field, _) => Field(field) == fieldFilter
-      | Validation.StringMax(field, _) => Field(field) == fieldFilter
-      | Validation.Custom(field, _) => Field(field) == fieldFilter
-      }
-    );
-
-  let validateField = (~validator, ~values) =>
-    switch (validator) {
-    | Validation.IntMin(field, min) => (
-        Field(field),
-        Config.get(values, field) >= min
-          ? Valid
-          : Error(
-              "This value must be greater than or equal to "
-              ++ string_of_int(min),
-            ),
-      )
-    | Validation.IntMax(field, max) => (
-        Field(field),
-        Config.get(values, field) <= max
-          ? Valid
-          : Error(
-              "This value must be less than or equal to "
-              ++ string_of_int(max),
-            ),
-      )
-    | Validation.FloatMin(field, min) => (
-        Field(field),
-        Config.get(values, field) >= min
-          ? Valid
-          : Error(
-              "This value must be greater than or equal to "
-              ++ Js.Float.toString(min),
-            ),
-      )
-    | Validation.FloatMax(field, max) => (
-        Field(field),
-        Config.get(values, field) <= max
-          ? Valid
-          : Error(
-              "This value must be less than or equal to "
-              ++ Js.Float.toString(max),
-            ),
-      )
-    | Validation.Email(field) => (
-        Field(field),
-        Js.Re.test_(
-          [%bs.re
-            "/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/"
-          ],
-          Config.get(values, field),
-        )
-          ? Valid : Error("Invalid email"),
-      )
-    | Validation.NoValidation(field) => (Field(field), Valid)
-    | Validation.StringNonEmpty(field) => (
-        Field(field),
-        Config.get(values, field) === ""
-          ? Error("String must not be empty") : Valid,
-      )
-    | Validation.StringRegExp(field, regexp) => (
-        Field(field),
-        Js.Re.test_(Js.Re.fromString(regexp), Config.get(values, field))
-          ? Valid
-          : Error("This value must match the following: /" ++ regexp ++ "/"),
-      )
-    | Validation.StringMin(field, min) => (
-        Field(field),
-        Js.String.length(Config.get(values, field)) >= min
-          ? Valid
-          : Error(
-              "This value must be at least "
-              ++ string_of_int(min)
-              ++ " characters",
-            ),
-      )
-    | Validation.StringMax(field, max) => (
-        Field(field),
-        Js.String.length(Config.get(values, field)) <= max
-          ? Valid
-          : Error(
-              "This value must be at most "
-              ++ string_of_int(max)
-              ++ " characters",
-            ),
-      )
-    | Validation.Custom(field, predicate) => (
-        Field(field),
-        predicate(values),
-      )
-    };
-
-  let getInitialFieldsState = (~schema: Validation.schema) => {
-    let Validation.Schema(validators) = schema;
-
-    validators->Belt.Array.map(validator =>
-      switch (validator) {
-      | Validation.IntMin(field, _min) => (Field(field), Pristine)
-      | Validation.IntMax(field, _max) => (Field(field), Pristine)
-      | Validation.FloatMin(field, _min) => (Field(field), Pristine)
-      | Validation.FloatMax(field, _max) => (Field(field), Pristine)
-      | Validation.Email(field) => (Field(field), Pristine)
-      | Validation.NoValidation(field) => (Field(field), Pristine)
-      | Validation.StringNonEmpty(field) => (Field(field), Pristine)
-      | Validation.StringRegExp(field, _regexp) => (Field(field), Pristine)
-      | Validation.StringMin(field, _min) => (Field(field), Pristine)
-      | Validation.StringMax(field, _max) => (Field(field), Pristine)
-      | Validation.Custom(field, _predicate) => (Field(field), Pristine)
-      }
-    );
-  };
-
-  let getFieldsState = (~schema: Validation.schema, ~values: Config.state) => {
-    let Validation.Schema(validators) = schema;
-
-    validators->Belt.Array.map(validator =>
-      validateField(~validator, ~values)
-    );
-  };
-
-  let getFieldState =
-      (~schema: Validation.schema, ~values: Config.state, ~field) => {
-    let Validation.Schema(validators) = schema;
-
-    filterFieldsStateByField(~validators, ~fieldFilter=field)
-    ->Belt.Array.map(validator => validateField(~validator, ~values))
-    ->Belt.Array.get(0);
-  };
+  type field = ReSchema.field;
 
   type formState =
     | Dirty
@@ -177,7 +22,6 @@ module Make = (Config: Config) => {
     | Valid;
 
   type action =
-    | ValidateAll
     | ValidateField(field)
     | TrySubmit
     | Submit
@@ -219,10 +63,37 @@ module Make = (Config: Config) => {
       (Config.field('a), 'a, ~shouldValidate: bool=?, unit) => unit,
 
   };
+
   type onSubmitAPI = {
     send: action => unit,
     state,
   };
+
+  let getInitialFieldsState: Validation.schema => array((field, fieldState)) =
+    schema => {
+      let Validation.Schema(validators) = schema;
+      validators->Belt.Array.map(validator =>
+        switch (validator) {
+        | Validation.IntMin(field, _min) => (
+            ReSchema.Field(field),
+            Pristine: fieldState,
+          )
+        | Validation.IntMax(field, _max) => (Field(field), Pristine)
+        | Validation.FloatMin(field, _min) => (Field(field), Pristine)
+        | Validation.FloatMax(field, _max) => (Field(field), Pristine)
+        | Validation.Email(field) => (Field(field), Pristine)
+        | Validation.NoValidation(field) => (Field(field), Pristine)
+        | Validation.StringNonEmpty(field) => (Field(field), Pristine)
+        | Validation.StringRegExp(field, _regexp) => (
+            Field(field),
+            Pristine,
+          )
+        | Validation.StringMin(field, _min) => (Field(field), Pristine)
+        | Validation.StringMax(field, _max) => (Field(field), Pristine)
+        | Validation.Custom(field, _predicate) => (Field(field), Pristine)
+        }
+      );
+    };
 
   let use =
       (
@@ -235,7 +106,7 @@ module Make = (Config: Config) => {
     let (state, send) =
       ReactUpdate.useReducer(
         {
-          fieldsState: getInitialFieldsState(~schema),
+          fieldsState: getInitialFieldsState(schema),
           values: initialState,
           formState: Pristine,
         },
@@ -249,17 +120,19 @@ module Make = (Config: Config) => {
         | TrySubmit =>
           SideEffects(
             self => {
-              let fieldsState =
-                getFieldsState(~schema, ~values=self.state.values);
+              let recordState =
+                schema |> ReSchema.validate(self.state.values);
 
-              self.send(SetFieldsState(fieldsState));
-
-              if (fieldsState->Belt.Array.every(((_, fieldState)) =>
-                    fieldState == Valid
-                  )) {
+              switch (recordState) {
+              | Valid =>
                 self.send(SetFormState(Valid));
                 self.send(Submit);
-              } else {
+              | Errors(erroredFields) =>
+                let newFieldsState =
+                  erroredFields->Belt.Array.map(((field, errorMessage)) =>
+                    (field, Error(errorMessage))
+                  );
+                self.send(SetFieldsState(newFieldsState));
                 onSubmitFail({send: self.send, state: self.state});
                 self.send(SetFormState(Errored));
               };
@@ -268,40 +141,34 @@ module Make = (Config: Config) => {
           )
         | SetFieldsState(fieldsState) => Update({...state, fieldsState})
         | ValidateField(field) =>
-          let fieldValidated =
-            getFieldState(~schema, ~values=state.values, ~field);
-          Update({
-            ...state,
-            fieldsState:
-              state.fieldsState
-              ->Belt.Array.keep(elem =>
-                  elem
-                  |> (((fieldValue, _fieldState)) => fieldValue != field)
-                )
-              ->Belt.Array.concat(
-                  switch (fieldValidated) {
-                  | Some(fieldState) => [|fieldState|]
-                  | None => [||]
-                  },
-                ),
-            formState: Dirty,
-          });
-        | ValidateAll =>
-          let fieldsState = getFieldsState(~schema, ~values=state.values);
-          Update({
-            ...state,
-            fieldsState,
-            formState:
-              fieldsState->Belt.Array.some(((_, fieldState)) =>
-                fieldState
-                |> (
+          SideEffects(
+            self => {
+              let fieldState =
+                schema
+                |> ReSchema.validateOne(~field, ~values=self.state.values);
+              let newFieldState: option(fieldState) =
+                fieldState->Belt.Option.map(
                   fun
-                  | Error(_) => true
-                  | _ => false
-                )
-              )
-                ? Errored : Valid,
-          });
+                  | (_, Error(message)) => Error(message)
+                  | (_, Valid) => Valid,
+                );
+
+              let newFieldsState =
+                state.fieldsState
+                ->Belt.Array.keep(elem =>
+                    elem
+                    |> (((fieldValue, _fieldState)) => fieldValue != field)
+                  )
+                ->Belt.Array.concat(
+                    switch (newFieldState) {
+                    | Some(fieldState) => [|(field, fieldState)|]
+                    | None => [||]
+                    },
+                  );
+              self.send(SetFieldsState(newFieldsState));
+              None;
+            },
+          )
         | FieldChangeValue(field, value) =>
           UpdateWithSideEffects(
             {
@@ -366,7 +233,7 @@ module Make = (Config: Config) => {
         | SetFormState(newState) => Update({...state, formState: newState})
         | ResetForm =>
           Update({
-            fieldsState: getInitialFieldsState(~schema),
+            fieldsState: getInitialFieldsState(schema),
             values: initialState,
             formState: Pristine,
           })

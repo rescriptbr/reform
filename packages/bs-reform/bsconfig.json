@@ -3,12 +3,21 @@
   "reason": {
     "react-jsx": 3
   },
-  "bs-dependencies": ["reason-react", "reason-react-compat", "reason-react-update"],
+  "bs-dependencies": ["reason-react", "reason-react-compat", "reason-react-update", "reschema"],
+  "bs-dev-dependencies": ["@glennsl/bs-jest"],
   "refmt": 3,
   "bsc-flags": ["-bs-super-errors"],
+  "package-specs": {
+    "module": "commonjs",
+    "in-source": true
+  },
   "sources": [
     {
       "dir": "src"
+    },
+    {
+      "dir": "__tests__",
+      "type": "dev"
     }
   ]
 }
