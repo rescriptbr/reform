@@ -25,7 +25,7 @@ let schema = [
 <SignUpFormParams schema>
 ```
 
-###StringNonEmpty
+### StringNonEmpty
 Use for string that must have some value.
 ```reason
 let schema = [
@@ -35,7 +35,7 @@ let schema = [
 <SignUpFormParams schema>
 ```
 
-###StringRegExp
+### StringRegExp
 Use for when you need to build your own custom RegEx validation.
 ```reason
 let schema = [
@@ -45,7 +45,7 @@ let schema = [
 <SignUpFormParams schema>
 ```
 
-###StringMin
+### StringMin
 Use for string that must have minimum number of characters.
 ```reason
 let schema = [
@@ -55,7 +55,7 @@ let schema = [
 <SignUpFormParams schema>
 ```
 
-###StringMax
+### StringMax
 Use for string that must have maximum number of characters.
 ```reason
 let schema = [
@@ -65,7 +65,7 @@ let schema = [
 <SignUpFormParams schema>
 ```
 
-###IntMin
+### IntMin
 Use for integer that must have minimum value.
 ```reason
 let schema = [
@@ -75,7 +75,7 @@ let schema = [
 <SignUpFormParams schema>
 ```
 
-###IntMax
+### IntMax
 Use for integer that must have maximum value.
 ```reason
 let schema = [
@@ -85,7 +85,7 @@ let schema = [
 <SignUpFormParams schema>
 ```
 
-###FloatMin
+### FloatMin
 Use for float that must have minimum value.
 ```reason
 let schema = [
@@ -95,7 +95,7 @@ let schema = [
 <SignUpFormParams schema>
 ```
 
-###FloatMax
+### FloatMax
 Use for float that must have maximum value.
 ```reason
 let schema = [
