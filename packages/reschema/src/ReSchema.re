@@ -34,86 +34,75 @@ module Make = (Lenses: Lenses) => {
       | Schema(array(t)): schema;
   };
 
-  let validateField = (~validator, ~values): (field, fieldState) =>
+  let validateField =
+      (~validator, ~values, ~i18n: ReSchemaI18n.t): (field, fieldState) =>
     switch (validator) {
-    | Validation.IntMin(field, min) => (
+    | Validation.IntMin(field, min) =>
+      let value = Lenses.get(values, field);
+      (
         Field(field),
-        Lenses.get(values, field) >= min
-          ? Valid
-          : Error(
-              "This value must be greater than or equal to "
-              ++ string_of_int(min),
-            ),
-      )
-    | Validation.IntMax(field, max) => (
+        value >= min ? Valid : Error(i18n.intMin(~value, ~min)),
+      );
+    | Validation.IntMax(field, max) =>
+      let value = Lenses.get(values, field);
+
+      (
         Field(field),
-        Lenses.get(values, field) <= max
-          ? Valid
-          : Error(
-              "This value must be less than or equal to "
-              ++ string_of_int(max),
-            ),
-      )
-    | Validation.FloatMin(field, min) => (
+        value <= max ? Valid : Error(i18n.intMax(~value, ~max)),
+      );
+    | Validation.FloatMin(field, min) =>
+      let value = Lenses.get(values, field);
+      (
         Field(field),
-        Lenses.get(values, field) >= min
-          ? Valid
-          : Error(
-              "This value must be greater than or equal to "
-              ++ Js.Float.toString(min),
-            ),
-      )
-    | Validation.FloatMax(field, max) => (
+        value >= min ? Valid : Error(i18n.floatMin(~value, ~min)),
+      );
+    | Validation.FloatMax(field, max) =>
+      let value = Lenses.get(values, field);
+      (
         Field(field),
         Lenses.get(values, field) <= max
-          ? Valid
-          : Error(
-              "This value must be less than or equal to "
-              ++ Js.Float.toString(max),
-            ),
-      )
-    | Validation.Email(field) => (
+          ? Valid : Error(i18n.floatMax(~value, ~max)),
+      );
+    | Validation.Email(field) =>
+      let value = Lenses.get(values, field);
+      (
         Field(field),
-        Js.Re.test_(
-          [%bs.re
-            "/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/"
-          ],
-          Lenses.get(values, field),
+        Js.Re.test(
+          value,
+          Js.Re.fromString(
+            "/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/",
+          ),
         )
-          ? Valid : Error("Invalid email"),
-      )
+          ? Valid : Error(i18n.email(~value)),
+      );
     | Validation.NoValidation(field) => (Field(field), Valid)
-    | Validation.StringNonEmpty(field) => (
+    | Validation.StringNonEmpty(field) =>
+      let value = Lenses.get(values, field);
+      (
         Field(field),
-        Lenses.get(values, field) === ""
-          ? Error("String must not be empty") : Valid,
-      )
-    | Validation.StringRegExp(field, regexp) => (
+        value === "" ? Error(i18n.stringNonEmpty(~value)) : Valid,
+      );
+    | Validation.StringRegExp(field, regexp) =>
+      let value = Lenses.get(values, field);
+      (
         Field(field),
-        Js.Re.test_(Js.Re.fromString(regexp), Lenses.get(values, field))
-          ? Valid
-          : Error("This value must match the following: /" ++ regexp ++ "/"),
-      )
-    | Validation.StringMin(field, min) => (
+        Js.Re.test(value, Js.Re.fromString(regexp))
+          ? Valid : Error(i18n.stringRegExp(~value, ~pattern=regexp)),
+      );
+    | Validation.StringMin(field, min) =>
+      let value = Lenses.get(values, field);
+      (
         Field(field),
-        Js.String.length(Lenses.get(values, field)) >= min
-          ? Valid
-          : Error(
-              "This value must be at least "
-              ++ string_of_int(min)
-              ++ " characters",
-            ),
-      )
-    | Validation.StringMax(field, max) => (
+        Js.String.length(value) >= min
+          ? Valid : Error(i18n.stringMin(~value, ~min)),
+      );
+    | Validation.StringMax(field, max) =>
+      let value = Lenses.get(values, field);
+      (
         Field(field),
-        Js.String.length(Lenses.get(values, field)) <= max
-          ? Valid
-          : Error(
-              "This value must be at most "
-              ++ string_of_int(max)
-              ++ " characters",
-            ),
-      )
+        Js.String.length(value) <= max
+          ? Valid : Error(i18n.stringMax(~value, ~max)),
+      );
     | Validation.Custom(field, predicate) => (
         Field(field),
         predicate(values),
@@ -146,17 +135,22 @@ module Make = (Lenses: Lenses) => {
     ->Belt.Option.map(validator => validateField(~validator, ~values));
   };
 
-  let validate = (values: Lenses.state, schema: Validation.schema) => {
+  let validate =
+      (
+        ~i18n=ReSchemaI18n.default,
+        values: Lenses.state,
+        schema: Validation.schema,
+      ) => {
     let Validation.Schema(validators) = schema;
 
     let validationList =
       validators->Belt.Array.map(validator =>
-        validateField(~validator, ~values)
+        validateField(~validator, ~values, ~i18n)
       );
 
     let errors =
       validationList
-      ->Belt.Array.keep(((field, fieldState)) => fieldState !== Valid)
+      ->Belt.Array.keep(((_field, fieldState)) => fieldState !== Valid)
       ->Belt.Array.map(((field, fieldState)) =>
           switch (fieldState) {
           | Valid => (field, None)
