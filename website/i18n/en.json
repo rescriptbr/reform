@@ -4,20 +4,39 @@
     "next": "Next",
     "previous": "Previous",
     "tagline": "Making forms sound good",
-    "basicUsage": "Basic usage",
-    "doc4": "Other Document",
-    "doc5": "Fifth Document",
-    "i18n": "I18N",
-    "installation": "Installation",
-    "Installation": "Installation",
-    "schema": "Schemas",
-    "Docs": "Docs",
-    "API": "API",
-    "Help": "Help",
-    "Blog": "Blog",
-    "Setting up": "Setting up",
-    "Usage": "Usage",
-    "First Category": "First Category"
+    "docs": {
+      "basicUsage": {
+        "title": "Basic usage"
+      },
+      "doc4": {
+        "title": "Other Document"
+      },
+      "doc5": {
+        "title": "Fifth Document"
+      },
+      "i18n": {
+        "title": "I18N"
+      },
+      "installation": {
+        "title": "Installation",
+        "sidebar_label": "Installation"
+      },
+      "schema": {
+        "title": "Schemas"
+      }
+    },
+    "links": {
+      "Docs": "Docs",
+      "API": "API",
+      "Help": "Help",
+      "Blog": "Blog"
+    },
+    "categories": {
+      "Setting up": "Setting up",
+      "Usage": "Usage",
+      "API": "API",
+      "First Category": "First Category"
+    }
   },
   "pages-strings": {
     "Help Translate|recruit community translators for your project": "Help Translate",

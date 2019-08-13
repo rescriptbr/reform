@@ -1,7 +1,7 @@
 ---
 title: Stable release out!
 author: Gabriel R. Abreu
-authorURL: http://twitter.com/_gabrielrubens
+authorURL: http://twitter.com/fakenickels
 authorFBID: 100001230774269
 ---
 
