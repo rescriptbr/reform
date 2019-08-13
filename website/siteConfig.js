@@ -9,7 +9,7 @@
 const users = [
   {
     caption: 'Astrocoders',
-    image: 'https://astrocoders.com/images/hero/logo.png',
+    image: 'img/users/astrocoders.png',
     infoLink: 'https://astrocoders.com',
     pinned: true,
   },
