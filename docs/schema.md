@@ -3,43 +3,38 @@ id: schema
 title: Schemas
 ---
 
-ReForm comes with helpful validation schema validators, here are the available ones:
+ReForm uses ReSchema to build schemas for validation, these are the available validators.
+Validators are type safe and only accept the field of the type they are meant to operate with.
 
-### Email
-Use for email values
+### Email(Lenses.field(string))
+Validates email values
 ```reason
-let schema = [
-  (`email, Email),
-];
-
-<SignUpFormParams schema>
+let schema = ReSchema.Validation([|
+  Email(Lenses.Email),
+|]);
 ```
 
-### Required
-For required changes. For now Required checks if the value is `""` to throw the error.
+### StringNonEmpty(Lenses.field(string))
+Requires that the string within is not empty
 ```reason
-let schema = [
-  (`name, Required)
-];
-
-<SignUpFormParams schema>
+let schema = ReSchema.Validation([|
+  StringNonEmpty(Lenses.Name),
+|]);
 ```
 
-### Custom(Config.state => option(string))
+
+### NoValidation(Lenses.field('a))
+Does not apply any validation in the field
+
+### StringNonEmpty(Lenses.field(string))
+### StringRegExp(Lenses.field(string), string)
+### StringMin(Lenses.field(string), int)
+### StringMax(Lenses.field(string), int)
+### IntMin(Lenses.field(int), int)
+### IntMax(Lenses.field(int), int)
+### FloatMin(Lenses.field(float), float)
+### FloatMax(Lenses.field(float), float)
+
+### Custom(Lenses.field('a), Lenses.state => fieldState)
 Useful for when you need to build your own custom logic. 
 You can validate with props your component received - this is why we let you pass the schema as prop and not in the functor - or whatever you need.
-
-```reason
-let make = (~isAdmin, _children) => {
-  ...component,
-  render: _self =>
-    let schema = [
-      (`password, Custom(
-        s => s.password === "12345" && isAdmin ?
-        Some("As an admin you need to have a stronger password") : None
-      ))
-    ]
-
-    <SignUpFormParams schema>
-}
-```

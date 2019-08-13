@@ -5,124 +5,125 @@ title: Basic usage
 
 A basic usage of ReForm looks like this:
 
-First, create a param module that will be passed to the functor:
+First, create a lenses module that will be passed as a param to the ReFormNext functor:
 
 ```reason
-module SignUpFormParams = {
-  /* Define the form state */
+module StateLenses = [%lenses
   type state = {
-    password: string,
-    confirmPassword: string,
-    email: string
-  };
-
-  /* Defined the field types, used for validation and change handling */
-  type fields = [ | `password | `email | `confirmPassword];
-
-  /* Now teach ReForm how to get and set your fields given the types */
-  /* The syntax goes (field, getter, setter) */
-  let lens = [
-    (`email, (s) => s.email, (s, email) => { ...s, email }),
-    (`password, (s) => s.password, (s, password) => { ...s, password }),
-    (`confirmPassword, (s) => s.confirmPassword, (s, confirmPassword) => { ...s, confirmPassword }),
-  ];
-};
+    description: string,
+    title: string,
+    acceptTerms: bool,
+  }
+];
 ```
 
 Now you can generate the actual form container component:
 ```reason
-module SignUpFormContainer = ReForm.Create(SignUpFormParams);
+module PostAddForm = ReFormNext.Make(StateLenses);
 ```
 
 After creating the container module, you can use it as a React component:
 
 ```reason
-module SignUpFormContainer = ReForm.Create(SignUpFormParams);
+[@react.component]
+let make = () => {
+  let {state, submit, getFieldState, handleChange}: PostAddForm.api =
+    PostAddForm.use(
+      ~schema={
+        PostAddForm.Validation.Schema([|
+          Custom(
+            Title,
+            values =>
+              Js.String.length(values.title) > 20
+                ? Error("Keep it short!") : Valid,
+          ),
+          StringNonEmpty(Description),
+          Custom(
+            AcceptTerms,
+            values =>
+              values.acceptTerms == false
+                ? Error("You must accept all the terms") : Valid,
+          ),
+        |]);
+      },
+      ~onSubmit=
+        ({state}) => {
+          yourLogic()
 
-let defaults = (defaultValue, optional) => switch(optional) {
-  | Some(value) => value
-  | None => defaultValue
+          None;
+        },
+      ~initialState={title: "", description: "", acceptTerms: false},
+      (),
+    );
+
+    <form
+      onSubmit={event => {
+        ReactEvent.Synthetic.preventDefault(event);
+        submit();
+      }}>
+      <label>
+        <span> {"Title:" |> React.string} </span>
+        <input
+          value={state.values.title}
+          onChange={ReForm.Helpers.handleDomFormChange(handleChange(Title))}
+        />
+        <p>
+          {getFieldState(Field(Title))
+           |> (
+             fun
+             | Error(error) => Some(error)
+             | _ => None
+           )
+           |> Belt.Option.getWithDefault(_, "")
+           |> React.string}
+        </p>
+      </label>
+      <label>
+        <span> {"Description:" |> React.string} </span>
+        <textarea
+          value={state.values.description}
+          rows=4
+          onChange={ReForm.Helpers.handleDomFormChange(
+            handleChange(Description),
+          )}
+        />
+        <p>
+          {getFieldState(Field(Description))
+           |> (
+             fun
+             | Error(error) => Some(error)
+             | _ => None
+           )
+           |> Belt.Option.getWithDefault(_, "")
+           |> React.string}
+        </p>
+      </label>
+      <label>
+        <p>
+          <span> {"Accept terms? " |> React.string} </span>
+          <input
+            type_="checkbox"
+            value={string_of_bool(state.values.acceptTerms)}
+            onChange={event =>
+              ReactEvent.Form.target(event)##checked
+              |> handleChange(AcceptTerms)
+            }
+          />
+        </p>
+        <p>
+          {getFieldState(Field(AcceptTerms))
+           |> (
+             fun
+             | Error(error) => Some(error)
+             | _ => None
+           )
+           |> Belt.Option.getWithDefault(_, "")
+           |> React.string}
+        </p>
+      </label>
+      {state.formState == Submitting
+         ? <p> {React.string("Saving...")} </p>
+         : <button type_="submit"> {"Submit" |> React.string} </button>}
+    </form>
 };
-
-let component = ReasonReact.statelessComponent("SignUp");
-
-let make = (_children) => {
-  ...component,
-  render: _self => {
-    <SignUpFormContainer
-      initialState={email: "", password: "", confirmPassword: ""}
-      onSubmit=(({values, setSubmitting, setError}) => doWhateverYouWant(~values, ~setError, ~setSubmitting))
-      schema=[
-        (`email, Email),
-        (`password, Required),
-        (`confirmPassword, Custom(s => s.password == s.confirmPassword ? None : Some("Passwords don't match")))
-      ]
-    >
-    ...(({form, handleChange, handleSubmit, getErrorForField}) =>
-      /* handleDomFormSubmit helps dealing with the DOM event for Web */
-      <form onSubmit=ReForm.Helpers.handleDomFormSubmit(handleSubmit)>
-       <label>
-         <span> ("Email:" |> ReasonReact.stringToElement) </span>
-         <input
-           value=form.values.email
-           onChange=(
-             ReForm.Helpers.handleDomFormChange(handleChange(`email))
-           )
-         />
-         <p>
-           (
-             getErrorForField(`email)
-             |> defaults("")
-             |> ReasonReact.stringToElement
-           )
-         </p>
-       </label>
-       <label>
-         <span> ("Password:" |> ReasonReact.stringToElement) </span>
-         <input
-           _type="password"
-           value=form.values.password
-           onChange=(
-             ReForm.Helpers.handleDomFormChange(
-               handleChange(`password)
-             )
-           )
-         />
-         <p>
-           (
-             getErrorForField(`password)
-             |> defaults("")
-             |> ReasonReact.stringToElement
-           )
-         </p>
-       </label>
-       <label>
-         <span>
-           ("Confirm password:" |> ReasonReact.stringToElement)
-         </span>
-         <input
-           _type="password"
-           value=form.values.confirmPassword
-           onChange=(
-             ReForm.Helpers.handleDomFormChange(
-               handleChange(`confirmPassword)
-             )
-           )
-         />
-         <p>
-           (
-             getErrorForField(`confirmPassword)
-             |> defaults("")
-             |> ReasonReact.stringToElement
-           )
-         </p>
-       </label>
-       <button _type="submit">
-         ("Submit" |> ReasonReact.stringToElement)
-       </button>
-      </form>
-    )
-    </SignUpFormContainer>
-  }
-}
 ```

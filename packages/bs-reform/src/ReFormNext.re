@@ -101,6 +101,7 @@ module Make = (Config: Config) => {
         ~schema: Validation.schema,
         ~onSubmit,
         ~onSubmitFail=ignore,
+        ~i18n=ReSchemaI18n.default,
         (),
       ) => {
     let (state, send) =
@@ -121,7 +122,7 @@ module Make = (Config: Config) => {
           SideEffects(
             self => {
               let recordState =
-                schema |> ReSchema.validate(self.state.values);
+                schema |> ReSchema.validate(~i18n, self.state.values);
 
               switch (recordState) {
               | Valid =>
@@ -145,7 +146,11 @@ module Make = (Config: Config) => {
             self => {
               let fieldState =
                 schema
-                |> ReSchema.validateOne(~field, ~values=self.state.values);
+                |> ReSchema.validateOne(
+                     ~field,
+                     ~values=self.state.values,
+                     ~i18n,
+                   );
               let newFieldState: option(fieldState) =
                 fieldState->Belt.Option.map(
                   fun

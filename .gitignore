@@ -60,6 +60,7 @@ typings/
 # BS
 .merlin
 lib/
+*.bs.js
 
 # Docusaurus
 build

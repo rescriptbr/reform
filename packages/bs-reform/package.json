@@ -14,12 +14,12 @@
   "author": "Astrocoders <astrocoders.com>",
   "license": "MIT",
   "peerDependencies": {
-    "bs-platform": "^5.0.0",
+    "bs-platform": "^5.0.6",
     "reason-react": "^0.7.0"
   },
   "devDependencies": {
-    "@glennsl/bs-jest": "^0.4.9",
     "bs-platform": "^5.0.6",
+    "@glennsl/bs-jest": "^0.4.9",
     "reason-react": "^0.7.0"
   },
   "scripts": {
