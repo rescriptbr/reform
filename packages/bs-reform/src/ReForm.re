@@ -1,250 +1,301 @@
-module Helpers = ReForm_Helpers;
-
-module Validation = ReForm_Validation;
-
-module Value = ReForm_Value;
-
-/* Validation types */
-let safeHd = lst => List.length(lst) == 0 ? None : Some(List.hd(lst));
-
-let (>>=) = (value, map) =>
-  switch (value) {
-  | None => None
-  | Some(value) => map(value)
-  };
-
 module type Config = {
+  type field('a);
   type state;
-  type fields;
-  /* (fieldName, getter, setter) */
-  let lens: list((fields, state => Value.t, (state, Value.t) => state));
+  let set: (state, field('a), 'a) => state;
+  let get: (state, field('a)) => 'a;
 };
+type fieldState =
+  | Pristine
+  | Valid
+  | Error(string);
+module Make = (Config: Config) => {
+  module ReSchema = ReSchema.Make(Config);
+  module Validation = ReSchema.Validation;
 
-module Create = (Config: Config) => {
-  /* TODO: Make a variant out of this */
-  type value = Value.t;
-  /* Form actions */
+  type field = ReSchema.field;
+
+  type formState =
+    | Dirty
+    | Submitting
+    | Pristine
+    | Errored
+    | Valid;
+
   type action =
+    | ValidateField(field)
     | TrySubmit
-    | HandleSubmitting(bool)
-    | SetFieldsErrors(list((Config.fields, option(string))))
-    | HandleFieldValidation((Config.fields, value))
-    | HandleError(option(string))
-    | HandleChange((Config.fields, value))
-    | HandleSubmit
-    | ResetFormState
-    | HandleSetFocusedField(Config.fields)
-    | HandleUnsetFocusedField;
-  type values = Config.state;
-  type schema = list((Config.fields, Validation.validation(values)));
-  module Field = {
-    let getFieldLens:
-      Config.fields =>
-      (
-        Config.fields,
-        Config.state => value,
-        (Config.state, value) => Config.state,
-      ) =
-      field =>
-        /* TODO handle exception */
-        Config.lens |> List.find(((fieldName, _, _)) => fieldName === field);
-    let validateField:
-      (Config.fields, values, value, schema, Validation.I18n.dictionary) =>
-      option(string) =
-      (field, values, value, schema, i18n) =>
-        schema
-        |> List.filter(((fieldName, _)) => fieldName === field)
-        |> safeHd
-        >>= (
-          fieldSchema =>
-            Validation.getValidationError(fieldSchema, ~values, ~value, ~i18n)
-        );
-    let handleChange: ((Config.fields, value), values) => values =
-      ((field, value), values) => {
-        let (_, _, setter) = getFieldLens(field);
-        setter(values, value);
-      };
-  };
-  type onSubmit = {
-    values,
-    setSubmitting: bool => unit,
-    setError: option(string) => unit,
-    resetFormState: unit => unit,
-  };
-  type state = {
-    values,
-    isSubmitting: bool,
-    errors: list((Config.fields, option(string))),
-    error: option(string),
-    focusedField: option(Config.fields),
-  };
-  /* Type of what is given to the children */
-  type reform = {
-    form: state,
-    handleChange: (Config.fields, value) => unit,
-    handleGlobalValidation: option(string) => unit,
-    handleSubmit: unit => unit,
-    getErrorForField: Config.fields => option(string),
-    resetFormState: unit => unit,
-    setFocusedField: Config.fields => unit,
-    unsetFocusedField: unit => unit,
-    focusedField: option(Config.fields),
-  };
-  let component = ReasonReact.reducerComponent("ReForm");
+    | Submit
+    | SetFieldsState(array((field, fieldState)))
+    | FieldChangeState(field, fieldState)
+    | FieldChangeValue(Config.field('a), 'a): action
+    | FieldArrayAdd(Config.field(array('a)), 'a): action
+    | FieldArrayUpdateByIndex(Config.field(array('a)), 'a, int): action
+    | FieldArrayRemove(Config.field(array('a)), int): action
+    | FieldArrayRemoveBy(Config.field(array('a)), 'a => bool): action
+    | SetFormState(formState)
+    | ResetForm
+    | SetValues(Config.state)
+    | SetFieldValue(Config.field('a), 'a): action;
 
-  [@react.component]
-  let make =
+  type state = {
+    formState,
+    values: Config.state,
+    fieldsState: array((field, fieldState)),
+  };
+
+  type api = {
+    state,
+    getFieldState: field => fieldState,
+    getFieldError: field => option(string),
+    handleChange: 'a. (Config.field('a), 'a) => unit,
+    arrayPush: 'a. (Config.field(array('a)), 'a) => unit,
+    arrayUpdateByIndex:
+      'a.
+      (~field: Config.field(array('a)), ~index: int, 'a) => unit,
+
+    arrayRemoveByIndex: 'a. (Config.field(array('a)), int) => unit,
+    arrayRemoveBy: 'a. (Config.field(array('a)), 'a => bool) => unit,
+    submit: unit => unit,
+    resetForm: unit => unit,
+    setValues: Config.state => unit,
+    setFieldValue:
+      'a.
+      (Config.field('a), 'a, ~shouldValidate: bool=?, unit) => unit,
+
+  };
+
+  type onSubmitAPI = {
+    send: action => unit,
+    state,
+  };
+
+  let getInitialFieldsState: Validation.schema => array((field, fieldState)) =
+    schema => {
+      let Validation.Schema(validators) = schema;
+      validators->Belt.Array.map(validator =>
+        switch (validator) {
+        | Validation.IntMin(field, _min) => (
+            ReSchema.Field(field),
+            Pristine: fieldState,
+          )
+        | Validation.IntMax(field, _max) => (Field(field), Pristine)
+        | Validation.FloatMin(field, _min) => (Field(field), Pristine)
+        | Validation.FloatMax(field, _max) => (Field(field), Pristine)
+        | Validation.Email(field) => (Field(field), Pristine)
+        | Validation.NoValidation(field) => (Field(field), Pristine)
+        | Validation.StringNonEmpty(field) => (Field(field), Pristine)
+        | Validation.StringRegExp(field, _regexp) => (
+            Field(field),
+            Pristine,
+          )
+        | Validation.StringMin(field, _min) => (Field(field), Pristine)
+        | Validation.StringMax(field, _max) => (Field(field), Pristine)
+        | Validation.Custom(field, _predicate) => (Field(field), Pristine)
+        }
+      );
+    };
+
+  let use =
       (
-        ~onSubmit: onSubmit => unit,
-        ~onSubmitFail: list((Config.fields, option(string))) => unit=ignore,
-        ~onFormStateChange: state => unit=ignore,
-        ~validate: values => option(string)=_ => None,
-        ~initialState: Config.state,
-        ~schema: schema,
-        ~i18n: Validation.I18n.dictionary=Validation.I18n.en,
-        ~children,
-      ) =>
-    ReactCompat.useRecordApi({
-      ...component,
-      initialState: () => {
-        values: initialState,
-        error: None,
-        isSubmitting: false,
-        errors: [],
-        focusedField: None,
-      },
-      reducer: (action, state) =>
+        ~initialState,
+        ~schema: Validation.schema,
+        ~onSubmit,
+        ~onSubmitFail=ignore,
+        ~i18n=ReSchemaI18n.default,
+        (),
+      ) => {
+    let (state, send) =
+      ReactUpdate.useReducer(
+        {
+          fieldsState: getInitialFieldsState(schema),
+          values: initialState,
+          formState: Pristine,
+        },
+        (action, state) =>
         switch (action) {
+        | Submit =>
+          UpdateWithSideEffects(
+            {...state, formState: Submitting},
+            self => onSubmit({send: self.send, state: self.state}),
+          )
         | TrySubmit =>
           SideEffects(
             self => {
-              let globalValidationError = validate(self.state.values);
-              let fieldsValidationErrors =
-                schema
-                |> List.map(((fieldName, _)) => {
-                     let (_, getter, _) = Field.getFieldLens(fieldName);
-                     (
-                       fieldName,
-                       Field.validateField(
-                         fieldName,
-                         self.state.values,
-                         getter(self.state.values),
-                         schema,
-                         i18n,
-                       ),
-                     );
-                   })
-                |> List.filter(((_, fieldError)) => fieldError !== None);
-              self.send(SetFieldsErrors(fieldsValidationErrors));
-              self.send(HandleError(globalValidationError));
-              globalValidationError === None
-              && List.length(fieldsValidationErrors) == 0
-                ? self.send(HandleSubmit)
-                : onSubmitFail(fieldsValidationErrors);
+              let recordState =
+                schema |> ReSchema.validate(~i18n, self.state.values);
+
+              switch (recordState) {
+              | Valid =>
+                self.send(SetFormState(Valid));
+                self.send(Submit);
+              | Errors(erroredFields) =>
+                let newFieldsState =
+                  erroredFields->Belt.Array.map(((field, errorMessage)) =>
+                    (field, Error(errorMessage))
+                  );
+                self.send(SetFieldsState(newFieldsState));
+                onSubmitFail({send: self.send, state: self.state});
+                self.send(SetFormState(Errored));
+              };
+              None;
             },
           )
-        | ResetFormState =>
-          UpdateWithSideEffects(
-            {...state, values: initialState, errors: [], isSubmitting: false},
-            self => onFormStateChange(self.state),
-          )
-        | HandleSubmitting(isSubmitting) =>
-          UpdateWithSideEffects(
-            {...state, isSubmitting},
-            self => onFormStateChange(self.state),
-          )
-        | HandleError(error) =>
-          UpdateWithSideEffects(
-            {...state, isSubmitting: false, error},
-            self => onFormStateChange(self.state),
-          )
-        | SetFieldsErrors(errors) =>
-          UpdateWithSideEffects(
-            {...state, isSubmitting: false, errors},
-            self => onFormStateChange(self.state),
-          )
-        | HandleFieldValidation((field, value)) =>
-          UpdateWithSideEffects(
-            {
-              ...state,
-              errors:
-                state.errors
-                |> List.filter(((fieldName, _)) => fieldName !== field)
-                |> List.append([
-                     (
-                       field,
-                       Field.validateField(
-                         field,
-                         state.values,
-                         value,
-                         schema,
-                         i18n,
-                       ),
-                     ),
-                   ]),
-            },
-            self => onFormStateChange(self.state),
-          )
-        | HandleChange((field, value)) =>
-          UpdateWithSideEffects(
-            {
-              ...state,
-              values: Field.handleChange((field, value), state.values),
-            },
-            self => self.send(HandleFieldValidation((field, value))),
-          )
-        | HandleSubmit =>
-          UpdateWithSideEffects(
-            {...state, isSubmitting: true},
+        | SetFieldsState(fieldsState) => Update({...state, fieldsState})
+        | ValidateField(field) =>
+          SideEffects(
             self => {
-              onSubmit({
-                resetFormState: () => self.send(ResetFormState),
-                values: state.values,
-                setSubmitting: isSubmitting =>
-                  self.send(HandleSubmitting(isSubmitting)),
-                setError: error => self.send(HandleError(error)),
-              });
-              onFormStateChange(self.state);
+              let fieldState =
+                schema
+                |> ReSchema.validateOne(
+                     ~field,
+                     ~values=self.state.values,
+                     ~i18n,
+                   );
+              let newFieldState: option(fieldState) =
+                fieldState->Belt.Option.map(
+                  fun
+                  | (_, Error(message)) => Error(message)
+                  | (_, Valid) => Valid,
+                );
+
+              let newFieldsState =
+                state.fieldsState
+                ->Belt.Array.keep(elem =>
+                    elem
+                    |> (((fieldValue, _fieldState)) => fieldValue != field)
+                  )
+                ->Belt.Array.concat(
+                    switch (newFieldState) {
+                    | Some(fieldState) => [|(field, fieldState)|]
+                    | None => [||]
+                    },
+                  );
+              self.send(SetFieldsState(newFieldsState));
+              None;
             },
           )
-        | HandleSetFocusedField(focusedField) =>
+        | FieldChangeValue(field, value) =>
           UpdateWithSideEffects(
-            {...state, focusedField: Some(focusedField)},
-            self => onFormStateChange(self.state),
+            {
+              ...state,
+              formState: state.formState == Errored ? Errored : Dirty,
+              values: Config.set(state.values, field, value),
+            },
+            self => {
+              self.send(ValidateField(Field(field)));
+              None;
+            },
           )
-        | HandleUnsetFocusedField =>
-          UpdateWithSideEffects(
-            {...state, focusedField: None},
-            self => onFormStateChange(self.state),
-          )
-        },
-      render: self => {
-        let handleChange = (field, value) =>
-          self.send(HandleChange((field, value)));
-        let handleGlobalValidation = error => self.send(HandleError(error));
-        let handleSubmit = _ => self.send(TrySubmit);
-        let resetFormState = _ => self.send(ResetFormState);
-        let getErrorForField: Config.fields => option(string) =
-          field =>
-            self.state.errors
-            |> List.filter(((fieldName, _)) => fieldName === field)
-            |> List.map(((_, error)) => error)
-            |> safeHd
-            >>= (i => i);
-        let setFocusedField = field =>
-          self.send(HandleSetFocusedField(field));
-        let unsetFocusedField = () => self.send(HandleUnsetFocusedField);
-        children({
-          form: self.state,
-          handleChange,
-          handleSubmit,
-          handleGlobalValidation,
-          getErrorForField,
-          resetFormState,
-          setFocusedField,
-          unsetFocusedField,
-          focusedField: self.state.focusedField,
-        });
+        | FieldChangeState(_, _) => NoUpdate
+        | FieldArrayAdd(field, entry) =>
+          Update({
+            ...state,
+            values:
+              Config.set(
+                state.values,
+                field,
+                Belt.Array.concat(
+                  Config.get(state.values, field),
+                  [|entry|],
+                ),
+              ),
+          })
+        | FieldArrayRemove(field, index) =>
+          Update({
+            ...state,
+            values:
+              Config.set(
+                state.values,
+                field,
+                Config.get(state.values, field)
+                ->Belt.Array.keepWithIndex((_, i) => i != index),
+              ),
+          })
+        | FieldArrayRemoveBy(field, predicate) =>
+          Update({
+            ...state,
+            values:
+              Config.set(
+                state.values,
+                field,
+                Config.get(state.values, field)
+                ->Belt.Array.keep(entry => !predicate(entry)),
+              ),
+          })
+        | FieldArrayUpdateByIndex(field, value, index) =>
+          Update({
+            ...state,
+            values:
+              Config.set(
+                state.values,
+                field,
+                Config.get(state.values, field)
+                ->Belt.Array.mapWithIndex((i, currentValue) =>
+                    i == index ? value : currentValue
+                  ),
+              ),
+          })
+        | SetFormState(newState) => Update({...state, formState: newState})
+        | ResetForm =>
+          Update({
+            fieldsState: getInitialFieldsState(schema),
+            values: initialState,
+            formState: Pristine,
+          })
+        | SetValues(values) => Update({...state, values})
+        | SetFieldValue(field, value) =>
+          Update({...state, values: Config.set(state.values, field, value)})
+        }
+      );
+
+    let getFieldState = field =>
+      state.fieldsState
+      ->Array.to_list
+      ->Belt.List.getBy(((nameField, _nameFieldState)) =>
+          switch (nameField == field) {
+          | true => true
+          | _ => false
+          }
+        )
+      |> (
+        field =>
+          switch (field) {
+          | Some((_nameField, nameFieldState)) => nameFieldState
+          | None => Pristine
+          }
+      );
+
+    let getFieldError = field =>
+      getFieldState(field)
+      |> (
+        fun
+        | Error(error) => Some(error)
+        | _ => None
+      );
+
+    let interface: api = {
+      state,
+      submit: () => send(TrySubmit),
+      resetForm: () => send(ResetForm),
+      setValues: values => send(SetValues(values)),
+      setFieldValue: (field, value, ~shouldValidate=true, ()) => {
+        shouldValidate
+          ? send(FieldChangeValue(field, value))
+          : send(SetFieldValue(field, value));
       },
-    });
+      getFieldState,
+      getFieldError,
+      handleChange: (field, value) => send(FieldChangeValue(field, value)),
+
+      arrayPush: (field, value) => send(FieldArrayAdd(field, value)),
+      arrayUpdateByIndex: (~field, ~index, value) =>
+        send(FieldArrayUpdateByIndex(field, value, index)),
+      arrayRemoveBy: (field, predicate) =>
+        send(FieldArrayRemoveBy(field, predicate)),
+      arrayRemoveByIndex: (field, index) =>
+        send(FieldArrayRemove(field, index)),
+    };
+
+    interface;
+  };
 };

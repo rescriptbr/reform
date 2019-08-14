@@ -14,7 +14,9 @@ module StateLenses = [%lenses
   }
 ];
 
-module Form = ReFormNext.Make(StateLenses);
+open BsReform;
+
+module Form = ReForm.Make(StateLenses);
 
 [@react.component]
 let make = () => {
@@ -66,7 +68,7 @@ let make = () => {
       <span> {"Name:" |> ReasonReact.string} </span>
       <input
         value={state.values.name}
-        onChange={ReForm.Helpers.handleDomFormChange(handleChange(Name))}
+        onChange={BsReform.Helpers.handleChange(handleChange(Name))}
       />
       <p>
         {getFieldError(Field(Name))
@@ -85,7 +87,7 @@ let make = () => {
              <span> {"Name:" |> ReasonReact.string} </span>
              <input
                value={favColor.name}
-               onChange={ReForm.Helpers.handleDomFormChange(name =>
+               onChange={BsReform.Helpers.handleChange(name =>
                  arrayUpdateByIndex(
                    ~field=FavoriteColors,
                    ~index,
@@ -98,7 +100,7 @@ let make = () => {
              <span> {"Hex:" |> ReasonReact.string} </span>
              <input
                value={favColor.hex}
-               onChange={ReForm.Helpers.handleDomFormChange(hex =>
+               onChange={Helpers.handleChange(hex =>
                  arrayUpdateByIndex(
                    ~field=FavoriteColors,
                    ~index,
@@ -119,9 +121,7 @@ let make = () => {
       <input
         value={string_of_int(state.values.numberOfFavoriteColors)}
         type_="number"
-        onChange={ReForm.Helpers.handleDomFormChange(
-          handleChange(NumberOfFavoriteColors),
-        )}
+        onChange={Helpers.handleChange(handleChange(NumberOfFavoriteColors))}
       />
       <p>
         {getFieldError(Field(NumberOfFavoriteColors))
@@ -135,9 +135,7 @@ let make = () => {
         value={Js.Float.toString(state.values.opacityOfColors)}
         type_="number"
         step=0.1
-        onChange={ReForm.Helpers.handleDomFormChange(
-          handleChange(OpacityOfColors),
-        )}
+        onChange={Helpers.handleChange(handleChange(OpacityOfColors))}
       />
       <p>
         {getFieldError(Field(OpacityOfColors))

@@ -1,6 +1,7 @@
-let handleDomFormChange = (handleChange, event) =>
+let handleChange = (handleChange, event) =>
   handleChange(ReactEvent.Form.target(event)##value);
-let handleDomFormSubmit = (handleSubmit, event) => {
+
+let handleSubmit = (handleSubmit, event) => {
   ReactEvent.Synthetic.preventDefault(event);
   handleSubmit();
 };
