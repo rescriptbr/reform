@@ -1,6 +1,6 @@
 {
   "name": "bs-reform",
-  "version": "9.1.1",
+  "version": "9.1.2",
   "description": "Reasonably making forms sound good again",
   "repository": "git@github.com:Astrocoders/reform.git",
   "homepage": "https://github.com/Astrocoders/reform#readme",
@@ -33,6 +33,6 @@
   },
   "dependencies": {
     "reason-react-update": "^0.1.1",
-    "reschema": "^1.1.1"
+    "reschema": "^1.1.2"
   }
 }
