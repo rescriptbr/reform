@@ -4,7 +4,7 @@
   "reason": {
     "react-jsx": 3
   },
-  "bs-dependencies": ["reason-react", "reason-react-compat", "reason-react-update", "reschema"],
+  "bs-dependencies": ["reason-react", "reason-react-update", "reschema"],
   "bs-dev-dependencies": ["@glennsl/bs-jest"],
   "refmt": 3,
   "bsc-flags": ["-bs-super-errors"],
