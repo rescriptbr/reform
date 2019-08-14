@@ -5,7 +5,8 @@ module StateLenses = [%lenses
     acceptTerms: bool,
   }
 ];
-module PostAddForm = ReFormNext.Make(StateLenses);
+open BsReform;
+module PostAddForm = ReForm.Make(StateLenses);
 
 module PostAddMutationConfig = [%graphql
   {|
@@ -106,7 +107,7 @@ let make = () => {
         <span> {"Title:" |> ReasonReact.string} </span>
         <input
           value={state.values.title}
-          onChange={ReForm.Helpers.handleDomFormChange(handleChange(Title))}
+          onChange={Helpers.handleChange(handleChange(Title))}
         />
         <p>
           {getFieldState(Field(Title))
@@ -124,9 +125,7 @@ let make = () => {
         <textarea
           value={state.values.description}
           rows=4
-          onChange={ReForm.Helpers.handleDomFormChange(
-            handleChange(Description),
-          )}
+          onChange={Helpers.handleChange(handleChange(Description))}
         />
         <p>
           {getFieldState(Field(Description))
