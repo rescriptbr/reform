@@ -16,9 +16,9 @@ let default = {
   intMax: (~value as _value, ~max) =>
     "This value must be less than or equal to " ++ string_of_int(max),
   floatMin: (~value as _value, ~min) =>
-    "This value must be greater than or equal to " ++ string_of_float(min),
+    "This value must be greater than or equal to " ++ Js.Float.toString(min),
   floatMax: (~value as _value, ~max) =>
-    "This value must be less than or equal to " ++ string_of_float(max),
+    "This value must be less than or equal to " ++ Js.Float.toString(max),
   email: (~value) => value ++ " is not a valid email",
   stringNonEmpty: (~value as _) => "String must not be empty",
   stringRegExp: (~value as _value, ~pattern) =>

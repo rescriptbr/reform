@@ -67,11 +67,11 @@ module Make = (Lenses: Lenses) => {
       let value = Lenses.get(values, field);
       (
         Field(field),
-        Js.Re.test(
-          value,
+        Js.Re.test_(
           Js.Re.fromString(
             "/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/",
           ),
+          value,
         )
           ? Valid : Error(i18n.email(~value)),
       );
@@ -86,7 +86,7 @@ module Make = (Lenses: Lenses) => {
       let value = Lenses.get(values, field);
       (
         Field(field),
-        Js.Re.test(value, Js.Re.fromString(regexp))
+        Js.Re.test_(Js.Re.fromString(regexp), value)
           ? Valid : Error(i18n.stringRegExp(~value, ~pattern=regexp)),
       );
     | Validation.StringMin(field, min) =>
