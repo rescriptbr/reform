@@ -82,7 +82,19 @@ let make = () => {
 ```
 
 #### Alternatives
-- The great https://github.com/alexfedoseev/re-formality 
+- The great https://github.com/alexfedoseev/re-formality
+
+#### Publishing
+
+```
+lerna version major|patch|minor
+```
+
+and then
+
+```
+lerna publish from-git
+```
 
 #### Support
 
