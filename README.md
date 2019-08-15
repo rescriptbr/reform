@@ -25,6 +25,18 @@ Then add it to bsconfig.json
 ]
 ```
 
+Then add lenses-ppx
+```
+yarn add lenses-ppx@2.0.0 -D
+```
+
+And update your bsconfig.json with `ppx-flags`
+```
+"ppx-flags": [
+ "lenses-ppx/ppx"
+]
+```
+
 ## What this is and why
 Code that deals with strongly typed forms can quickly become walls of repeated text.
 We created ReForm to be both deadly simple and to make forms sound good leveraging ReasonML's powerful typesytem.
