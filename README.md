@@ -1,7 +1,5 @@
 # ReForm.re
 
-[![Build Status](https://app.bitrise.io/app/7a8015b7814278c9/status.svg?token=dAyLaVmb7EOTtNXLitKKlg&branch=master)](https://app.bitrise.io/app/7a8015b7814278c9)
-
 Reasonably making forms sound good
 
 * [Installation](#installation)
