@@ -23,7 +23,7 @@ module Make = (Config: Config) => {
 
   type action =
     | ValidateField(field)
-    | ValidateForm
+    | ValidateForm(bool)
     | TrySubmit
     | Submit
     | SetFieldsState(array((field, fieldState)))
@@ -123,8 +123,7 @@ module Make = (Config: Config) => {
         | TrySubmit =>
           SideEffects(
             self => {
-              self.send(ValidateForm);
-              self.state.formState == Valid ? self.send(Submit) : ();
+              self.send(ValidateForm(true));
               None;
             },
           )
@@ -162,14 +161,16 @@ module Make = (Config: Config) => {
               None;
             },
           )
-        | ValidateForm =>
+        | ValidateForm(submit) =>
           SideEffects(
             self => {
               let recordState =
                 schema |> ReSchema.validate(~i18n, self.state.values);
 
               switch (recordState) {
-              | Valid => self.send(SetFormState(Valid))
+              | Valid =>
+                self.send(SetFormState(Valid));
+                submit ? self.send(Submit) : ();
               | Errors(erroredFields) =>
                 let newFieldsState =
                   erroredFields->Belt.Array.map(((field, errorMessage)) =>
@@ -302,7 +303,7 @@ module Make = (Config: Config) => {
         send(FieldArrayRemoveBy(field, predicate)),
       arrayRemoveByIndex: (field, index) =>
         send(FieldArrayRemove(field, index)),
-      validateForm: () => send(ValidateForm),
+      validateForm: () => send(ValidateForm(false)),
     };
 
     interface;
