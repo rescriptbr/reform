@@ -23,6 +23,7 @@ module Make = (Config: Config) => {
 
   type action =
     | ValidateField(field)
+    | ValidateForm(bool)
     | TrySubmit
     | Submit
     | SetFieldsState(array((field, fieldState)))
@@ -62,6 +63,8 @@ module Make = (Config: Config) => {
       'a.
       (Config.field('a), 'a, ~shouldValidate: bool=?, unit) => unit,
 
+    validateField: field => unit,
+    validateForm: unit => unit,
   };
 
   type onSubmitAPI = {
@@ -121,22 +124,7 @@ module Make = (Config: Config) => {
         | TrySubmit =>
           SideEffects(
             self => {
-              let recordState =
-                schema |> ReSchema.validate(~i18n, self.state.values);
-
-              switch (recordState) {
-              | Valid =>
-                self.send(SetFormState(Valid));
-                self.send(Submit);
-              | Errors(erroredFields) =>
-                let newFieldsState =
-                  erroredFields->Belt.Array.map(((field, errorMessage)) =>
-                    (field, Error(errorMessage))
-                  );
-                self.send(SetFieldsState(newFieldsState));
-                onSubmitFail({send: self.send, state: self.state});
-                self.send(SetFormState(Errored));
-              };
+              self.send(ValidateForm(true));
               None;
             },
           )
@@ -171,6 +159,28 @@ module Make = (Config: Config) => {
                     },
                   );
               self.send(SetFieldsState(newFieldsState));
+              None;
+            },
+          )
+        | ValidateForm(submit) =>
+          SideEffects(
+            self => {
+              let recordState =
+                schema |> ReSchema.validate(~i18n, self.state.values);
+
+              switch (recordState) {
+              | Valid =>
+                self.send(SetFormState(Valid));
+                submit ? self.send(Submit) : ();
+              | Errors(erroredFields) =>
+                let newFieldsState =
+                  erroredFields->Belt.Array.map(((field, errorMessage)) =>
+                    (field, Error(errorMessage))
+                  );
+                self.send(SetFieldsState(newFieldsState));
+                onSubmitFail({send: self.send, state: self.state});
+                self.send(SetFormState(Errored));
+              };
               None;
             },
           )
@@ -294,6 +304,8 @@ module Make = (Config: Config) => {
         send(FieldArrayRemoveBy(field, predicate)),
       arrayRemoveByIndex: (field, index) =>
         send(FieldArrayRemove(field, index)),
+      validateField: field => send(ValidateField(field)),
+      validateForm: () => send(ValidateForm(false)),
     };
 
     interface;
