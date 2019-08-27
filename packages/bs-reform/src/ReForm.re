@@ -178,7 +178,8 @@ module Make = (Config: Config) => {
                     (field, Error(errorMessage))
                   );
                 self.send(SetFieldsState(newFieldsState));
-                onSubmitFail({send: self.send, state: self.state});
+                submit
+                  ? onSubmitFail({send: self.send, state: self.state}) : ();
                 self.send(SetFormState(Errored));
               };
               None;
