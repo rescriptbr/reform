@@ -63,6 +63,7 @@ module Make = (Config: Config) => {
       'a.
       (Config.field('a), 'a, ~shouldValidate: bool=?, unit) => unit,
 
+    validateField: field => unit,
     validateForm: unit => unit,
   };
 
@@ -303,6 +304,7 @@ module Make = (Config: Config) => {
         send(FieldArrayRemoveBy(field, predicate)),
       arrayRemoveByIndex: (field, index) =>
         send(FieldArrayRemove(field, index)),
+      validateField: field => send(ValidateField(field)),
       validateForm: () => send(ValidateForm(false)),
     };
 
