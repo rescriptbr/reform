@@ -102,24 +102,23 @@ let make = () => {
   <PostAddForm.Provider value=reform>
     {switch (result) {
      | Some(Error(_error)) =>
-       <p> {ReasonReact.string("Something went wrong...")} </p>
-     | Some(NoData) =>
-       <p> {ReasonReact.string("Something went wrong...")} </p>
+       <p> {React.string("Something went wrong...")} </p>
+     | Some(NoData) => <p> {React.string("Something went wrong...")} </p>
      | Some(Data(data)) =>
        <div>
          <h2>
            {data##createPost
-            |> Belt.Option.map(_, post =>
-                 "Post#" ++ post##id ++ " " ++ post##title
-               )
-            |> Belt.Option.getWithDefault(_, "")
-            |> ReasonReact.string}
+            ->Belt.Option.map(post =>
+                "Post#" ++ post##id ++ " " ++ post##title
+              )
+            ->Belt.Option.getWithDefault("")
+            ->React.string}
          </h2>
          <p>
            {data##createPost
-            |> Belt.Option.map(_, post => post##description)
-            |> Belt.Option.getWithDefault(_, "")
-            |> ReasonReact.string}
+            ->Belt.Option.map(post => post##description)
+            ->Belt.Option.getWithDefault("")
+            ->React.string}
          </p>
        </div>
      | None =>
@@ -135,7 +134,7 @@ let make = () => {
            render={({handleChange, error, value}) =>
              <label>
                <p>
-                 <span> {"Accept terms? " |> ReasonReact.string} </span>
+                 <span> {"Accept terms? " |> React.string} </span>
                  <input
                    type_="checkbox"
                    value={string_of_bool(value)}
