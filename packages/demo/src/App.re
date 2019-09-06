@@ -6,7 +6,7 @@ let make = (~message) => {
     <div className="App">
       <div className="App-header">
         <img
-          src="https://astrocoders.com/panel.png"
+          src="https://avatars2.githubusercontent.com/u/14410490?s=200&v=4"
           className="App-logo"
           alt="logo"
         />

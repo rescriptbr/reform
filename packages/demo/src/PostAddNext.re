@@ -1,3 +1,4 @@
+open BsReform;
 module StateLenses = [%lenses
   type state = {
     description: string,
@@ -5,7 +6,6 @@ module StateLenses = [%lenses
     acceptTerms: bool,
   }
 ];
-open BsReform;
 module PostAddForm = ReForm.Make(StateLenses);
 
 module PostAddMutationConfig = [%graphql
@@ -23,6 +23,27 @@ module PostAddMutationConfig = [%graphql
 module PostAddMutation =
   ReasonApolloHooks.Mutation.Make(PostAddMutationConfig);
 
+module FieldString = {
+  [@react.component]
+  let make = (~field, ~label) => {
+    <PostAddForm.Field
+      field
+      render={({handleChange, error, value, validate}) => {
+        Js.log(label);
+        <label>
+          <span> {React.string(label)} </span>
+          <input
+            value
+            onChange={Helpers.handleChange(handleChange)}
+            onBlur={_ => validate()}
+          />
+          <p> {error->Belt.Option.getWithDefault("")->React.string} </p>
+        </label>;
+      }}
+    />;
+  };
+};
+
 [@react.component]
 let make = () => {
   let mutate =
@@ -33,8 +54,9 @@ let make = () => {
   let (result: option(PostAddMutation.result), setResult) =
     React.useState(() => None);
 
-  let {state, submit, getFieldState, handleChange}: PostAddForm.api =
+  let reform =
     PostAddForm.use(
+      ~validationStrategy=OnDemand,
       ~schema={
         PostAddForm.Validation.Schema([|
           Custom(
@@ -76,94 +98,59 @@ let make = () => {
       (),
     );
 
-  switch (result) {
-  | Some(Error(_error)) =>
-    <p> {ReasonReact.string("Something went wrong...")} </p>
-  | Some(NoData) => <p> {ReasonReact.string("Something went wrong...")} </p>
-  | Some(Data(data)) =>
-    <div>
-      <h2>
-        {data##createPost
-         |> Belt.Option.map(_, post =>
-              "Post#" ++ post##id ++ " " ++ post##title
-            )
-         |> Belt.Option.getWithDefault(_, "")
-         |> ReasonReact.string}
-      </h2>
-      <p>
-        {data##createPost
-         |> Belt.Option.map(_, post => post##description)
-         |> Belt.Option.getWithDefault(_, "")
-         |> ReasonReact.string}
-      </p>
-    </div>
-  | None =>
-    <form
-      onSubmit={event => {
-        ReactEvent.Synthetic.preventDefault(event);
-        submit();
-      }}>
-      <label>
-        <span> {"Title:" |> ReasonReact.string} </span>
-        <input
-          value={state.values.title}
-          onChange={Helpers.handleChange(handleChange(Title))}
-        />
-        <p>
-          {getFieldState(Field(Title))
-           |> (
-             fun
-             | Error(error) => Some(error)
-             | _ => None
-           )
-           |> Belt.Option.getWithDefault(_, "")
-           |> ReasonReact.string}
-        </p>
-      </label>
-      <label>
-        <span> {"Description:" |> ReasonReact.string} </span>
-        <textarea
-          value={state.values.description}
-          rows=4
-          onChange={Helpers.handleChange(handleChange(Description))}
-        />
-        <p>
-          {getFieldState(Field(Description))
-           |> (
-             fun
-             | Error(error) => Some(error)
-             | _ => None
-           )
-           |> Belt.Option.getWithDefault(_, "")
-           |> ReasonReact.string}
-        </p>
-      </label>
-      <label>
-        <p>
-          <span> {"Accept terms? " |> ReasonReact.string} </span>
-          <input
-            type_="checkbox"
-            value={string_of_bool(state.values.acceptTerms)}
-            onChange={event =>
-              ReactEvent.Form.target(event)##checked
-              |> handleChange(AcceptTerms)
-            }
-          />
-        </p>
-        <p>
-          {getFieldState(Field(AcceptTerms))
-           |> (
-             fun
-             | Error(error) => Some(error)
-             | _ => None
-           )
-           |> Belt.Option.getWithDefault(_, "")
-           |> ReasonReact.string}
-        </p>
-      </label>
-      {state.formState == Submitting
-         ? <p> {React.string("Saving...")} </p>
-         : <button type_="submit"> {"Submit" |> ReasonReact.string} </button>}
-    </form>
-  };
+  <PostAddForm.Provider value=reform>
+    {switch (result) {
+     | Some(Error(_error)) =>
+       <p> {ReasonReact.string("Something went wrong...")} </p>
+     | Some(NoData) =>
+       <p> {ReasonReact.string("Something went wrong...")} </p>
+     | Some(Data(data)) =>
+       <div>
+         <h2>
+           {data##createPost
+            |> Belt.Option.map(_, post =>
+                 "Post#" ++ post##id ++ " " ++ post##title
+               )
+            |> Belt.Option.getWithDefault(_, "")
+            |> ReasonReact.string}
+         </h2>
+         <p>
+           {data##createPost
+            |> Belt.Option.map(_, post => post##description)
+            |> Belt.Option.getWithDefault(_, "")
+            |> ReasonReact.string}
+         </p>
+       </div>
+     | None =>
+       <form
+         onSubmit={event => {
+           ReactEvent.Synthetic.preventDefault(event);
+           reform.submit();
+         }}>
+         <FieldString field=StateLenses.Title label="Title" />
+         <FieldString field=StateLenses.Description label="Description" />
+         <PostAddForm.Field
+           field=StateLenses.AcceptTerms
+           render={({handleChange, error, value}) =>
+             <label>
+               <p>
+                 <span> {"Accept terms? " |> ReasonReact.string} </span>
+                 <input
+                   type_="checkbox"
+                   value={string_of_bool(value)}
+                   onChange={event =>
+                     ReactEvent.Form.target(event)##checked |> handleChange
+                   }
+                 />
+               </p>
+               <p> {error->Belt.Option.getWithDefault("")->React.string} </p>
+             </label>
+           }
+         />
+         {reform.state.formState == Submitting
+            ? <p> {React.string("Saving...")} </p>
+            : <button type_="submit"> {"Submit" |> React.string} </button>}
+       </form>
+     }}
+  </PostAddForm.Provider>;
 };

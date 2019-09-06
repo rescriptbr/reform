@@ -72,6 +72,18 @@ module Make = (Config: Config) => {
     state,
   };
 
+  type fieldInterface('value) = {
+    handleChange: 'value => unit,
+    error: option(string),
+    state: fieldState,
+    validate: unit => unit,
+    value: 'value,
+  };
+
+  type validationStrategy =
+    | OnChange
+    | OnDemand;
+
   let getInitialFieldsState: Validation.schema => array((field, fieldState)) =
     schema => {
       let Validation.Schema(validators) = schema;
@@ -98,6 +110,57 @@ module Make = (Config: Config) => {
       );
     };
 
+  let formContext: React.Context.t(option(api)) = React.createContext(None);
+
+  let useFormContext = () => React.useContext(formContext);
+  let useField = field => {
+    let interface = useFormContext();
+    interface->Belt.Option.map(
+      ({handleChange, getFieldError, getFieldState, validateField, state}) =>
+      {
+        handleChange: handleChange(field),
+        error: getFieldError(Field(field)),
+        state: getFieldState(Field(field)),
+        validate: () => validateField(Field(field)),
+        value: state.values->Config.get(field),
+      }
+    );
+  };
+
+  module Provider = {
+    let makeProps = (~value, ~children, ()) => {
+      "value": Some(value),
+      "children": children,
+    };
+    let make = React.Context.provider(formContext);
+  };
+
+  module Field = {
+    [@react.component]
+    let make =
+        (
+          ~field: Config.field('a),
+          ~render: fieldInterface('a) => React.element,
+          ~renderOnMissingContext=React.null,
+          (),
+        ) => {
+      let fieldInterface = useField(field);
+      React.useMemo3(
+        () =>
+          fieldInterface
+          ->Belt.Option.map(render)
+          ->Belt.Option.getWithDefault(renderOnMissingContext),
+        (
+          Belt.Option.(
+            fieldInterface->flatMap(({error}) => error)->getWithDefault("")
+          ),
+          Belt.Option.(fieldInterface->map(({value}) => value)),
+          Belt.Option.(fieldInterface->map(({state}) => state)),
+        ),
+      );
+    };
+  };
+
   let use =
       (
         ~initialState,
@@ -105,6 +168,7 @@ module Make = (Config: Config) => {
         ~onSubmit,
         ~onSubmitFail=ignore,
         ~i18n=ReSchemaI18n.default,
+        ~validationStrategy=OnChange,
         (),
       ) => {
     let (state, send) =
@@ -193,7 +257,10 @@ module Make = (Config: Config) => {
               values: Config.set(state.values, field, value),
             },
             self => {
-              self.send(ValidateField(Field(field)));
+              switch (validationStrategy) {
+              | OnChange => self.send(ValidateField(Field(field)))
+              | OnDemand => ()
+              };
               None;
             },
           )
