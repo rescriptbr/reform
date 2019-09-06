@@ -47,7 +47,7 @@ module FieldString = {
 
 [@react.component]
 let make = () => {
-  let mutate = PostAddMutation.use(~client=Apollo.client, ());
+  let (mutate, result, _) = PostAddMutation.use(~client=Apollo.client, ());
 
   let reform =
     PostAddForm.use(
@@ -72,19 +72,14 @@ let make = () => {
       ~onSubmit=
         ({state}) => {
           mutate(
-            PostAddMutation.options(
-              ~variables=
-                PostAddMutationConfig.make(
-                  ~title=state.values.title,
-                  ~description=state.values.description,
-                  (),
-                )##variables,
-              (),
-            ),
+            ~variables=
+              PostAddMutationConfig.make(
+                ~title=state.values.title,
+                ~description=state.values.description,
+                (),
+              )##variables,
+            (),
           )
-          |> Js.Promise.then_(result =>
-               setResult(_ => Some(result)) |> Js.Promise.resolve
-             )
           |> ignore;
 
           None;
@@ -95,10 +90,8 @@ let make = () => {
 
   <PostAddForm.Provider value=reform>
     {switch (result) {
-     | Some(Error(_error)) =>
-       <p> {React.string("Something went wrong...")} </p>
-     | Some(NoData) => <p> {React.string("Something went wrong...")} </p>
-     | Some(Data(data)) =>
+     | Error(_error) => <p> {React.string("Something went wrong...")} </p>
+     | Data(data) =>
        <div>
          <h2>
            {data##createPost
@@ -115,7 +108,7 @@ let make = () => {
             ->React.string}
          </p>
        </div>
-     | None =>
+     | _ =>
        <form
          onSubmit={event => {
            ReactEvent.Synthetic.preventDefault(event);
