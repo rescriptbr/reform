@@ -47,13 +47,7 @@ module FieldString = {
 
 [@react.component]
 let make = () => {
-  let mutate =
-    PostAddMutation.use(
-      ~options=PostAddMutation.options(~client=Apollo.client, ()),
-      (),
-    );
-  let (result: option(PostAddMutation.result), setResult) =
-    React.useState(() => None);
+  let mutate = PostAddMutation.use(~client=Apollo.client, ());
 
   let reform =
     PostAddForm.use(
