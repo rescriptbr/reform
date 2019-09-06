@@ -3,6 +3,7 @@
 Reasonably making forms sound good
 
 * [Installation](#installation)
+* [Features](#features)
 * [What this is and why](#what-this-is-and-why)
 * [Quick usage](#usage)
 
@@ -35,6 +36,14 @@ And update your bsconfig.json with `ppx-flags`
 ]
 ```
 
+## Features
+- Hook API
+- Schema API
+- Type safe, `handleChange` properly infers the value of the field it is handling
+- Context Provider
+- Field component
+- Validation strategy, OnDemand and OnChange
+
 ## What this is and why
 Code that deals with strongly typed forms can quickly become walls of repeated text.
 We created ReForm to be both deadly simple and to make forms sound good leveraging ReasonML's powerful typesytem.
@@ -42,9 +51,11 @@ Even the schemas we use are nothing more than constructors built-in in the langu
 
 ## Usage with hooks
 
-Checkout `packages/demo/src/PostAddNext.re` also
+Checkout https://github.com/Astrocoders/reform/blob/master/packages/demo/src/PostAddNext.re for a more complete demo
 
 ```reason
+open BsReform;
+
 module StateLenses = [%lenses
   type state = {
     description: string,
@@ -52,7 +63,7 @@ module StateLenses = [%lenses
     acceptTerms: bool,
   }
 ];
-module PostAddForm = ReFormNext.Make(StateLenses);
+module PostAddForm = ReForm.Make(StateLenses);
 
 [@react.component]
 let make = () => {
