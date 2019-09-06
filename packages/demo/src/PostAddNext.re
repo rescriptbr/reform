@@ -29,6 +29,7 @@ module FieldString = {
     <PostAddForm.Field
       field
       render={({handleChange, error, value, validate}) => {
+        /* Open up your browser DevTools to see how the changes are only applied when you change the respective component */
         Js.log(label);
         <label>
           <span> {React.string(label)} </span>
