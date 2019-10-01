@@ -2,34 +2,38 @@
 
 Reasonably making forms sound good
 
-* [Installation](#installation)
-* [Features](#features)
-* [What this is and why](#what-this-is-and-why)
-* [Quick usage](#usage)
+- [Installation](#installation)
+- [Features](#features)
+- [What this is and why](#what-this-is-and-why)
+- [Quick usage](#usage)
 
 ## Docs
+
 Check our Docusaurus https://astrocoders.dev/reform
 
 ## Installation
 
 ```
-yarn add bs-reform
+yarn add bs-reform reschema
 ```
 
 Then add it to bsconfig.json
 
 ```
 "bs-dependencies": [
- "bs-reform"
+ "bs-reform",
+ "reschema"
 ]
 ```
 
 Then add lenses-ppx
+
 ```
 yarn add lenses-ppx@4.0.0 -D
 ```
 
 And update your bsconfig.json with `ppx-flags`
+
 ```
 "ppx-flags": [
  "lenses-ppx/ppx"
@@ -37,6 +41,7 @@ And update your bsconfig.json with `ppx-flags`
 ```
 
 ## Features
+
 - Hook API
 - Schema API
 - Type safe, `handleChange` properly infers the value of the field it is handling
@@ -45,11 +50,12 @@ And update your bsconfig.json with `ppx-flags`
 - Validation strategy, OnDemand and OnChange
 
 ## What this is and why
+
 Code that deals with strongly typed forms can quickly become walls of repeated text.
 We created ReForm to be both deadly simple and to make forms sound good leveraging ReasonML's powerful typesytem.
 Even the schemas we use are nothing more than constructors built-in in the language itself with a small size footprint.
 
-## Usage with hooks
+## Basic usage
 
 Checkout https://github.com/Astrocoders/reform/blob/master/packages/demo/src/PostAddNext.re for a more complete demo
 
@@ -65,10 +71,31 @@ module StateLenses = [%lenses
 ];
 module PostAddForm = ReForm.Make(StateLenses);
 
+module FieldString = {
+  [@react.component]
+  let make = (~field, ~label) => {
+    <PostAddForm.Field
+      field
+      render={({handleChange, error, value, validate}) =>
+        <label>
+          <span> {React.string(label)} </span>
+          <input
+            value
+            onChange={Helpers.handleChange(handleChange)}
+            onBlur={_ => validate()}
+          />
+          <p> {error->Belt.Option.getWithDefault("")->React.string} </p>
+        </label>
+      }
+    />;
+  };
+};
+
 [@react.component]
 let make = () => {
-  let {state, submit, getFieldState, handleChange}: PostAddForm.api =
+  let reform =
     PostAddForm.use(
+      ~validationStrategy=OnDemand,
       ~schema={
         PostAddForm.Validation.Schema([|
           StringMin(Title, 20),
@@ -78,34 +105,56 @@ let make = () => {
             values =>
               values.acceptTerms == false
                 ? Error("You must accept all the terms") : Valid,
-          ),
+          )
         |]);
       },
       ~onSubmit=
         ({state}) => {
-          mutate(
-            ~variables=
-              PostAddMutationConfig.make(
-                ~title=state.values.title,
-                ~description=state.values.description,
-                (),
-              )##variables,
-            (),
-          )
-          |> Js.Promise.then_(result =>
-               setResult(_ => Some(result)) |> Js.Promise.resolve
-             )
-          |> ignore;
-
+          Js.log2("title", state.values.description);
+          Js.log2("description", state.values.description);
+          Js.log2("acceptTerms", state.values.description);
           None;
         },
       ~initialState={title: "", description: "", acceptTerms: false},
       (),
     );
+
+  <PostAddForm.Provider value=reform>
+    <form
+      onSubmit={event => {
+        ReactEvent.Synthetic.preventDefault(event);
+        reform.submit();
+      }}>
+      <FieldString field=StateLenses.Title label="Title" />
+      <FieldString field=StateLenses.Description label="Description" />
+      <PostAddForm.Field
+        field=StateLenses.AcceptTerms
+        render={({handleChange, error, value}) =>
+          <label>
+            <p>
+              <span> {"Accept terms? " |> React.string} </span>
+              <input
+                type_="checkbox"
+                value={string_of_bool(value)}
+                onChange={event =>
+                  ReactEvent.Form.target(event)##checked |> handleChange
+                }
+              />
+            </p>
+            <p> {error->Belt.Option.getWithDefault("")->React.string} </p>
+          </label>
+        }
+      />
+      {reform.state.formState == Submitting
+         ? <p> {React.string("Saving...")} </p>
+         : <button type_="submit"> {"Submit" |> React.string} </button>}
+    </form>
+  </PostAddForm.Provider>;
 };
 ```
 
 #### Alternatives
+
 - The great https://github.com/alexfedoseev/re-formality
 
 #### Publishing
