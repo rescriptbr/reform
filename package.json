@@ -15,6 +15,9 @@
   "author": "Gabriel R. Abreu <grsabreu@gmail.com>",
   "license": "MIT",
   "devDependencies": {
+    "@commitlint/cli": "7.2.1",
+    "@commitlint/config-conventional": "7.1.2",
+    "husky": "1.2.1",
     "lerna": "^3.14.1",
     "lint-staged": "^7.0.0",
     "pre-commit": "^1.2.2"
@@ -36,6 +39,12 @@
       "**/lenses_ppx",
       "**/lenses_ppx/**"
     ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint:staged",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
   },
   "scripts": {
     "start": "yarn bs:watch",
