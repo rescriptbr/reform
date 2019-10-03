@@ -2,6 +2,15 @@
   "packages": [
     "packages/*"
   ],
+  "command": {
+    "publish": {
+      "conventionalCommits": true
+    },
+    "version": {
+      "message": "chore(version): bump",
+      "conventionalCommits": true
+    }
+  },
   "version": "independent",
   "npmClient": "yarn",
   "useWorkspaces": true
