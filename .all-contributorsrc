@@ -13,6 +13,19 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "fakenickels",
+      "name": "Gabriel Rubens",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/1283200?v=4",
+      "profile": "http://twitter.com/fakenickels",
+      "contributions": [
+        "code",
+        "bug",
+        "ideas",
+        "content",
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
