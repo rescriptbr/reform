@@ -1,5 +1,5 @@
 # ReForm.re
-[![All Contributors](https://img.shields.io/badge/all_contributors-6-orange.svg?style=flat-square)](#contributors)
+[![All Contributors](https://img.shields.io/badge/all_contributors-7-orange.svg?style=flat-square)](#contributors)
 
 Reasonably making forms sound good
 
@@ -188,6 +188,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/JeffersonCarvalh0"><img src="https://avatars1.githubusercontent.com/u/11946020?v=4" width="100px;" alt="Jefferson Carvalho"/><br /><sub><b>Jefferson Carvalho</b></sub></a><br /><a href="https://github.com/Astrocoders/reform/commits?author=JeffersonCarvalh0" title="Code">💻</a></td>
     <td align="center"><a href="https://gtluizmoratelli.itch.io"><img src="https://avatars2.githubusercontent.com/u/24661951?v=4" width="100px;" alt="Luiz Augusto Moratelli"/><br /><sub><b>Luiz Augusto Moratelli</b></sub></a><br /><a href="https://github.com/Astrocoders/reform/commits?author=LuizMoratelli" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/amythos"><img src="https://avatars0.githubusercontent.com/u/959296?v=4" width="100px;" alt="amythos"/><br /><sub><b>amythos</b></sub></a><br /><a href="https://github.com/Astrocoders/reform/commits?author=amythos" title="Code">💻</a></td>
+    <td align="center"><a href="http://www.lallinuorteva.fi"><img src="https://avatars3.githubusercontent.com/u/7643715?v=4" width="100px;" alt="Lalli Nuorteva"/><br /><sub><b>Lalli Nuorteva</b></sub></a><br /><a href="https://github.com/Astrocoders/reform/issues?q=author%3Alalnuo" title="Bug reports">🐛</a></td>
   </tr>
 </table>
 
