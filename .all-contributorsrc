@@ -62,6 +62,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "lalnuo",
+      "name": "Lalli Nuorteva",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/7643715?v=4",
+      "profile": "http://www.lallinuorteva.fi",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
