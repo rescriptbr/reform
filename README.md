@@ -1,5 +1,5 @@
 # ReForm.re
-[![All Contributors](https://img.shields.io/badge/all_contributors-10-orange.svg?style=flat-square)](#contributors)
+[![All Contributors](https://img.shields.io/badge/all_contributors-11-orange.svg?style=flat-square)](#contributors)
 
 Reasonably making forms sound good
 
@@ -194,6 +194,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://playqup.com"><img src="https://avatars0.githubusercontent.com/u/3103241?v=4" width="100px;" alt="Matt"/><br /><sub><b>Matt</b></sub></a><br /><a href="#maintenance-hew" title="Maintenance">🚧</a></td>
     <td align="center"><a href="https://github.com/kyldvs"><img src="https://avatars1.githubusercontent.com/u/1830497?v=4" width="100px;" alt="Kyle Davis"/><br /><sub><b>Kyle Davis</b></sub></a><br /><a href="#review-kyldvs" title="Reviewed Pull Requests">👀</a></td>
     <td align="center"><a href="https://github.com/ulugbekna"><img src="https://avatars2.githubusercontent.com/u/16353531?v=4" width="100px;" alt="Ulugbek Abdullaev"/><br /><sub><b>Ulugbek Abdullaev</b></sub></a><br /><a href="https://github.com/Astrocoders/reform/issues?q=author%3Aulugbekna" title="Bug reports">🐛</a></td>
+    <td align="center"><a href="https://khoanguyen.me"><img src="https://avatars2.githubusercontent.com/u/3049054?v=4" width="100px;" alt="Khoa Nguyen"/><br /><sub><b>Khoa Nguyen</b></sub></a><br /><a href="https://github.com/Astrocoders/reform/commits?author=thangngoc89" title="Code">💻</a></td>
   </tr>
 </table>
 
