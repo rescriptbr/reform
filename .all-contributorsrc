@@ -80,6 +80,15 @@
       "contributions": [
         "maintenance"
       ]
+    },
+    {
+      "login": "kyldvs",
+      "name": "Kyle Davis",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/1830497?v=4",
+      "profile": "https://github.com/kyldvs",
+      "contributions": [
+        "review"
+      ]
     }
   ],
   "contributorsPerLine": 7,
