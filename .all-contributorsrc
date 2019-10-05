@@ -1,0 +1,23 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "DCKT",
+      "name": "Thomas Deconinck",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/1548421?v=4",
+      "profile": "http://www.thomasdeconinck.fr",
+      "contributions": [
+        "doc"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "reform",
+  "projectOwner": "Astrocoders",
+  "repoType": "github",
+  "repoHost": "https://github.com"
+}
