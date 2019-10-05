@@ -26,6 +26,15 @@
         "content",
         "doc"
       ]
+    },
+    {
+      "login": "lucasbesen",
+      "name": "Lucas Besen",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/13984388?v=4",
+      "profile": "https://twitter.com/lucasbesen",
+      "contributions": [
+        "maintenance"
+      ]
     }
   ],
   "contributorsPerLine": 7,
