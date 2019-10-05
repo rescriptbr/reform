@@ -89,6 +89,15 @@
       "contributions": [
         "review"
       ]
+    },
+    {
+      "login": "ulugbekna",
+      "name": "Ulugbek Abdullaev",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/16353531?v=4",
+      "profile": "https://github.com/ulugbekna",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
