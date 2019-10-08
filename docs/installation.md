@@ -7,7 +7,7 @@ sidebar_label: Installation
 ### Pre-requisites
 
 #### BS-Platform
- In order to start using Reform you need the basic tooling for ReasonML using [Buckescript](https://bucklescript.github.io/en/).
+ In order to start using Reform you need the basic tooling for ReasonML using [BuckleScript](https://bucklescript.github.io/en/).
 
 #### React
 Reform is a library for React applications, so we assume that you are already familiar with [React](https://reactjs.org/).
