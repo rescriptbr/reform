@@ -1,0 +1,33 @@
+name: Update Docs
+
+on:
+  push:
+    branches: 
+      - master
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [8.x, 10.x, 12.x]
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: npm install, build, and test
+      run: |
+        cd website && npm ci
+      env:
+        CI: true
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: clay/docusaurus-github-action
+      with:
+        args: deploy
+        BUILD_DIR: website
+        PROJECT_NAME: reform
