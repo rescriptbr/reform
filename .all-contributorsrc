@@ -1,0 +1,127 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "DCKT",
+      "name": "Thomas Deconinck",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/1548421?v=4",
+      "profile": "http://www.thomasdeconinck.fr",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "fakenickels",
+      "name": "Gabriel Rubens",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/1283200?v=4",
+      "profile": "http://twitter.com/fakenickels",
+      "contributions": [
+        "code",
+        "bug",
+        "ideas",
+        "content",
+        "doc"
+      ]
+    },
+    {
+      "login": "lucasbesen",
+      "name": "Lucas Besen",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/13984388?v=4",
+      "profile": "https://twitter.com/lucasbesen",
+      "contributions": [
+        "maintenance"
+      ]
+    },
+    {
+      "login": "JeffersonCarvalh0",
+      "name": "Jefferson Carvalho",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/11946020?v=4",
+      "profile": "https://github.com/JeffersonCarvalh0",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "LuizMoratelli",
+      "name": "Luiz Augusto Moratelli",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/24661951?v=4",
+      "profile": "https://gtluizmoratelli.itch.io",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "amythos",
+      "name": "amythos",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/959296?v=4",
+      "profile": "https://github.com/amythos",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "lalnuo",
+      "name": "Lalli Nuorteva",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/7643715?v=4",
+      "profile": "http://www.lallinuorteva.fi",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "hew",
+      "name": "Matt",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/3103241?v=4",
+      "profile": "https://playqup.com",
+      "contributions": [
+        "maintenance"
+      ]
+    },
+    {
+      "login": "kyldvs",
+      "name": "Kyle Davis",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/1830497?v=4",
+      "profile": "https://github.com/kyldvs",
+      "contributions": [
+        "review"
+      ]
+    },
+    {
+      "login": "ulugbekna",
+      "name": "Ulugbek Abdullaev",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/16353531?v=4",
+      "profile": "https://github.com/ulugbekna",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "thangngoc89",
+      "name": "Khoa Nguyen",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/3049054?v=4",
+      "profile": "https://khoanguyen.me",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "medson10",
+      "name": "Medson Oliveira",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/17956325?v=4",
+      "profile": "http://medson.me",
+      "contributions": [
+        "code",
+        "ideas"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "reform",
+  "projectOwner": "Astrocoders",
+  "repoType": "github",
+  "repoHost": "https://github.com"
+}
