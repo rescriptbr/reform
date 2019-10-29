@@ -6,7 +6,7 @@ sidebar_label: Installation
 
 ### Pre-requisites
 
-#### BS-Platform
+#### BuckleScript
  In order to start using Reform you need the basic tooling for ReasonML using [BuckleScript](https://bucklescript.github.io/en/).
 
 #### React
@@ -14,7 +14,7 @@ Reform is a library for React applications, so we assume that you are already fa
 
 ### Instalation and Setup
 
-You’ll need to have [Node 8.16.0 or Node 10.16.0 or later version](https://nodejs.org/en/) on your local development machine (but it’s not required on the server). You can use `nvm` (macOS/Linux) or `nvm-windows` to easily switch Node versions between different projects.
+You’ll need to have [Node 8.16.0 or Node 10.16.0 or later version](https://nodejs.org/en/) on your local development machine (but it’s not required on the server). You can use `fnm`, `nvm` (macOS/Linux) or `nvm-windows` to easily switch Node versions between different projects.
 
 If you want to create a ReasonReact development envinroment you can use the create-react-app to bootstrap a initial project.
 `yarn create react-app my-app --scripts-version reason-scripts`
@@ -22,8 +22,8 @@ If you want to create a ReasonReact development envinroment you can use the crea
 
 or
 
-`npx create-react-app <app-name> --scripts-version reason-scripts`
-`npx` comes with npm 5.2+ and higher
+`bsb -init reform-demo -theme react-hooks`
+`bsb` comes with BuckleScript installation
 
 It will create a directory called my-app inside the current folder.
 Inside that directory, it will generate the initial project structure.
