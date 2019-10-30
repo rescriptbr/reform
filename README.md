@@ -1,5 +1,5 @@
 # ReForm.re
-[![All Contributors](https://img.shields.io/badge/all_contributors-12-orange.svg?style=flat-square)](#contributors)
+[![All Contributors](https://img.shields.io/badge/all_contributors-13-orange.svg?style=flat-square)](#contributors)
 
 Reasonably making forms sound good
 
@@ -196,6 +196,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/ulugbekna"><img src="https://avatars2.githubusercontent.com/u/16353531?v=4" width="100px;" alt="Ulugbek Abdullaev"/><br /><sub><b>Ulugbek Abdullaev</b></sub></a><br /><a href="https://github.com/Astrocoders/reform/issues?q=author%3Aulugbekna" title="Bug reports">🐛</a></td>
     <td align="center"><a href="https://khoanguyen.me"><img src="https://avatars2.githubusercontent.com/u/3049054?v=4" width="100px;" alt="Khoa Nguyen"/><br /><sub><b>Khoa Nguyen</b></sub></a><br /><a href="https://github.com/Astrocoders/reform/commits?author=thangngoc89" title="Code">💻</a></td>
     <td align="center"><a href="http://medson.me"><img src="https://avatars0.githubusercontent.com/u/17956325?v=4" width="100px;" alt="Medson Oliveira"/><br /><sub><b>Medson Oliveira</b></sub></a><br /><a href="https://github.com/Astrocoders/reform/commits?author=medson10" title="Code">💻</a> <a href="#ideas-medson10" title="Ideas, Planning, & Feedback">🤔</a></td>
+    <td align="center"><a href="https://anabastos.me"><img src="https://avatars1.githubusercontent.com/u/10088900?v=4" width="100px;" alt="Ana Luiza Portello Bastos"/><br /><sub><b>Ana Luiza Portello Bastos</b></sub></a><br /><a href="https://github.com/Astrocoders/reform/commits?author=anabastos" title="Documentation">📖</a></td>
   </tr>
 </table>
 
