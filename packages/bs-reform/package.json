@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "reason-react-compat": "^0.4.0",
-    "reason-react-update": "^0.1.1",
+    "reason-react-update": "^1.0.0",
     "reschema": "^1.2.0"
   }
 }

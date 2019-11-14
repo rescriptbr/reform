@@ -7752,10 +7752,10 @@ reason-react-compat@^0.4.0:
   resolved "https://registry.yarnpkg.com/reason-react-compat/-/reason-react-compat-0.4.0.tgz#9c6705f9bd67e7ff7219355f3a95fd67442b578d"
   integrity sha512-Bwwgb6AHusLiRhdd0aupFAuMYaG3gnwR6iHYYlj9gfLD6Uxp53dtJIhS2ZMTEpCSU1JE2X0k7x3rru1IRdx9FQ==
 
-reason-react-update@^0.1.1:
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/reason-react-update/-/reason-react-update-0.1.1.tgz#ea51c2e24fef7a061bb419496c0941f19f773924"
-  integrity sha512-wuP4MD79Gv0HLRy365vMa1JMXEqVQNNtq3ilB0Jw2ha8z9HR2Lzg/R+wPVWorXSnvoHkbE/vHaCRIA7ggn5WEA==
+reason-react-update@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/reason-react-update/-/reason-react-update-1.0.0.tgz#c2e9f064fb665e24d35073a93f901c5792fdf36f"
+  integrity sha512-apsqywkgcEnkAc7V9fOs5ikEmufgYkxcLu5fqYWQ2Atb4UlYnoN7P92Xal3izReyqfk41G4zHlPHwJhoq0xwIA==
 
 reason-react@>=0.7.0, reason-react@^0.7.0:
   version "0.7.0"
