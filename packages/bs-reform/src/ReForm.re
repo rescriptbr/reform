@@ -397,14 +397,14 @@ module Make = (Config: Config) => {
 
       send(SetFieldsState(newFieldsState));
 
-      Belt.Array.map(
-        newFieldsState,
-        fieldState => {
+      Belt.Array.keep(newFieldsState, ((field, _)) =>
+        Belt.Array.some(fields, fieldItem => fieldItem == field)
+      )
+      ->Belt.Array.map(fieldState => {
           let (_, fieldStateValidation) = fieldState;
 
           fieldStateValidation;
-        },
-      );
+        });
     };
 
     let interface: api = {
