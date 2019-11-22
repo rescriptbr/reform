@@ -65,6 +65,7 @@ module Make = (Config: Config) => {
 
     validateField: field => unit,
     validateForm: unit => unit,
+    validateFields: array(field) => array(fieldState),
   };
 
   type onSubmitAPI = {
@@ -351,20 +352,73 @@ module Make = (Config: Config) => {
         | _ => None
       );
 
+    let validateFields = (fields: array(field)) => {
+      let fieldsValidated =
+        ReSchema.validateFields(~fields, ~values=state.values, ~i18n, schema);
+
+      let newFieldsState =
+        Belt.Array.map(
+          state.fieldsState,
+          fieldStateItem => {
+            let (field, _) = fieldStateItem;
+
+            Belt.Array.some(fields, fieldItem => fieldItem == field)
+              ? {
+                let newFieldState =
+                  fieldsValidated
+                  ->Belt.Array.keep(fieldStateValidated =>
+                      Belt.Option.map(fieldStateValidated, ((item, _)) =>
+                        item
+                      )
+                      == Some(field)
+                    )
+                  ->Belt.Array.get(0);
+
+                switch (newFieldState) {
+                | Some(fieldStateValidated) =>
+                  switch (fieldStateValidated) {
+                  | Some((_, newFieldStateValidated)) =>
+                    switch (newFieldStateValidated) {
+                    | Valid => [|(field, Valid: fieldState)|]
+                    | Error(message) => [|(field, Error(message))|]
+                    }
+
+                  | None => [||]
+                  }
+                | None => [||]
+                };
+              }
+              : [|fieldStateItem|];
+          },
+        )
+        ->Belt.Array.reduce([||], (acc, fieldState) =>
+            Belt.Array.concat(acc, fieldState)
+          );
+
+      send(SetFieldsState(newFieldsState));
+
+      Belt.Array.keep(newFieldsState, ((field, _)) =>
+        Belt.Array.some(fields, fieldItem => fieldItem == field)
+      )
+      ->Belt.Array.map(fieldState => {
+          let (_, fieldStateValidation) = fieldState;
+
+          fieldStateValidation;
+        });
+    };
+
     let interface: api = {
       state,
       submit: () => send(TrySubmit),
       resetForm: () => send(ResetForm),
       setValues: values => send(SetValues(values)),
-      setFieldValue: (field, value, ~shouldValidate=true, ()) => {
+      setFieldValue: (field, value, ~shouldValidate=true, ()) =>
         shouldValidate
           ? send(FieldChangeValue(field, value))
-          : send(SetFieldValue(field, value));
-      },
+          : send(SetFieldValue(field, value)),
       getFieldState,
       getFieldError,
       handleChange: (field, value) => send(FieldChangeValue(field, value)),
-
       arrayPush: (field, value) => send(FieldArrayAdd(field, value)),
       arrayUpdateByIndex: (~field, ~index, value) =>
         send(FieldArrayUpdateByIndex(field, value, index)),
@@ -374,6 +428,7 @@ module Make = (Config: Config) => {
         send(FieldArrayRemove(field, index)),
       validateField: field => send(ValidateField(field)),
       validateForm: () => send(ValidateForm(false)),
+      validateFields,
     };
 
     interface;
