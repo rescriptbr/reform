@@ -134,6 +134,19 @@ module Make = (Lenses: Lenses) => {
     ->Belt.Option.map(validator => validateField(~validator, ~values, ~i18n));
   };
 
+  let validateFields = (~fields, ~values, ~i18n, schema: Validation.schema) => {
+    let Validation.Schema(validators) = schema;
+
+    Belt.Array.map(fields, field =>
+      getFieldValidator(~validators, ~fieldName=field)
+    )
+    ->Belt.Array.map(validator =>
+        Belt.Option.map(validator, validator =>
+          validateField(~validator, ~values, ~i18n)
+        )
+      );
+  };
+
   let validate =
       (
         ~i18n=ReSchemaI18n.default,
