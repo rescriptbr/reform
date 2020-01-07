@@ -12,7 +12,8 @@ type formState =
   | Dirty
   | Submitting
   | Pristine
-  | Errored
+  | Errored                
+  | SubmitFailed(option(string))
   | Valid;
 module Make = (Config: Config) => {
   module ReSchema = ReSchema.Make(Config);
@@ -36,7 +37,8 @@ module Make = (Config: Config) => {
     | SetFormState(formState)
     | ResetForm
     | SetValues(Config.state)
-    | SetFieldValue(Config.field('a), 'a): action;
+    | SetFieldValue(Config.field('a), 'a): action
+    | RaiseSubmitFailed(option(string));
 
   type state = {
     formState,
@@ -66,6 +68,7 @@ module Make = (Config: Config) => {
     validateField: field => unit,
     validateForm: unit => unit,
     validateFields: array(field) => array(fieldState),
+    raiseSubmitFailed: option(string) => unit,
   };
 
   type onSubmitAPI = {
@@ -324,6 +327,8 @@ module Make = (Config: Config) => {
         | SetValues(values) => Update({...state, values})
         | SetFieldValue(field, value) =>
           Update({...state, values: Config.set(state.values, field, value)})
+        | RaiseSubmitFailed(err) =>
+          Update({...state, formState: SubmitFailed(err)})
         }
       );
 
@@ -351,6 +356,8 @@ module Make = (Config: Config) => {
         | Error(error) => Some(error)
         | _ => None
       );
+
+    let raiseSubmitFailed = error => send(RaiseSubmitFailed(error));
 
     let validateFields = (fields: array(field)) => {
       let fieldsValidated =
@@ -429,6 +436,7 @@ module Make = (Config: Config) => {
       validateField: field => send(ValidateField(field)),
       validateForm: () => send(ValidateForm(false)),
       validateFields,
+      raiseSubmitFailed,
     };
 
     interface;
