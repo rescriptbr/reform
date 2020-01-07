@@ -8,19 +8,19 @@ type fieldState =
   | Pristine
   | Valid
   | Error(string);
+type formState =
+  | Dirty
+  | Submitting
+  | Pristine
+  | Errored                
+  | SubmitFailed(option(string))
+  | Valid;
 module Make = (Config: Config) => {
   module ReSchema = ReSchema.Make(Config);
   module Validation = ReSchema.Validation;
 
   type field = ReSchema.field;
-
-  type formState =
-    | Dirty
-    | Submitting
-    | Pristine
-    | Errored
-    | SubmitFailed(option(string))
-    | Valid;
+  type nonrec formState = formState;
 
   type action =
     | ValidateField(field)
