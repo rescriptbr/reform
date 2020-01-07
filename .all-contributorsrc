@@ -11,7 +11,8 @@
       "avatar_url": "https://avatars2.githubusercontent.com/u/1548421?v=4",
       "profile": "http://www.thomasdeconinck.fr",
       "contributions": [
-        "doc"
+        "doc",
+        "code"
       ]
     },
     {
@@ -132,5 +133,6 @@
   "projectName": "reform",
   "projectOwner": "Astrocoders",
   "repoType": "github",
-  "repoHost": "https://github.com"
+  "repoHost": "https://github.com",
+  "skipCi": true
 }
