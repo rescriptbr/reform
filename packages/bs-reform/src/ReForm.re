@@ -370,8 +370,6 @@ module Make = (Config: Config) => {
         | _ => None
       );
 
-    let raiseSubmitFailed = error => send(RaiseSubmitFailed(error));
-
     let validateFields = (fields: array(field)) => {
       let fieldsValidated =
         ReSchema.validateFields(~fields, ~values=state.values, ~i18n, schema);
