@@ -465,17 +465,12 @@ module Make = (Config: Config) => {
 
     let getFieldErrorState = field => getFieldState(field);
 
-    let getNestedFieldError = (field, index, name) =>
+    let getNestedFieldError = (field, index) =>
       getFieldState(field)
       |> (
         fun
         | NestedErrors(errors) => {
-            switch (
-              errors
-              |> Js.Array.find(error =>
-                   error.index == index && error.name == name
-                 )
-            ) {
+            switch (errors->Belt.Array.get(index)) {
             | None => None
             | Some(error) => Some(error.error)
             };
