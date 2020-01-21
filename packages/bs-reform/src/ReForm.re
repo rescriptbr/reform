@@ -13,11 +13,6 @@ type fieldState =
   | NestedErrors(array(ReSchema.childFieldError))
   | Error(string);
 
-type fieldError =
-  | Error(string)
-  | Errors(array(ReSchema.childFieldError))
-  | Ok;
-
 type formState =
   | Dirty
   | Submitting
@@ -60,9 +55,9 @@ module Make = (Config: Config) => {
   type api = {
     state,
     getFieldState: field => fieldState,
-    getFieldErrorState: field => fieldError,
+    getFieldErrorState: field => fieldState,
     getFieldError: field => option(string),
-    getNestedFieldError: (field, int, string) => option(string),
+    getNestedFieldError: (field, int) => option(string),
     handleChange: 'a. (Config.field('a), 'a) => unit,
     arrayPush: 'a. (Config.field(array('a)), 'a) => unit,
     arrayUpdateByIndex:
@@ -91,7 +86,7 @@ module Make = (Config: Config) => {
 
   type fieldInterface('value) = {
     handleChange: 'value => unit,
-    error: fieldError,
+    error: fieldState,
     state: fieldState,
     validate: unit => unit,
     value: 'value,
@@ -468,15 +463,7 @@ module Make = (Config: Config) => {
         });
     };
 
-    let getFieldErrorState = field =>
-      getFieldState(field)
-      |> (
-        fun
-        | Error(error) => Error(error)
-        | NestedErrors(errors) => Errors(errors)
-        | Pristine
-        | Valid => Ok
-      );
+    let getFieldErrorState = field => getFieldState(field);
 
     let getNestedFieldError = (field, index, name) =>
       getFieldState(field)
