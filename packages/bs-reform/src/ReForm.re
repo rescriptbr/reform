@@ -12,7 +12,7 @@ type formState =
   | Dirty
   | Submitting
   | Pristine
-  | Errored                
+  | Errored
   | SubmitFailed(option(string))
   | Valid;
 module Make = (Config: Config) => {
@@ -74,6 +74,7 @@ module Make = (Config: Config) => {
   type onSubmitAPI = {
     send: action => unit,
     state,
+    raiseSubmitFailed: option(string) => unit,
   };
 
   type fieldInterface('value) = {
@@ -187,7 +188,13 @@ module Make = (Config: Config) => {
         | Submit =>
           UpdateWithSideEffects(
             {...state, formState: Submitting},
-            self => onSubmit({send: self.send, state: self.state}),
+            self =>
+              onSubmit({
+                send: self.send,
+                state: self.state,
+                raiseSubmitFailed: error =>
+                  self.send(RaiseSubmitFailed(error)),
+              }),
           )
         | TrySubmit =>
           SideEffects(
@@ -247,7 +254,13 @@ module Make = (Config: Config) => {
                   );
                 self.send(SetFieldsState(newFieldsState));
                 submit
-                  ? onSubmitFail({send: self.send, state: self.state}) : ();
+                  ? onSubmitFail({
+                      send: self.send,
+                      state: self.state,
+                      raiseSubmitFailed: error =>
+                        self.send(RaiseSubmitFailed(error)),
+                    })
+                  : ();
                 self.send(SetFormState(Errored));
               };
               None;
@@ -356,8 +369,6 @@ module Make = (Config: Config) => {
         | Error(error) => Some(error)
         | _ => None
       );
-
-    let raiseSubmitFailed = error => send(RaiseSubmitFailed(error));
 
     let validateFields = (fields: array(field)) => {
       let fieldsValidated =
