@@ -425,6 +425,8 @@ module Make = (Config: Config) => {
         });
     };
 
+    let raiseSubmitFailed = error => send(RaiseSubmitFailed(error));
+
     let interface: api = {
       state,
       submit: () => send(TrySubmit),
