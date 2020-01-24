@@ -1,6 +1,6 @@
 {
   "name": "demo",
-  "version": "0.4.5",
+  "version": "0.4.6",
   "private": true,
   "scripts": {
     "build": "bsb -make-world",
@@ -24,7 +24,7 @@
     "apollo-link-context": "^1.0.18",
     "apollo-link-error": "^1.1.11",
     "apollo-link-http": "^1.5.15",
-    "bs-reform": "^9.7.0",
+    "bs-reform": "^9.7.1",
     "graphql": "14.5.4",
     "graphql-tag": "2.10.1",
     "react": "^16.9.0",

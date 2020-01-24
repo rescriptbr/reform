@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [9.7.1](https://github.com/Astrocoders/reform/compare/bs-reform@9.7.0...bs-reform@9.7.1) (2020-01-24)
+
+
+### Bug Fixes
+
+* add missing function raiseSubmitFailed ([b6b42a6](https://github.com/Astrocoders/reform/commit/b6b42a6))
+
+
+
+
+
 # [9.7.0](https://github.com/Astrocoders/reform/compare/bs-reform@9.6.1...bs-reform@9.7.0) (2020-01-23)
 
 
