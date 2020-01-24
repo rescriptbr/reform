@@ -18,7 +18,7 @@ jobs:
         node-version: 12.x
     - name: npm install, build, and test
       run: |
-        cd website && npm ci
+        cd website && yarn install
       env:
         CI: true
     - name: Use Node.js ${{ matrix.node-version }}
