@@ -21,10 +21,10 @@ jobs:
         cd website && yarn install
       env:
         CI: true
-    - name: Use Node.js ${{ matrix.node-version }}
+    - name: Docusaurus
       uses: clay/docusaurus-github-action@master
       with:
         args: deploy
-        DEPLOY_SSH_KEY: ${{ secrets.GITHUB_TOKEN }}
+        DEPLOY_SSH_KEY: ${{ secrets.DOCAURUS_DEPLOY_KEY }}
         BUILD_DIR: website
         PROJECT_NAME: reform
