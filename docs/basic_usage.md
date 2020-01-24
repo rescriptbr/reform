@@ -17,12 +17,12 @@ module StateLenses = [%lenses
 ];
 ```
 
-Now you can generate the actual form container component:
+Now you can provide the lenses module to the ReForm functor as argument:
 ```ocaml
-module PostAddForm = ReForm.Make(StateLenses);
+module PostAddForm = BsReform.ReForm.Make(StateLenses);
 ```
 
-After creating the container module, you can use it as a React component:
+After creating instantiating your form module, you can use it as a React hook:
 
 ```ocaml
 [@react.component]
@@ -86,3 +86,8 @@ let make = () => {
   </PostAddForm.Provider>;
 };
 ```
+
+## What?
+
+Let's try to focus on the parts
+

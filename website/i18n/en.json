@@ -24,6 +24,10 @@
         "title": "Installation",
         "sidebar_label": "Installation"
       },
+      "philosophy": {
+        "title": "Philosophy",
+        "sidebar_label": "Philosophy"
+      },
       "schema": {
         "title": "Schemas"
       }
@@ -35,7 +39,7 @@
       "Blog": "Blog"
     },
     "categories": {
-      "Setting up": "Setting up",
+      "Basics": "Basics",
       "Usage": "Usage",
       "API": "API",
       "First Category": "First Category"

@@ -1,6 +1,6 @@
 {
   "docs": {
-    "Setting up": ["gettingStarted", "installation"],
+    "Basics": ["philosophy", "gettingStarted", "installation"],
     "Usage": ["basicUsage"],
     "API": ["schema", "i18n"]
   },
