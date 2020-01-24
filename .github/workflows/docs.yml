@@ -26,8 +26,9 @@ jobs:
       env:
         CI: true
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: clay/docusaurus-github-action
+      uses: clay/docusaurus-github-action@master
       with:
         args: deploy
+        DEPLOY_SSH_KEY: ${{ secrets.GITHUB_TOKEN }}
         BUILD_DIR: website
         PROJECT_NAME: reform
