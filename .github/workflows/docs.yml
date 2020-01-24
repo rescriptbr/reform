@@ -25,6 +25,6 @@ jobs:
       uses: clay/docusaurus-github-action@master
       with:
         args: deploy
-        DEPLOY_SSH_KEY: ${{ secrets.DOCAURUS_DEPLOY_KEY }}
+        DEPLOY_SSH_KEY: ${{ secrets.DOCUSAURUS_DEPLOY_KEY }}
         BUILD_DIR: website
         PROJECT_NAME: reform
