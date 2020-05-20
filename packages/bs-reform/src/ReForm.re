@@ -30,6 +30,7 @@ module Make = (Config: Config) => {
     | SetFieldsState(array((field, fieldState)))
     | FieldChangeState(field, fieldState)
     | FieldChangeValue(Config.field('a), 'a): action
+    | FieldChangeValueWithCallback(Config.field('a), 'a => 'a): action
     | FieldArrayAdd(Config.field(array('a)), 'a): action
     | FieldArrayUpdateByIndex(Config.field(array('a)), 'a, int): action
     | FieldArrayRemove(Config.field(array('a)), int): action
@@ -51,6 +52,7 @@ module Make = (Config: Config) => {
     getFieldState: field => fieldState,
     getFieldError: field => option(string),
     handleChange: 'a. (Config.field('a), 'a) => unit,
+    handleChangeWithCallback: 'a. (Config.field('a), 'a => 'a) => unit,
     arrayPush: 'a. (Config.field(array('a)), 'a) => unit,
     arrayUpdateByIndex:
       'a.
@@ -281,6 +283,22 @@ module Make = (Config: Config) => {
               None;
             },
           )
+        | FieldChangeValueWithCallback(field, updateFn) =>
+          let oldValue = Config.get(state.values, field);
+          UpdateWithSideEffects(
+            {
+              ...state,
+              formState: state.formState == Errored ? Errored : Dirty,
+              values: Config.set(state.values, field, updateFn(oldValue)),
+            },
+            self => {
+              switch (validationStrategy) {
+              | OnChange => self.send(ValidateField(Field(field)))
+              | OnDemand => ()
+              };
+              None;
+            },
+          );
         | FieldChangeState(_, _) => NoUpdate
         | FieldArrayAdd(field, entry) =>
           Update({
@@ -439,6 +457,8 @@ module Make = (Config: Config) => {
       getFieldState,
       getFieldError,
       handleChange: (field, value) => send(FieldChangeValue(field, value)),
+      handleChangeWithCallback: (field, updateFn) =>
+        send(FieldChangeValueWithCallback(field, updateFn)),
       arrayPush: (field, value) => send(FieldArrayAdd(field, value)),
       arrayUpdateByIndex: (~field, ~index, value) =>
         send(FieldArrayUpdateByIndex(field, value, index)),
