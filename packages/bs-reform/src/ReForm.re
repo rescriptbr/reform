@@ -258,7 +258,10 @@ module Make = (Config: Config) => {
                 submit
                   ? onSubmitFail({
                       send: self.send,
-                      state: self.state,
+                      state: {
+                        ...self.state,
+                        fieldsState: newFieldsState,
+                      },
                       raiseSubmitFailed: error =>
                         self.send(RaiseSubmitFailed(error)),
                     })
