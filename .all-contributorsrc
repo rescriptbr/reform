@@ -127,6 +127,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "Freddy03h",
+      "name": "Freddy Harris",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/1412159?v=4",
+      "profile": "https://freddy03h.github.io",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
