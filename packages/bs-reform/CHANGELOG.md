@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [9.8.0](https://github.com/Astrocoders/reform/compare/bs-reform@9.7.1...bs-reform@9.8.0) (2020-06-23)
+
+
+### Features
+
+* add handleChangeWithCallback function ([6bf7be1](https://github.com/Astrocoders/reform/commit/6bf7be1))
+
+
+
+
+
 ## [9.7.1](https://github.com/Astrocoders/reform/compare/bs-reform@9.7.0...bs-reform@9.7.1) (2020-01-24)
 
 
