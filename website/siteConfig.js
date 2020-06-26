@@ -15,8 +15,7 @@ const users = [
   },
 ];
 
-const siteConfig = {
-  title: 'ReForm' /* title for your website */,
+const siteConfig = { /* title for your website */
   tagline: 'Making forms sound good',
   url: 'https://astrocoders.com' /* your website url */,
   baseUrl: '/reform/' /* base url for your project */,
@@ -29,12 +28,13 @@ const siteConfig = {
   ],
   users,
   /* path to images for header/footer */
+  headerIcon: 'img/logo.svg',
   footerIcon: 'img/reform.svg',
   favicon: 'img/favicon.png',
   /* colors for website */
   colors: {
-    primaryColor: '#6C52C1',
-    secondaryColor: '#85CAAE',
+    primaryColor: '#FFF',
+    secondaryColor: '#FFF',
   },
   // This copyright info is used in /core/Footer.js and blog rss/atom feeds.
   copyright:
@@ -46,6 +46,9 @@ const siteConfig = {
   highlight: {
     // Highlight.js theme to use for syntax highlighting in code blocks
     theme: 'default',
+    defaultLang: 'ocaml',
+    themeUrl: 'https://cdn.jsdelivr.net/npm/highlightjs-themes@1.0.0/dark.css'
+    //https://cdn.jsdelivr.net/npm/highlightjs-themes@1.0.0/dark.css
   },
   scripts: ['https://buttons.github.io/buttons.js'],
   // You may provide arbitrary config keys to be used as needed by your template.
