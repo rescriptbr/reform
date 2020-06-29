@@ -68,7 +68,7 @@ let make = () => {
                />
              </label>
              <span>
-               {" is done?" ++ string_of_bool(todo.completed) |> React.string}
+               {(todo.completed ? "Done" : "Not done") |> React.string}
              </span>
              <button
                onClick={_ =>
