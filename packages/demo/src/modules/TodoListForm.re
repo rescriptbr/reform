@@ -55,7 +55,7 @@ let make = () => {
            <>
              <hr />
              <label>
-               <span> {" Content " |> React.string} </span>
+               <span> {" Task description " |> React.string} </span>
                <input
                  value={todo.content}
                  onChange={BsReform.Helpers.handleChange(content =>
