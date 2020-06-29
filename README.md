@@ -201,7 +201,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://freddy03h.github.io"><img src="https://avatars1.githubusercontent.com/u/1412159?v=4" width="100px;" alt=""/><br /><sub><b>Freddy Harris</b></sub></a><br /><a href="https://github.com/Astrocoders/reform/issues?q=author%3AFreddy03h" title="Bug reports">🐛</a></td>
   </tr>
   <tr>
-    <td align="center"><a href="https://github.com/arthurbarroso"><img src="https://avatars3.githubusercontent.com/u/48794198?v=4" width="100px;" alt=""/><br /><sub><b>arthur</b></sub></a><br /><a href="https://github.com/Astrocoders/reform/commits?author=arthurbarroso" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://github.com/arthurbarroso"><img src="https://avatars3.githubusercontent.com/u/48794198?v=4" width="100px;" alt=""/><br /><sub><b>arthur</b></sub></a><br /><a href="https://github.com/Astrocoders/reform/commits?author=arthurbarroso" title="Documentation">📖</a> <a href="https://github.com/Astrocoders/reform/commits?author=arthurbarroso" title="Code">💻</a></td>
   </tr>
 </table>
 
