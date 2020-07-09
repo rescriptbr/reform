@@ -1,8 +1,9 @@
 {
   "name": "reason-scripts",
-  "sources": [
-    "src"
-  ],
+  "sources": {
+    "dir" : "src",
+    "subdirs" : true
+  },
   "bs-dependencies": [
     "bs-reform",
     "reason-react",
