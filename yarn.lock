@@ -2245,6 +2245,11 @@ browserify-zlib@^0.2.0:
   dependencies:
     pako "~1.0.5"
 
+bs-platform@7.2.2:
+  version "7.2.2"
+  resolved "https://registry.yarnpkg.com/bs-platform/-/bs-platform-7.2.2.tgz#76fdc63e4889458ae3d257a0132107a792f2309c"
+  integrity sha512-PWcFfN+jCTtT/rMaHDhKh+W9RUTpaRunmSF9vbLYcrJbpgCNW6aFKAY33u0P3mLxwuhshN3b4FxqGUBPj6exZQ==
+
 bs-platform@^5.0.6:
   version "5.0.6"
   resolved "https://registry.yarnpkg.com/bs-platform/-/bs-platform-5.0.6.tgz#88c13041fb020479800de3d82c680bf971091425"
@@ -7764,6 +7769,11 @@ reason-react@>=0.7.0, reason-react@^0.7.0:
   dependencies:
     react ">=16.8.1"
     react-dom ">=16.8.1"
+
+redemon@0.2.6:
+  version "0.2.6"
+  resolved "https://registry.yarnpkg.com/redemon/-/redemon-0.2.6.tgz#59e4d738eddc3c9369e8f6ab35aa01dc2760c265"
+  integrity sha512-kSZBy+b4q4P6/q5elqQe7NDZXDrZpbaklk+fYW6CJjb4JpeHW9rmczxkIVtWZc5MvxMmX0aDn8rlFafcnvUQJQ==
 
 redent@^1.0.0:
   version "1.0.0"

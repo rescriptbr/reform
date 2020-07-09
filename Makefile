@@ -1,3 +1,5 @@
+# Inspired from https://github.com/fhammerschmidt/bucklescript-monorepo/blob/master/Makefile
+
 ifeq ($(OS), Windows_NT) 
 	detected_OS := Windows
 else
@@ -24,7 +26,7 @@ all: serve
 serve:
 	trap 'kill %1' INT TERM
 	# BuckleScript doesn't like being run first.
-	yarn workspace app start & $(MAKE) watch
+	yarn workspace demo server & $(MAKE) watch
 
 $(SOURCE_DIRS_JSON): bsconfig.json
 	$(BSB) -install
@@ -33,7 +35,8 @@ bs:
 	$(BSB) $(BSB_ARGS) 2>/dev/null || echo Hang
 
 watch: bs
-	yarn redemon --paths=$(BSDIRS) --extensions=$(BSEXTENSIONS) $(MAKE) bs
+	echo $(BSDIRS)
+	./node_modules/.bin/redemon --paths=$(BSDIRS) --verbose --extensions=$(BSEXTENSIONS) $(MAKE) bs
 
 print-%: ; @echo $*=$($*)
 

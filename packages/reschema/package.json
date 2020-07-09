@@ -18,6 +18,6 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "bs-platform": "^5.0.6"
+    "bs-platform": "7.2.2"
   }
 }

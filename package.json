@@ -33,12 +33,6 @@
   "workspaces": {
     "packages": [
       "packages/*"
-    ],
-    "nohoist": [
-      "**/graphql_ppx",
-      "**/graphql_ppx/**",
-      "**/lenses_ppx",
-      "**/lenses_ppx/**"
     ]
   },
   "husky": {

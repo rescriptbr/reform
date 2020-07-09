@@ -154,6 +154,34 @@ let make = () => {
 };
 ```
 
+#### Contributing
+
+Requisites: 
+
+- jq
+- node
+- esy
+
+Setup your env with:
+
+```
+$ esy
+```
+
+Then:
+
+```
+yarn install
+```
+
+##### Running
+
+Run everything in watch mode and serve the `demo` app with:
+
+```
+make serve
+```
+
 #### Alternatives
 
 - The great https://github.com/alexfedoseev/re-formality
