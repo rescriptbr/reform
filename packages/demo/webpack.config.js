@@ -7,6 +7,33 @@ const isProd = process.env.NODE_ENV === 'production';
 module.exports = {
   entry: './src/Index.bs.js',
   mode: isProd ? 'production' : 'development',
+  resolve: {
+    modules: [
+      'node_modules',
+    ],
+    extensions: ['.js', '.json'],
+    symlinks: true,
+  },
+  module: {
+    rules: [
+      {
+        test: /\js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: require.resolve('babel-loader'),
+        },
+      },
+      {
+        test: /\.html$/,
+        use: [
+          {
+            loader: 'html-loader',
+            options: { minimize: true },
+          },
+        ],
+      },
+    ],
+  },
   output: {
     path: outputDir,
     filename: 'Index.js'

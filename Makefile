@@ -35,8 +35,7 @@ bs:
 	$(BSB) $(BSB_ARGS) 2>/dev/null || echo Hang
 
 watch: bs
-	echo $(BSDIRS)
-	./node_modules/.bin/redemon --paths=$(BSDIRS) --verbose --extensions=$(BSEXTENSIONS) $(MAKE) bs
+	./node_modules/.bin/redemon --paths=$(BSDIRS) --extensions=$(BSEXTENSIONS) $(MAKE) bs
 
 print-%: ; @echo $*=$($*)
 

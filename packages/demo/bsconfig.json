@@ -1,5 +1,5 @@
 {
-  "name": "reason-scripts",
+  "name": "reform-demo",
   "sources": {
     "dir" : "src",
     "subdirs" : true
@@ -9,6 +9,7 @@
     "reason-react",
     "reason-apollo",
     "reason-apollo-hooks",
+    "@reasonml-community/graphql-ppx",
     "reschema"
   ],
   "reason": {
@@ -18,7 +19,7 @@
     "-bs-super-errors"
   ],
   "ppx-flags": [
-    "graphql_ppx/ppx",
+    "@reasonml-community/graphql-ppx/ppx",
     "lenses-ppx/ppx"
   ],
   "refmt": 3,
