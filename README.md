@@ -1,16 +1,20 @@
-# ReForm.re
 [![All Contributors](https://img.shields.io/badge/all_contributors-13-orange.svg?style=flat-square)](#contributors)
 
-Reasonably making forms sound good
-
-- [Installation](#installation)
-- [Features](#features)
-- [What this is and why](#what-this-is-and-why)
-- [Quick usage](#usage)
-
-## Docs
-
-Check our Docusaurus https://astrocoders.dev/reform
+<p align="center">
+  <br />
+  <img src="./assets/logo-readme.svg" width="600" /> 
+  <br />
+</p>
+<p align="center">
+ <a href="#installation">Installation</a> • 
+ <a target="_blank" href="https://astrocoders.dev/reform">Official Docs</a> • 
+ <a href="#features">Features</a> •
+ <a href="#usage">Usage</a> 
+</p>
+<br/>
+<br/>
+<hr />
+<br/>
 
 ## Installation
 
