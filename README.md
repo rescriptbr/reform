@@ -2,11 +2,7 @@
 
 <p align="center">
   <br />
-  <br />
-  <br />
   <img src="./assets/logo-readme.svg" width="600" /> 
-  <br />
-  <br />
   <br />
 </p>
 <p align="center">
@@ -18,7 +14,7 @@
 <br/>
 <br/>
 <hr />
-
+<br/>
 ## Installation
 
 ```
