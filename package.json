@@ -51,5 +51,6 @@
     "bs:setup": "bsb -make-world"
   },
   "dependencies": {
+    "bs-platform": "^7.3.2"
   }
 }

@@ -8,21 +8,6 @@ module StateLenses = [%lenses
 ];
 module PostAddForm = ReForm.Make(StateLenses);
 
-module PostAddMutationConfig = [%graphql
-  {|
-  mutation PostAddMutation ($description: String!, $title: String!) {
-    createPost(description: $description, title: $title) {
-      id
-      title
-      description
-    }
-  }
-|}
-];
-
-module PostAddMutation =
-  ReasonApolloHooks.Mutation.Make(PostAddMutationConfig);
-
 module FieldString = {
   [@react.component]
   let make = (~field, ~label) => {
@@ -47,7 +32,10 @@ module FieldString = {
 
 [@react.component]
 let make = () => {
-  let (mutate, result, _) = PostAddMutation.use(~client=Apollo.client, ());
+  let (AsyncHook.{state: result}, _mutate) =
+    AsyncHook.use((~cb, ~title, ~description, ()) => {
+      Promise.resolved(title ++ " " ++ description)
+    });
 
   let reform =
     PostAddForm.use(
@@ -71,16 +59,7 @@ let make = () => {
       },
       ~onSubmit=
         ({state}) => {
-          mutate(
-            ~variables=
-              PostAddMutationConfig.make(
-                ~title=state.values.title,
-                ~description=state.values.description,
-                (),
-              )##variables,
-            (),
-          )
-          |> ignore;
+          Js.log(state);
 
           None;
         },

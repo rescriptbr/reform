@@ -40,14 +40,16 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: 'src/index.html',
-      inject: false
+      inject: false,
+      devServer: 'http://localhost:3001',
+      title: "ReForm",
+      appMountId: 'root',
     })
   ],
   devServer: {
     compress: true,
     contentBase: outputDir,
-    port: process.env.PORT || 8000,
+    port: process.env.PORT || 3001,
     historyApiFallback: true
   },
 };

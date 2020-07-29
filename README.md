@@ -1,4 +1,5 @@
 # ReForm.re
+
 [![All Contributors](https://img.shields.io/badge/all_contributors-13-orange.svg?style=flat-square)](#contributors)
 
 Reasonably making forms sound good
@@ -57,6 +58,9 @@ We created ReForm to be both deadly simple and to make forms sound good leveragi
 Even the schemas we use are nothing more than constructors built-in in the language itself with a small size footprint.
 
 ## Basic usage
+
+<details>
+  <summary>Click for spoiler!</summary>
 
 Checkout https://github.com/Astrocoders/reform/blob/master/packages/demo/src/PostAddNext.re for a more complete demo
 
@@ -154,9 +158,11 @@ let make = () => {
 };
 ```
 
+</details>
+
 #### Contributing
 
-Requisites: 
+Requisites:
 
 - jq
 - node
@@ -235,6 +241,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!

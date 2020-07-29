@@ -2,10 +2,8 @@
   "name": "root-reform",
   "version": "0.1.0",
   "sources": {
-    "dir" : "packages/",
-    "subdirs" : [
-      "demo"
-    ]
+    "dir": "packages/demo/src",
+    "subdirs": true
   },
   "package-specs": {
     "module": "commonjs",
@@ -14,12 +12,17 @@
   "suffix": ".bs.js",
   "bs-dependencies": [
     "bs-reform",
-    "reason-apollo",
-    "reason-apollo-hooks",
-    "reschema"
+    "reschema",
+    "reason-react",
+    "reason-async-hook",
+    "reason-promise"
   ],
+  "ppx-flags": ["lenses-ppx/ppx"],
+  "reason": {
+    "react-jsx": 3
+  },
   "warnings": {
-    "error" : "+101"
+    "error": "+101"
   },
   "refmt": 3
 }
