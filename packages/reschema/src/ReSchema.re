@@ -32,6 +32,46 @@ module Make = (Lenses: Lenses) => {
       | Custom(Lenses.field('a), Lenses.state => fieldState): t;
     type schema =
       | Schema(array(t)): schema;
+
+    let (@) = (a, b) => a->Belt.Array.concat(b);
+    let (<?) = (arr, maybeArr) => {
+      switch (maybeArr) {
+      | Some(someArr) => arr @ [|someArr|]
+      | None => arr
+      };
+    };
+
+    let custom = (~predicate, field) => {
+      [|Custom(field, predicate)|];
+    };
+
+    let email = field => [|Email(field)|];
+
+    let nonEmpty = field => [|StringNonEmpty(field)|];
+
+    let string = (~min=?, ~max=?, field) => {
+      Belt.Option.(
+        [||]
+        <? min->map(min => StringMin(field, min))
+        <? max->map(max => StringMax(field, max))
+      );
+    };
+
+    let float = (~min=?, ~max=?, field) => {
+      Belt.Option.(
+        [||]
+        <? min->map(min => FloatMin(field, min))
+        <? max->map(max => FloatMax(field, max))
+      );
+    };
+
+    let int = (~min=?, ~max=?, field) => {
+      Belt.Option.(
+        [||]
+        <? min->map(min => IntMin(field, min))
+        <? max->map(max => IntMax(field, max))
+      );
+    };
   };
 
   module RegExps = {

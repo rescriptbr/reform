@@ -41,21 +41,26 @@ let make = () => {
     PostAddForm.use(
       ~validationStrategy=OnDemand,
       ~schema={
-        PostAddForm.Validation.Schema([|
-          Custom(
-            Title,
-            values =>
-              Js.String.length(values.title) > 20
-                ? Error("Keep it short!") : Valid,
-          ),
-          StringNonEmpty(Description),
-          Custom(
-            AcceptTerms,
-            values =>
-              values.acceptTerms == false
-                ? Error("You must accept all the terms") : Valid,
-          ),
-        |]);
+        PostAddForm.Validation.(
+          Schema(
+            string(~min=12, Title)
+            @ custom(
+                ~predicate=
+                  values =>
+                    Js.String.length(values.title) > 20
+                      ? Error("Keep it short!") : Valid,
+                Title,
+              )
+            @ nonEmpty(Description)
+            @ custom(
+                ~predicate=
+                  values =>
+                    values.acceptTerms == false
+                      ? Error("You must accept all the terms") : Valid,
+                AcceptTerms,
+              ),
+          )
+        );
       },
       ~onSubmit=
         ({state}) => {
