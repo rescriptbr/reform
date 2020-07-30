@@ -1,3 +1,4 @@
 .graphql_ppx_cache/
 lib/
 *.bs.js
+src/tailwind.output.css

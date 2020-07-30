@@ -32,6 +32,13 @@ module.exports = {
           },
         ],
       },
+      {
+        test: /\.css$/,
+        use: [
+          'style-loader',
+          { loader: 'css-loader', options: { importLoaders: 1 } },
+        ]
+      }
     ],
   },
   output: {
@@ -40,10 +47,8 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      inject: false,
+      template: __dirname + "/index.html",
       devServer: 'http://localhost:3001',
-      title: "ReForm",
-      appMountId: 'root',
     })
   ],
   devServer: {
