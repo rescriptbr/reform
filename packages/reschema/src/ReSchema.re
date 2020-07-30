@@ -25,67 +25,81 @@ module Make = (Lenses: Lenses) => {
     | Field(Lenses.field('a)): field;
 
   module Validation = {
-    type t =
+    type t('meta) =
       | Email({
           field: Lenses.field(string),
           error: option(string),
+          meta: 'meta,
         })
-        : t
-      | NoValidation({field: Lenses.field('a)}): t
+        : t('meta)
+      | NoValidation({
+          field: Lenses.field('a),
+          meta: 'b,
+        })
+        : t('meta)
       | StringNonEmpty({
           field: Lenses.field(string),
           error: option(string),
+          meta: 'meta,
         })
-        : t
+        : t('meta)
       | StringRegExp({
           field: Lenses.field(string),
           matches: string,
           error: option(string),
+          meta: 'meta,
         })
-        : t
+        : t('meta)
       | StringMin({
           field: Lenses.field(string),
           min: int,
           error: option(string),
+          meta: 'meta,
         })
-        : t
+        : t('meta)
       | StringMax({
           field: Lenses.field(string),
           max: int,
           error: option(string),
+          meta: 'meta,
         })
-        : t
+        : t('meta)
       | IntMin({
           field: Lenses.field(int),
           min: int,
           error: option(string),
+          meta: 'meta,
         })
-        : t
+        : t('meta)
       | IntMax({
           field: Lenses.field(int),
           max: int,
           error: option(string),
+          meta: 'meta,
         })
-        : t
+        : t('meta)
       | FloatMin({
           field: Lenses.field(float),
           min: float,
           error: option(string),
+          meta: 'meta,
         })
-        : t
+        : t('meta)
       | FloatMax({
           field: Lenses.field(float),
           max: float,
           error: option(string),
+          meta: 'meta,
         })
-        : t
+        : t('meta)
       | Custom({
           field: Lenses.field('a),
+          meta: 'meta,
           predicate: Lenses.state => fieldState,
         })
-        : t;
-    type schema =
-      | Schema(array(t)): schema;
+        : t('meta);
+    type schema('meta) =
+      | Schema(array(t('meta))): schema('meta);
 
     let (+) = (a, b) => a->Belt.Array.concat(b);
     let (<?) = (arr, maybeArr) => {
@@ -95,39 +109,43 @@ module Make = (Lenses: Lenses) => {
       };
     };
 
-    let custom = (predicate, field) => {
-      [|Custom({field, predicate})|];
+    let custom = (predicate, ~meta=?, field) => {
+      [|Custom({field, meta, predicate})|];
     };
 
-    let email = (~error=?, field) => [|Email({field, error})|];
+    let email = (~error=?, ~meta=?, field) => [|
+      Email({field, meta, error}),
+    |];
 
-    let nonEmpty = (~error=?, field) => [|StringNonEmpty({field, error})|];
+    let nonEmpty = (~error=?, ~meta=?, field) => [|
+      StringNonEmpty({field, meta, error}),
+    |];
 
-    let string = (~min=?, ~minError=?, ~max=?, ~maxError=?, field) => {
+    let string = (~min=?, ~minError=?, ~max=?, ~maxError=?, ~meta=?, field) => {
       Belt.Option.(
         [||]
-        <? min->map(min => StringMin({field, min, error: minError}))
-        <? max->map(max => StringMax({field, max, error: maxError}))
+        <? min->map(min => StringMin({field, meta, min, error: minError}))
+        <? max->map(max => StringMax({field, meta, max, error: maxError}))
       );
     };
 
-    let regExp = (~error=?, ~matches, field) => {
-      [|StringRegExp({field, matches, error})|];
+    let regExp = (~error=?, ~matches, ~meta=?, field) => {
+      [|StringRegExp({field, meta, matches, error})|];
     };
 
-    let float = (~min=?, ~minError=?, ~max=?, ~maxError=?, field) => {
+    let float = (~min=?, ~minError=?, ~max=?, ~maxError=?, ~meta=?, field) => {
       Belt.Option.(
         [||]
-        <? min->map(min => FloatMin({field, min, error: minError}))
-        <? max->map(max => FloatMax({field, max, error: maxError}))
+        <? min->map(min => FloatMin({field, meta, min, error: minError}))
+        <? max->map(max => FloatMax({field, meta, max, error: maxError}))
       );
     };
 
-    let int = (~min=?, ~minError=?, ~max=?, ~maxError=?, field) => {
+    let int = (~min=?, ~minError=?, ~max=?, ~maxError=?, ~meta=?, field) => {
       Belt.Option.(
         [||]
-        <? min->map(min => IntMin({field, min, error: minError}))
-        <? max->map(max => IntMax({field, max, error: maxError}))
+        <? min->map(min => IntMin({field, meta, min, error: minError}))
+        <? max->map(max => IntMax({field, meta, max, error: maxError}))
       );
     };
   };
@@ -242,45 +260,51 @@ module Make = (Lenses: Lenses) => {
     };
 
   let getFieldValidator = (~validators, ~fieldName) =>
-    validators->Belt.Array.getBy(validator =>
-      switch (validator) {
-      | Validation.IntMin({field}) => Field(field) == fieldName
-      | Validation.IntMax({field}) => Field(field) == fieldName
-      | Validation.FloatMin({field}) => Field(field) == fieldName
-      | Validation.FloatMax({field}) => Field(field) == fieldName
-      | Validation.Email({field}) => Field(field) == fieldName
-      | Validation.NoValidation({field}) => Field(field) == fieldName
-      | Validation.StringNonEmpty({field}) => Field(field) == fieldName
-      | Validation.StringRegExp({field}) => Field(field) == fieldName
-      | Validation.StringMin({field}) => Field(field) == fieldName
-      | Validation.StringMax({field}) => Field(field) == fieldName
-      | Validation.Custom({field}) => Field(field) == fieldName
-      }
-    );
+    validators
+    ->Belt.Array.keep(validator =>
+        switch (validator) {
+        | Validation.IntMin({field}) => Field(field) == fieldName
+        | Validation.IntMax({field}) => Field(field) == fieldName
+        | Validation.FloatMin({field}) => Field(field) == fieldName
+        | Validation.FloatMax({field}) => Field(field) == fieldName
+        | Validation.Email({field}) => Field(field) == fieldName
+        | Validation.NoValidation({field}) => Field(field) == fieldName
+        | Validation.StringNonEmpty({field}) => Field(field) == fieldName
+        | Validation.StringRegExp({field}) => Field(field) == fieldName
+        | Validation.StringMin({field}) => Field(field) == fieldName
+        | Validation.StringMax({field}) => Field(field) == fieldName
+        | Validation.Custom({field}) => Field(field) == fieldName
+        }
+      )
+    ->Belt.Array.get(0);
 
-  let validateOne = (~field, ~values, ~i18n, schema: Validation.schema) => {
+  let validateOne =
+      (~field, ~values, ~i18n, schema: Validation.schema('meta)) => {
     let Validation.Schema(validators) = schema;
 
     getFieldValidator(~validators, ~fieldName=field)
     ->Belt.Option.map(validator => validateField(~validator, ~values, ~i18n));
   };
 
-  let validateFields = (~fields, ~values, ~i18n, schema: Validation.schema) => {
+  let validateFields =
+      (~fields, ~values, ~i18n, schema: Validation.schema('meta)) => {
     let Validation.Schema(validators) = schema;
 
-    fields->Belt.Array.map(field =>
+    Belt.Array.map(fields, field =>
       getFieldValidator(~validators, ~fieldName=field)
-      ->Belt.Option.map(validator =>
+    )
+    ->Belt.Array.map(validator =>
+        Belt.Option.map(validator, validator =>
           validateField(~validator, ~values, ~i18n)
         )
-    );
+      );
   };
 
   let validate =
       (
         ~i18n=ReSchemaI18n.default,
         values: Lenses.state,
-        schema: Validation.schema,
+        schema: Validation.schema('meta),
       ) => {
     let Validation.Schema(validators) = schema;
 
@@ -290,9 +314,9 @@ module Make = (Lenses: Lenses) => {
       );
 
     let errors =
-      validationList->Belt.Array.keep(((_field, fieldState)) =>
-        fieldState !== Valid
-      );
+      validationList
+      ->Belt.Array.keep(((_field, fieldState)) => fieldState !== Valid)
+      ->Belt.Array.map(((field, fieldState)) => (field, fieldState));
 
     Belt.Array.length(errors) > 0 ? Errors(errors) : Valid;
   };
