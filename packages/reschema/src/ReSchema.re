@@ -33,15 +33,15 @@ module Make = (Lenses: Lenses) => {
     type schema =
       | Schema(array(t)): schema;
 
-    let (@) = (a, b) => a->Belt.Array.concat(b);
+    let (+) = (a, b) => a->Belt.Array.concat(b);
     let (<?) = (arr, maybeArr) => {
       switch (maybeArr) {
-      | Some(someArr) => arr @ [|someArr|]
+      | Some(someArr) => arr + [|someArr|]
       | None => arr
       };
     };
 
-    let custom = (~predicate, field) => {
+    let custom = (predicate, field) => {
       [|Custom(field, predicate)|];
     };
 
