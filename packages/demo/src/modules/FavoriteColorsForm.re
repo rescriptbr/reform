@@ -18,6 +18,10 @@ open BsReform;
 
 module Form = ReForm.Make(StateLenses);
 
+type meta =
+  | Mask(string)
+  | Slider;
+
 [@react.component]
 let make = () => {
   let {
@@ -33,8 +37,9 @@ let make = () => {
       ~schema={
         Form.Validation.(
           Schema(
-            regExp(~matches="^[a-zA-Z\s]*$", Name)
+            regExp(~matches="^[a-zA-Z\s]*$", ~meta=Mask("000"), Name)
             + custom(
+                ~meta=Mask("dkljfas"),
                 ({favoriteColors}) => {
                   let length = Array.length(favoriteColors);
 
@@ -46,7 +51,7 @@ let make = () => {
                 },
                 FavoriteColors,
               )
-            + float(~min=1.0, OpacityOfColors)
+            + float(~min=1.0, ~meta=Slider, OpacityOfColors)
             + int(~max=3, NumberOfFavoriteColors),
           )
         );

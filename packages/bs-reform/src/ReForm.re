@@ -98,7 +98,8 @@ module Make = (Config: Config) => {
     | OnChange
     | OnDemand;
 
-  let getInitialFieldsState: Validation.schema => array((field, fieldState)) =
+  let getInitialFieldsState:
+    Validation.schema('meta) => array((field, fieldState)) =
     schema => {
       let Validation.Schema(validators) = schema;
       validators->Belt.Array.map(validator =>
@@ -173,7 +174,7 @@ module Make = (Config: Config) => {
   let use =
       (
         ~initialState,
-        ~schema: Validation.schema,
+        ~schema: Validation.schema('meta),
         ~onSubmit,
         ~onSubmitFail=ignore,
         ~i18n=ReSchemaI18n.default,

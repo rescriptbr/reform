@@ -26,7 +26,8 @@
     "in-source": true
   },
   "warnings": {
-    "error": "+8"
+    "error": "+8",
+    "number": "-44"
   },
   "suffix": ".bs.js"
 }
