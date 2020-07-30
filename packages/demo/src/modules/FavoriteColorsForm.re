@@ -51,7 +51,7 @@ let make = () => {
                 },
                 FavoriteColors,
               )
-            + float(~min=1.0, ~meta=12, OpacityOfColors)
+            + float(~min=1.0, ~meta=Slider, OpacityOfColors)
             + int(~max=3, NumberOfFavoriteColors),
           )
         );
