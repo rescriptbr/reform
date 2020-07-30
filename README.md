@@ -103,7 +103,7 @@ let make = () => {
       ~validationStrategy=OnDemand,
       ~schema={
         PostAddForm.Validation.(Schema(
-          string(~min=20, Title)
+          string(~min=20, ~minError="Title needs to be greater than 20", Title)
           + nonEmpty(Description),
           + custom(
             values =>
