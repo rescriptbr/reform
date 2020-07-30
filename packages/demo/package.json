@@ -1,6 +1,6 @@
 {
   "name": "demo",
-  "version": "1.0.0-alpha.0",
+  "version": "1.0.1-alpha.0",
   "private": true,
   "scripts": {
     "build": "bsb -make-world",
@@ -19,7 +19,7 @@
   "license": "MIT",
   "dependencies": {
     "bs-platform": "^7.3.2",
-    "bs-reform": "^10.0.0-alpha.0",
+    "bs-reform": "^10.0.1-alpha.0",
     "graphql": "14.5.4",
     "graphql-tag": "2.10.1",
     "html-loader": "^1.1.0",
@@ -30,7 +30,7 @@
     "reason-promise": "^1.1.1",
     "reason-react": "^0.7.0",
     "reason-react-update": "2.0.0",
-    "reschema": "^2.0.0-alpha.0",
+    "reschema": "^2.0.1-alpha.0",
     "tailwindcss": "^1.6.0"
   },
   "devDependencies": {

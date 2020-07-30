@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [10.0.1-alpha.0](https://github.com/Astrocoders/reform/compare/bs-reform@10.0.0-alpha.0...bs-reform@10.0.1-alpha.0) (2020-07-30)
+
+
+### Features
+
+* **meta:** meta field ([78ec9aa](https://github.com/Astrocoders/reform/commit/78ec9aa68f0f07246e2e3863dd6efd95b7b60c88))
+
+
+
+
+
 # [10.0.0-alpha.0](https://github.com/Astrocoders/reform/compare/bs-reform@9.8.0...bs-reform@10.0.0-alpha.0) (2020-07-30)
 
 

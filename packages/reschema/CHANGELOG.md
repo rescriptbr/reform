@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.1-alpha.0](https://github.com/Astrocoders/reform/compare/reschema@2.0.0-alpha.0...reschema@2.0.1-alpha.0) (2020-07-30)
+
+
+### Bug Fixes
+
+* **optimisations:** minor optimizations ([24ce4ca](https://github.com/Astrocoders/reform/commit/24ce4cace3eefbbab656e8349f3a3eab22d67922))
+
+
+### Features
+
+* **meta:** meta field ([78ec9aa](https://github.com/Astrocoders/reform/commit/78ec9aa68f0f07246e2e3863dd6efd95b7b60c88))
+
+
+
+
+
 # [2.0.0-alpha.0](https://github.com/Astrocoders/reform/compare/reschema@1.3.1...reschema@2.0.0-alpha.0) (2020-07-30)
 
 

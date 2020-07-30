@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.1-alpha.0](https://github.com/Astrocoders/reform/compare/demo@1.0.0-alpha.0...demo@1.0.1-alpha.0) (2020-07-30)
+
+
+### Bug Fixes
+
+* demo ([b6e97ad](https://github.com/Astrocoders/reform/commit/b6e97adc13f44ab2fa084abc14ffbe1f6882d4a8))
+
+
+### Features
+
+* **meta:** meta field ([78ec9aa](https://github.com/Astrocoders/reform/commit/78ec9aa68f0f07246e2e3863dd6efd95b7b60c88))
+
+
+
+
+
 # [1.0.0-alpha.0](https://github.com/Astrocoders/reform/compare/demo@0.4.7...demo@1.0.0-alpha.0) (2020-07-30)
 
 
