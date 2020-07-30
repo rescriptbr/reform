@@ -103,44 +103,20 @@ module Make = (Config: Config) => {
       let Validation.Schema(validators) = schema;
       validators->Belt.Array.map(validator =>
         switch (validator) {
-        | Validation.IntMin(field, _min, _customErrorMessage) => (
+        | Validation.IntMin({field}) => (
             ReSchema.Field(field),
             Pristine: fieldState,
           )
-        | Validation.IntMax(field, _max, _customErrorMessage) => (
-            Field(field),
-            Pristine,
-          )
-        | Validation.FloatMin(field, _min, _customErrorMessage) => (
-            Field(field),
-            Pristine,
-          )
-        | Validation.FloatMax(field, _max, _customErrorMessage) => (
-            Field(field),
-            Pristine,
-          )
-        | Validation.Email(field, _customErrorMessage) => (
-            Field(field),
-            Pristine,
-          )
-        | Validation.NoValidation(field) => (Field(field), Pristine)
-        | Validation.StringNonEmpty(field, _customErrorMessage) => (
-            Field(field),
-            Pristine,
-          )
-        | Validation.StringRegExp(field, _regexp, _customErrorMessage) => (
-            Field(field),
-            Pristine,
-          )
-        | Validation.StringMin(field, _min, _customErrorMessage) => (
-            Field(field),
-            Pristine,
-          )
-        | Validation.StringMax(field, _max, _customErrorMessage) => (
-            Field(field),
-            Pristine,
-          )
-        | Validation.Custom(field, _predicate) => (Field(field), Pristine)
+        | Validation.IntMax({field}) => (Field(field), Pristine)
+        | Validation.FloatMin({field}) => (Field(field), Pristine)
+        | Validation.FloatMax({field}) => (Field(field), Pristine)
+        | Validation.Email({field}) => (Field(field), Pristine)
+        | Validation.NoValidation({field}) => (Field(field), Pristine)
+        | Validation.StringNonEmpty({field}) => (Field(field), Pristine)
+        | Validation.StringRegExp({field}) => (Field(field), Pristine)
+        | Validation.StringMin({field}) => (Field(field), Pristine)
+        | Validation.StringMax({field}) => (Field(field), Pristine)
+        | Validation.Custom({field}) => (Field(field), Pristine)
         }
       );
     };
