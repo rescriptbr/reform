@@ -16,4 +16,4 @@ jobs:
     - name: yarn install, build, and test
       run: |
         yarn install
-        yarn workspace bs-reform test
+        yarn bsb -make-world
