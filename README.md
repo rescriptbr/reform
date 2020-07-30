@@ -1,13 +1,64 @@
-# ReForm.re
-
 [![All Contributors](https://img.shields.io/badge/all_contributors-13-orange.svg?style=flat-square)](#contributors)
 
-Reasonably making forms sound good
+<p align="center">
+  <br />
+  <img src="./assets/logo-readme.svg" width="600" /> 
+  <br />
+</p>
+<p align="center">
+ <a href="#installation">Installation</a> • 
+ <a target="_blank" href="https://astrocoders.dev/reform">Official Docs</a> • 
+ <a href="#features">Features</a> •
+ <a href="#usage">Usage</a> 
+</p>
+<br/>
+<br/>
+<hr />
+<br/>
 
-- [Installation](#installation)
-- [Features](#features)
-- [What this is and why](#what-this-is-and-why)
-- [Quick usage](#usage)
+## Installation
+
+```
+yarn add bs-reform reschema
+```
+
+Then add it to bsconfig.json
+
+```
+"bs-dependencies": [
+ "bs-reform",
+ "reschema"
+]
+```
+
+Then add lenses-ppx
+
+```
+yarn add lenses-ppx@4.0.0 -D
+```
+
+And update your bsconfig.json with `ppx-flags`
+
+```
+"ppx-flags": [
+ "lenses-ppx/ppx"
+]
+```
+
+## Features
+
+- Hook API
+- Schema API
+- Type safe, `handleChange` properly infers the value of the field it is handling
+- Context Provider
+- Field component
+- Validation strategy, OnDemand and OnChange
+
+## What this is and why
+
+Code that deals with strongly typed forms can quickly become walls of repeated text.
+We created ReForm to be both deadly simple and to make forms sound good leveraging ReasonML's powerful typesytem.
+Even the schemas we use are nothing more than constructors built-in in the language itself with a small size footprint.
 
 ## Basic usage
 
@@ -232,6 +283,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   </tr>
   <tr>
     <td align="center"><a href="https://github.com/arthurbarroso"><img src="https://avatars3.githubusercontent.com/u/48794198?v=4" width="100px;" alt=""/><br /><sub><b>arthur</b></sub></a><br /><a href="https://github.com/Astrocoders/reform/commits?author=arthurbarroso" title="Documentation">📖</a> <a href="https://github.com/Astrocoders/reform/commits?author=arthurbarroso" title="Code">💻</a></td>
+    <td align="center"><a href="http://vmarcosp.dribbble.com"><img src="https://avatars0.githubusercontent.com/u/20327229?v=4" width="100px;" alt=""/><br /><sub><b>Marcos Oliveira</b></sub></a><br /><a href="https://github.com/Astrocoders/reform/commits?author=vmarcosp" title="Documentation">📖</a> <a href="#design-vmarcosp" title="Design">🎨</a></td>
   </tr>
 </table>
 
