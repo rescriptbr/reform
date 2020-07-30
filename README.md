@@ -9,54 +9,6 @@ Reasonably making forms sound good
 - [What this is and why](#what-this-is-and-why)
 - [Quick usage](#usage)
 
-## Docs
-
-Check our Docusaurus https://astrocoders.dev/reform
-
-## Installation
-
-```
-yarn add bs-reform reschema
-```
-
-Then add it to bsconfig.json
-
-```
-"bs-dependencies": [
- "bs-reform",
- "reschema"
-]
-```
-
-Then add lenses-ppx
-
-```
-yarn add lenses-ppx@4.0.0 -D
-```
-
-And update your bsconfig.json with `ppx-flags`
-
-```
-"ppx-flags": [
- "lenses-ppx/ppx"
-]
-```
-
-## Features
-
-- Hook API
-- Schema API
-- Type safe, `handleChange` properly infers the value of the field it is handling
-- Context Provider
-- Field component
-- Validation strategy, OnDemand and OnChange
-
-## What this is and why
-
-Code that deals with strongly typed forms can quickly become walls of repeated text.
-We created ReForm to be both deadly simple and to make forms sound good leveraging ReasonML's powerful typesytem.
-Even the schemas we use are nothing more than constructors built-in in the language itself with a small size footprint.
-
 ## Basic usage
 
 <details>
@@ -160,6 +112,50 @@ let make = () => {
 
 </details>
 
+## Installation
+
+```
+yarn add bs-reform reschema
+```
+
+Then add it to bsconfig.json
+
+```
+"bs-dependencies": [
+ "bs-reform",
+ "reschema"
+]
+```
+
+Then add lenses-ppx
+
+```
+yarn add lenses-ppx@4.0.0 -D
+```
+
+And update your bsconfig.json with `ppx-flags`
+
+```
+"ppx-flags": [
+ "lenses-ppx/ppx"
+]
+```
+
+## Features
+
+- Hook API
+- Schema API
+- Type safe, `handleChange` properly infers the value of the field it is handling
+- Context Provider
+- Field component
+- Validation strategy, OnDemand and OnChange
+
+## What this is and why
+
+Code that deals with strongly typed forms can quickly become walls of repeated text.
+We created ReForm to be both deadly simple and to make forms sound good leveraging ReasonML's powerful typesytem.
+Even the schemas we use are nothing more than constructors built-in in the language itself with a small size footprint.
+
 #### Contributing
 
 Requisites:
@@ -190,7 +186,7 @@ make serve
 
 #### Alternatives
 
-- The great https://github.com/alexfedoseev/re-formality
+- [Formality](https://github.com/alexfedoseev/re-formality)
 
 #### Publishing
 
