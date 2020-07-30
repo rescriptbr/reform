@@ -16,20 +16,22 @@ let make = () => {
   let {state, submit, arrayPush, arrayUpdateByIndex, arrayRemoveByIndex}: TodoForm.api =
     TodoForm.use(
       ~schema={
-        TodoForm.Validation.Schema([|
-          Custom(
-            Todos,
-            ({todos}) => {
-              let length = Array.length(todos);
+        TodoForm.Validation.(
+          Schema(
+            custom(
+              ({todos}) => {
+                let length = Array.length(todos);
 
-              length < 0
-              || Belt.Array.some(todos, item =>
-                   Js.String.length(item.content) == 0
-                 )
-                ? Error("Invalid todo") : Valid;
-            },
-          ),
-        |]);
+                length < 0
+                || Belt.Array.some(todos, item =>
+                     Js.String.length(item.content) == 0
+                   )
+                  ? Error("Invalid todo") : Valid;
+              },
+              Todos,
+            ),
+          )
+        );
       },
       ~onSubmit=
         ({state}) => {

@@ -62,6 +62,9 @@ Even the schemas we use are nothing more than constructors built-in in the langu
 
 ## Basic usage
 
+<details>
+  <summary>Click for spoiler!</summary>
+
 Checkout https://github.com/Astrocoders/reform/blob/master/packages/demo/src/PostAddNext.re for a more complete demo
 
 ```reason
@@ -102,16 +105,16 @@ let make = () => {
     PostAddForm.use(
       ~validationStrategy=OnDemand,
       ~schema={
-        PostAddForm.Validation.Schema([|
-          StringMin(Title, 20),
-          StringNonEmpty(Description),
-          Custom(
-            AcceptTerms,
+        PostAddForm.Validation.(Schema(
+          string(~min=20, ~minError="Title needs to be greater than 20", Title)
+          + nonEmpty(Description),
+          + custom(
             values =>
               values.acceptTerms == false
                 ? Error("You must accept all the terms") : Valid,
+            AcceptTerms,
           )
-        |]);
+        |]));
       },
       ~onSubmit=
         ({state}) => {
@@ -158,9 +161,83 @@ let make = () => {
 };
 ```
 
+</details>
+
+## Installation
+
+```
+yarn add bs-reform reschema
+```
+
+Then add it to bsconfig.json
+
+```
+"bs-dependencies": [
+ "bs-reform",
+ "reschema"
+]
+```
+
+Then add lenses-ppx
+
+```
+yarn add lenses-ppx@4.0.0 -D
+```
+
+And update your bsconfig.json with `ppx-flags`
+
+```
+"ppx-flags": [
+ "lenses-ppx/ppx"
+]
+```
+
+## Features
+
+- Hook API
+- Schema API
+- Type safe, `handleChange` properly infers the value of the field it is handling
+- Context Provider
+- Field component
+- Validation strategy, OnDemand and OnChange
+
+## What this is and why
+
+Code that deals with strongly typed forms can quickly become walls of repeated text.
+We created ReForm to be both deadly simple and to make forms sound good leveraging ReasonML's powerful typesytem.
+Even the schemas we use are nothing more than constructors built-in in the language itself with a small size footprint.
+
+#### Contributing
+
+Requisites:
+
+- jq
+- node
+- esy
+
+Setup your env with:
+
+```
+$ esy
+```
+
+Then:
+
+```
+yarn install
+```
+
+##### Running
+
+Run everything in watch mode and serve the `demo` app with:
+
+```
+make serve
+```
+
 #### Alternatives
 
-- The great https://github.com/alexfedoseev/re-formality
+- [Formality](https://github.com/alexfedoseev/re-formality)
 
 #### Publishing
 
@@ -212,6 +289,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!

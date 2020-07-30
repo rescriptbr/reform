@@ -1,13 +1,18 @@
+open ReSchema;
+
 module type Config = {
   type field('a);
   type state;
   let set: (state, field('a), 'a) => state;
   let get: (state, field('a)) => 'a;
 };
+
 type fieldState =
   | Pristine
   | Valid
+  | NestedErrors(array(ReSchema.childFieldError))
   | Error(string);
+
 type formState =
   | Dirty
   | Submitting
@@ -15,6 +20,7 @@ type formState =
   | Errored
   | SubmitFailed(option(string))
   | Valid;
+
 module Make = (Config: Config) => {
   module ReSchema = ReSchema.Make(Config);
   module Validation = ReSchema.Validation;
@@ -51,6 +57,7 @@ module Make = (Config: Config) => {
     state,
     getFieldState: field => fieldState,
     getFieldError: field => option(string),
+    getNestedFieldError: (field, int) => option(string),
     handleChange: 'a. (Config.field('a), 'a) => unit,
     handleChangeWithCallback: 'a. (Config.field('a), 'a => 'a) => unit,
     arrayPush: 'a. (Config.field(array('a)), 'a) => unit,
@@ -96,23 +103,20 @@ module Make = (Config: Config) => {
       let Validation.Schema(validators) = schema;
       validators->Belt.Array.map(validator =>
         switch (validator) {
-        | Validation.IntMin(field, _min) => (
+        | Validation.IntMin({field}) => (
             ReSchema.Field(field),
             Pristine: fieldState,
           )
-        | Validation.IntMax(field, _max) => (Field(field), Pristine)
-        | Validation.FloatMin(field, _min) => (Field(field), Pristine)
-        | Validation.FloatMax(field, _max) => (Field(field), Pristine)
-        | Validation.Email(field) => (Field(field), Pristine)
-        | Validation.NoValidation(field) => (Field(field), Pristine)
-        | Validation.StringNonEmpty(field) => (Field(field), Pristine)
-        | Validation.StringRegExp(field, _regexp) => (
-            Field(field),
-            Pristine,
-          )
-        | Validation.StringMin(field, _min) => (Field(field), Pristine)
-        | Validation.StringMax(field, _max) => (Field(field), Pristine)
-        | Validation.Custom(field, _predicate) => (Field(field), Pristine)
+        | Validation.IntMax({field}) => (Field(field), Pristine)
+        | Validation.FloatMin({field}) => (Field(field), Pristine)
+        | Validation.FloatMax({field}) => (Field(field), Pristine)
+        | Validation.Email({field}) => (Field(field), Pristine)
+        | Validation.NoValidation({field}) => (Field(field), Pristine)
+        | Validation.StringNonEmpty({field}) => (Field(field), Pristine)
+        | Validation.StringRegExp({field}) => (Field(field), Pristine)
+        | Validation.StringMin({field}) => (Field(field), Pristine)
+        | Validation.StringMax({field}) => (Field(field), Pristine)
+        | Validation.Custom({field}) => (Field(field), Pristine)
         }
       );
     };
@@ -158,9 +162,7 @@ module Make = (Config: Config) => {
           ->Belt.Option.map(render)
           ->Belt.Option.getWithDefault(renderOnMissingContext),
         (
-          Belt.Option.(
-            fieldInterface->flatMap(({error}) => error)->getWithDefault("")
-          ),
+          Belt.Option.(fieldInterface->map(({error}) => error)),
           Belt.Option.(fieldInterface->map(({value}) => value)),
           Belt.Option.(fieldInterface->map(({state}) => state)),
         ),
@@ -216,12 +218,16 @@ module Make = (Config: Config) => {
                      ~values=self.state.values,
                      ~i18n,
                    );
-              let newFieldState: option(fieldState) =
-                fieldState->Belt.Option.map(
-                  fun
+              let newFieldState: fieldState =
+                switch (fieldState) {
+                | None => Valid
+                | Some(fieldState) =>
+                  switch (fieldState) {
                   | (_, Error(message)) => Error(message)
-                  | (_, Valid) => Valid,
-                );
+                  | (_, NestedErrors(errors)) => NestedErrors(errors)
+                  | (_, Valid) => Valid
+                  }
+                };
 
               let newFieldsState =
                 state.fieldsState
@@ -229,12 +235,7 @@ module Make = (Config: Config) => {
                     elem
                     |> (((fieldValue, _fieldState)) => fieldValue != field)
                   )
-                ->Belt.Array.concat(
-                    switch (newFieldState) {
-                    | Some(fieldState) => [|(field, fieldState)|]
-                    | None => [||]
-                    },
-                  );
+                ->Belt.Array.concat([|(field, newFieldState)|]);
               self.send(SetFieldsState(newFieldsState));
               None;
             },
@@ -250,9 +251,13 @@ module Make = (Config: Config) => {
                 self.send(SetFormState(Valid));
                 submit ? self.send(Submit) : ();
               | Errors(erroredFields) =>
-                let newFieldsState =
-                  erroredFields->Belt.Array.map(((field, errorMessage)) =>
-                    (field, Error(errorMessage))
+                let newFieldsState: array((field, fieldState)) =
+                  erroredFields->Belt.Array.map(((field, fieldState)) =>
+                    switch (fieldState) {
+                    | NestedErrors(errors) => (field, NestedErrors(errors))
+                    | Error(message) => (field, Error(message))
+                    | Valid => (field, Valid)
+                    }
                   );
                 self.send(SetFieldsState(newFieldsState));
                 submit
@@ -388,7 +393,15 @@ module Make = (Config: Config) => {
       |> (
         fun
         | Error(error) => Some(error)
-        | _ => None
+        | NestedErrors(errors) => {
+            Js.log2(
+              "The following field has nested errors, access these with `getNestedFieldError` instead of `getFieldError`",
+              field,
+            );
+            None;
+          }
+        | Pristine
+        | Valid => None
       );
 
     let validateFields = (fields: array(field)) => {
@@ -420,6 +433,9 @@ module Make = (Config: Config) => {
                     switch (newFieldStateValidated) {
                     | Valid => [|(field, Valid: fieldState)|]
                     | Error(message) => [|(field, Error(message))|]
+                    | NestedErrors(message) => [|
+                        (field, NestedErrors(message)),
+                      |]
                     }
 
                   | None => [||]
@@ -448,17 +464,34 @@ module Make = (Config: Config) => {
 
     let raiseSubmitFailed = error => send(RaiseSubmitFailed(error));
 
+    let getNestedFieldError = (field, index) =>
+      getFieldState(field)
+      |> (
+        fun
+        | NestedErrors(errors) => {
+            switch (errors->Belt.Array.get(index)) {
+            | None => None
+            | Some(error) => Some(error.error)
+            };
+          }
+        | Pristine
+        | Valid
+        | Error(_) => None
+      );
+
     let interface: api = {
       state,
       submit: () => send(TrySubmit),
       resetForm: () => send(ResetForm),
       setValues: values => send(SetValues(values)),
-      setFieldValue: (field, value, ~shouldValidate=true, ()) =>
+      setFieldValue: (field, value, ~shouldValidate=true, ()) => {
         shouldValidate
           ? send(FieldChangeValue(field, value))
-          : send(SetFieldValue(field, value)),
+          : send(SetFieldValue(field, value));
+      },
       getFieldState,
       getFieldError,
+      getNestedFieldError,
       handleChange: (field, value) => send(FieldChangeValue(field, value)),
       handleChangeWithCallback: (field, updateFn) =>
         send(FieldChangeValueWithCallback(field, updateFn)),

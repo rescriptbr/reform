@@ -1,5 +1,5 @@
 {
-  "name": "reason-scripts",
+  "name": "reform-demo",
   "sources": {
     "dir" : "src",
     "subdirs" : true
@@ -7,8 +7,8 @@
   "bs-dependencies": [
     "bs-reform",
     "reason-react",
-    "reason-apollo",
-    "reason-apollo-hooks",
+    "reason-async-hook",
+    "reason-promise",
     "reschema"
   ],
   "reason": {
@@ -18,7 +18,6 @@
     "-bs-super-errors"
   ],
   "ppx-flags": [
-    "graphql_ppx/ppx",
     "lenses-ppx/ppx"
   ],
   "refmt": 3,

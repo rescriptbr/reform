@@ -8,21 +8,6 @@ module StateLenses = [%lenses
 ];
 module PostAddForm = ReForm.Make(StateLenses);
 
-module PostAddMutationConfig = [%graphql
-  {|
-  mutation PostAddMutation ($description: String!, $title: String!) {
-    createPost(description: $description, title: $title) {
-      id
-      title
-      description
-    }
-  }
-|}
-];
-
-module PostAddMutation =
-  ReasonApolloHooks.Mutation.Make(PostAddMutationConfig);
-
 module FieldString = {
   [@react.component]
   let make = (~field, ~label) => {
@@ -47,40 +32,37 @@ module FieldString = {
 
 [@react.component]
 let make = () => {
-  let (mutate, result, _) = PostAddMutation.use(~client=Apollo.client, ());
+  let (AsyncHook.{state: result}, _mutate) =
+    AsyncHook.use((~cb, ~title, ~description, ()) => {
+      Promise.resolved(title ++ " " ++ description)
+    });
 
   let reform =
     PostAddForm.use(
       ~validationStrategy=OnDemand,
       ~schema={
-        PostAddForm.Validation.Schema([|
-          Custom(
-            Title,
-            values =>
-              Js.String.length(values.title) > 20
-                ? Error("Keep it short!") : Valid,
-          ),
-          StringNonEmpty(Description),
-          Custom(
-            AcceptTerms,
-            values =>
-              values.acceptTerms == false
-                ? Error("You must accept all the terms") : Valid,
-          ),
-        |]);
+        PostAddForm.Validation.(
+          Schema(
+            string(~min=12, Title)
+            + custom(
+                values =>
+                  Js.String.length(values.title) > 20
+                    ? Error("Keep it short!") : Valid,
+                Title,
+              )
+            + nonEmpty(Description)
+            + custom(
+                values =>
+                  values.acceptTerms == false
+                    ? Error("You must accept all the terms") : Valid,
+                AcceptTerms,
+              ),
+          )
+        );
       },
       ~onSubmit=
         ({state}) => {
-          mutate(
-            ~variables=
-              PostAddMutationConfig.make(
-                ~title=state.values.title,
-                ~description=state.values.description,
-                (),
-              )##variables,
-            (),
-          )
-          |> ignore;
+          Js.log(state);
 
           None;
         },

@@ -31,23 +31,25 @@ let make = () => {
   }: Form.api =
     Form.use(
       ~schema={
-        Form.Validation.Schema([|
-          StringRegExp(Name, "^[a-zA-Z\s]*$"),
-          Custom(
-            FavoriteColors,
-            ({favoriteColors}) => {
-              let length = Array.length(favoriteColors);
+        Form.Validation.(
+          Schema(
+            regExp(~matches="^[a-zA-Z\s]*$", Name)
+            + custom(
+                ({favoriteColors}) => {
+                  let length = Array.length(favoriteColors);
 
-              length < 0
-              || Belt.Array.some(favoriteColors, favColor =>
-                   Js.String.length(favColor.hex) == 0
-                 )
-                ? Error("Invalid colors") : Valid;
-            },
-          ),
-          FloatMax(OpacityOfColors, 1.0),
-          IntMax(NumberOfFavoriteColors, 3),
-        |]);
+                  length < 0
+                  || Belt.Array.some(favoriteColors, favColor =>
+                       Js.String.length(favColor.hex) == 0
+                     )
+                    ? Error("Invalid colors") : Valid;
+                },
+                FavoriteColors,
+              )
+            + float(~min=1.0, OpacityOfColors)
+            + int(~max=3, NumberOfFavoriteColors),
+          )
+        );
       },
       ~onSubmit=({state}) => None,
       ~initialState={

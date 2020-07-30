@@ -17,10 +17,12 @@
   "devDependencies": {
     "@commitlint/cli": "7.2.1",
     "@commitlint/config-conventional": "7.1.2",
+    "babel-loader": "^8.1.0",
     "husky": "1.2.1",
     "lerna": "^3.14.1",
     "lint-staged": "^7.0.0",
-    "pre-commit": "^1.2.2"
+    "pre-commit": "^1.2.2",
+    "redemon": "0.2.6"
   },
   "lint-staged": {
     "*.re": [
@@ -32,12 +34,6 @@
   "workspaces": {
     "packages": [
       "packages/*"
-    ],
-    "nohoist": [
-      "**/graphql_ppx",
-      "**/graphql_ppx/**",
-      "**/lenses_ppx",
-      "**/lenses_ppx/**"
     ]
   },
   "husky": {
@@ -53,5 +49,8 @@
     "bs:watch": "lerna run bs:watch",
     "lint:staged": "lint-staged",
     "bs:setup": "bsb -make-world"
+  },
+  "dependencies": {
+    "bs-platform": "^7.3.2"
   }
 }

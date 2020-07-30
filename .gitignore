@@ -61,7 +61,13 @@ typings/
 .merlin
 lib/
 *.bs.js
+.bsb.lock
+
+# Tooling
+_esy
+.vscode
 
 # Docusaurus
 build
-.bsb.lock
+
+
