@@ -260,23 +260,21 @@ module Make = (Lenses: Lenses) => {
     };
 
   let getFieldValidator = (~validators, ~fieldName) =>
-    validators
-    ->Belt.Array.keep(validator =>
-        switch (validator) {
-        | Validation.IntMin({field}) => Field(field) == fieldName
-        | Validation.IntMax({field}) => Field(field) == fieldName
-        | Validation.FloatMin({field}) => Field(field) == fieldName
-        | Validation.FloatMax({field}) => Field(field) == fieldName
-        | Validation.Email({field}) => Field(field) == fieldName
-        | Validation.NoValidation({field}) => Field(field) == fieldName
-        | Validation.StringNonEmpty({field}) => Field(field) == fieldName
-        | Validation.StringRegExp({field}) => Field(field) == fieldName
-        | Validation.StringMin({field}) => Field(field) == fieldName
-        | Validation.StringMax({field}) => Field(field) == fieldName
-        | Validation.Custom({field}) => Field(field) == fieldName
-        }
-      )
-    ->Belt.Array.get(0);
+    validators->Belt.Array.getBy(validator =>
+      switch (validator) {
+      | Validation.IntMin({field}) => Field(field) == fieldName
+      | Validation.IntMax({field}) => Field(field) == fieldName
+      | Validation.FloatMin({field}) => Field(field) == fieldName
+      | Validation.FloatMax({field}) => Field(field) == fieldName
+      | Validation.Email({field}) => Field(field) == fieldName
+      | Validation.NoValidation({field}) => Field(field) == fieldName
+      | Validation.StringNonEmpty({field}) => Field(field) == fieldName
+      | Validation.StringRegExp({field}) => Field(field) == fieldName
+      | Validation.StringMin({field}) => Field(field) == fieldName
+      | Validation.StringMax({field}) => Field(field) == fieldName
+      | Validation.Custom({field}) => Field(field) == fieldName
+      }
+    );
 
   let validateOne =
       (~field, ~values, ~i18n, schema: Validation.schema('meta)) => {
@@ -314,9 +312,9 @@ module Make = (Lenses: Lenses) => {
       );
 
     let errors =
-      validationList
-      ->Belt.Array.keep(((_field, fieldState)) => fieldState !== Valid)
-      ->Belt.Array.map(((field, fieldState)) => (field, fieldState));
+      validationList->Belt.Array.keep(((_field, fieldState)) =>
+        fieldState !== Valid
+      );
 
     Belt.Array.length(errors) > 0 ? Errors(errors) : Valid;
   };
