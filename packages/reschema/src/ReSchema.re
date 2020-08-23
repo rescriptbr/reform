@@ -290,12 +290,10 @@ module Make = (Lenses: Lenses) => {
 
     Belt.Array.map(fields, field =>
       getFieldValidator(~validators, ~fieldName=field)
-    )
-    ->Belt.Array.map(validator =>
-        Belt.Option.map(validator, validator =>
+      ->Belt.Option.map(validator =>
           validateField(~validator, ~values, ~i18n)
         )
-      );
+    );
   };
 
   let validate =
