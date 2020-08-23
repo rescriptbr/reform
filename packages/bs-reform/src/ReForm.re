@@ -418,14 +418,10 @@ module Make = (Config: Config) => {
             Belt.Array.some(fields, fieldItem => fieldItem == field)
               ? {
                 let newFieldState =
-                  fieldsValidated
-                  ->Belt.Array.keep(fieldStateValidated =>
-                      Belt.Option.map(fieldStateValidated, ((item, _)) =>
-                        item
-                      )
-                      == Some(field)
-                    )
-                  ->Belt.Array.get(0);
+                  fieldsValidated->Belt.Array.getBy(fieldStateValidated =>
+                    Belt.Option.map(fieldStateValidated, ((item, _)) => item)
+                    == Some(field)
+                  );
 
                 switch (newFieldState) {
                 | Some(fieldStateValidated) =>
@@ -453,14 +449,10 @@ module Make = (Config: Config) => {
 
       send(SetFieldsState(newFieldsState));
 
-      Belt.Array.keep(newFieldsState, ((field, _)) =>
+      Belt.Array.keepMap(newFieldsState, ((field, fieldState)) => {
         Belt.Array.some(fields, fieldItem => fieldItem == field)
-      )
-      ->Belt.Array.map(fieldState => {
-          let (_, fieldStateValidation) = fieldState;
-
-          fieldStateValidation;
-        });
+          ? Some(fieldState) : None
+      });
     };
 
     let raiseSubmitFailed = error => send(RaiseSubmitFailed(error));
