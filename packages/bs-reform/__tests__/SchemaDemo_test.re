@@ -31,7 +31,7 @@ test("should validate a correct record", () => {
 
   let schema =
     ProfileValidation.Validation.(
-      Schema(Belt.Array.concat(email(Email), int(~min=18, Age)))
+      Schema(email(Email) + int(~min=18, Age))
     );
 
   expect(schema |> ProfileValidation.validate(user))
