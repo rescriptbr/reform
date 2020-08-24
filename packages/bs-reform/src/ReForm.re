@@ -423,10 +423,10 @@ module Make = (Config: Config) => {
                     == Some(field)
                   );
 
-                switch (newFieldState) {
-                | Some(fieldStateValidated) =>
-                  switch (fieldStateValidated) {
-                  | Some((_, newFieldStateValidated)) =>
+                newFieldState
+                ->Belt.Option.getWithDefault(None)
+                ->Belt.Option.mapWithDefault(
+                    [||], ((_, newFieldStateValidated)) =>
                     switch (newFieldStateValidated) {
                     | Valid => [|(field, Valid: fieldState)|]
                     | Error(message) => [|(field, Error(message))|]
@@ -434,11 +434,7 @@ module Make = (Config: Config) => {
                         (field, NestedErrors(message)),
                       |]
                     }
-
-                  | None => [||]
-                  }
-                | None => [||]
-                };
+                  );
               }
               : [|fieldStateItem|];
           },
