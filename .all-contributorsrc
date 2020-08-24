@@ -156,6 +156,15 @@
         "doc",
         "design"
       ]
+    },
+    {
+      "login": "celsobonutti",
+      "name": "Celso Bonutti",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/12688694?v=4",
+      "profile": "http://cel.so",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
