@@ -374,27 +374,20 @@ module Make = (Config: Config) => {
 
     let getFieldState = field =>
       state.fieldsState
-      ->Array.to_list
-      ->Belt.List.getBy(((nameField, _nameFieldState)) =>
-          switch (nameField == field) {
-          | true => true
-          | _ => false
-          }
+      ->Belt.Array.getBy(((nameField, _nameFieldState)) =>
+          nameField == field
         )
-      |> (
-        field =>
-          switch (field) {
-          | Some((_nameField, nameFieldState)) => nameFieldState
-          | None => Pristine
-          }
-      );
+      ->Belt.Option.mapWithDefault(
+          Pristine: fieldState, ((_nameField, nameFieldState)) =>
+          nameFieldState
+        );
 
     let getFieldError = field =>
       getFieldState(field)
       |> (
         fun
         | Error(error) => Some(error)
-        | NestedErrors(errors) => {
+        | NestedErrors(_errors) => {
             Js.log2(
               "The following field has nested errors, access these with `getNestedFieldError` instead of `getFieldError`",
               field,
@@ -439,9 +432,7 @@ module Make = (Config: Config) => {
               : [|fieldStateItem|];
           },
         )
-        ->Belt.Array.reduce([||], (acc, fieldState) =>
-            Belt.Array.concat(acc, fieldState)
-          );
+        ->Belt.Array.concatMany;
 
       send(SetFieldsState(newFieldsState));
 
