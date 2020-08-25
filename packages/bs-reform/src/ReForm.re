@@ -374,27 +374,20 @@ module Make = (Config: Config) => {
 
     let getFieldState = field =>
       state.fieldsState
-      ->Array.to_list
-      ->Belt.List.getBy(((nameField, _nameFieldState)) =>
-          switch (nameField == field) {
-          | true => true
-          | _ => false
-          }
+      ->Belt.Array.getBy(((nameField, _nameFieldState)) =>
+          nameField == field
         )
-      |> (
-        field =>
-          switch (field) {
-          | Some((_nameField, nameFieldState)) => nameFieldState
-          | None => Pristine
-          }
-      );
+      ->Belt.Option.mapWithDefault(
+          Pristine: fieldState, ((_nameField, nameFieldState)) =>
+          nameFieldState
+        );
 
     let getFieldError = field =>
       getFieldState(field)
       |> (
         fun
         | Error(error) => Some(error)
-        | NestedErrors(errors) => {
+        | NestedErrors(_errors) => {
             Js.log2(
               "The following field has nested errors, access these with `getNestedFieldError` instead of `getFieldError`",
               field,
@@ -423,10 +416,10 @@ module Make = (Config: Config) => {
                     == Some(field)
                   );
 
-                switch (newFieldState) {
-                | Some(fieldStateValidated) =>
-                  switch (fieldStateValidated) {
-                  | Some((_, newFieldStateValidated)) =>
+                newFieldState
+                ->Belt.Option.getWithDefault(None)
+                ->Belt.Option.mapWithDefault(
+                    [||], ((_, newFieldStateValidated)) =>
                     switch (newFieldStateValidated) {
                     | Valid => [|(field, Valid: fieldState)|]
                     | Error(message) => [|(field, Error(message))|]
@@ -434,18 +427,12 @@ module Make = (Config: Config) => {
                         (field, NestedErrors(message)),
                       |]
                     }
-
-                  | None => [||]
-                  }
-                | None => [||]
-                };
+                  );
               }
               : [|fieldStateItem|];
           },
         )
-        ->Belt.Array.reduce([||], (acc, fieldState) =>
-            Belt.Array.concat(acc, fieldState)
-          );
+        ->Belt.Array.concatMany;
 
       send(SetFieldsState(newFieldsState));
 
