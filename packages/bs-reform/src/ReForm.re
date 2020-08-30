@@ -261,12 +261,8 @@ module Make = (Config: Config) => {
                 submit ? self.send(Submit) : ();
               | Errors(erroredFields) =>
                 let newFieldsState: array((field, fieldState)) =
-                  erroredFields->Belt.Array.map(((field, fieldState)) =>
-                    switch (fieldState) {
-                    | NestedErrors(errors) => (field, NestedErrors(errors))
-                    | Error(message) => (field, Error(message))
-                    | Valid => (field, Valid)
-                    }
+                  erroredFields->Belt.Array.map(((field, errorMsg)) =>
+                    (field, Error(errorMsg))
                   );
                 self.send(SetFieldsState(newFieldsState));
                 submit

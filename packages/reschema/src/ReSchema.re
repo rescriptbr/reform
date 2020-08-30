@@ -18,7 +18,7 @@ type fieldState =
 
 type recordValidationState('a) =
   | Valid
-  | Errors(array(('a, fieldState)));
+  | Errors(array(('a, string)));
 
 module Make = (Lenses: Lenses) => {
   type field =
@@ -296,6 +296,8 @@ module Make = (Lenses: Lenses) => {
   let getFieldValidator = (~validators, ~fieldName) =>
     validators->Belt.Array.getBy(validator =>
       switch (validator) {
+      | Validation.False({field}) => Field(field) == fieldName
+      | Validation.True({field}) => Field(field) == fieldName
       | Validation.IntMin({field}) => Field(field) == fieldName
       | Validation.IntMax({field}) => Field(field) == fieldName
       | Validation.FloatMin({field}) => Field(field) == fieldName
@@ -344,8 +346,11 @@ module Make = (Lenses: Lenses) => {
       );
 
     let errors =
-      validationList->Belt.Array.keep(((_field, fieldState)) =>
-        fieldState !== Valid
+      validationList->Belt.Array.keepMap(((field, fieldState)) =>
+        switch (fieldState) {
+        | Error(string) => Some((field, string))
+        | _ => None
+        }
       );
 
     Belt.Array.length(errors) > 0 ? Errors(errors) : Valid;
