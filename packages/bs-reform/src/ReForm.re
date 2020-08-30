@@ -1,5 +1,7 @@
 open ReSchema;
 
+module Helpers = ReForm__Helpers;
+
 module type Config = {
   type field('a);
   type state;
@@ -55,6 +57,12 @@ module Make = (Config: Config) => {
 
   type api = {
     state,
+    values: Config.state,
+    formState,
+    fieldsState: array((field, fieldState)),
+    isSubmitting: bool,
+    isDirty: bool,
+    isPristine: bool,
     getFieldState: field => fieldState,
     getFieldError: field => option(string),
     getNestedFieldError: (field, int) => option(string),
@@ -461,6 +469,12 @@ module Make = (Config: Config) => {
 
     let interface: api = {
       state,
+      formState: state.formState,
+      fieldsState: state.fieldsState,
+      values: state.values,
+      isSubmitting: state.formState == Submitting,
+      isDirty: state.formState == Dirty,
+      isPristine: state.formState == Pristine,
       submit: () => send(TrySubmit),
       resetForm: () => send(ResetForm),
       setValues: values => send(SetValues(values)),

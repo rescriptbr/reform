@@ -1,5 +1,3 @@
-open BsReform;
-
 module TodoLenses = [%lenses
   type todo = {
     content: string,
@@ -60,7 +58,7 @@ let make = () => {
                <span> {" Task description " |> React.string} </span>
                <input
                  value={todo.content}
-                 onChange={BsReform.Helpers.handleChange(content =>
+                 onChange={ReForm.Helpers.handleChange(content =>
                    arrayUpdateByIndex(
                      ~field=Todos,
                      ~index,

@@ -1,6 +1,5 @@
 {
   "name": "bs-reform",
-  "namespace": true,
   "reason": {
     "react-jsx": 3
   },
