@@ -108,12 +108,7 @@ let make = () => {
         PostAddForm.Validation.(Schema(
           string(~min=20, ~minError="Title needs to be greater than 20", Title)
           + nonEmpty(Description),
-          + custom(
-            values =>
-              values.acceptTerms == false
-                ? Error("You must accept all the terms") : Valid,
-            AcceptTerms,
-          )
+          + true_(~error="You must accept the terms", AcceptTerms)
         |]));
       },
       ~onSubmit=

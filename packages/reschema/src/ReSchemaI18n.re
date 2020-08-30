@@ -1,4 +1,6 @@
 type t = {
+  false_: unit => string,
+  true_: unit => string,
   intMin: (~value: int, ~min: int) => string,
   intMax: (~value: int, ~max: int) => string,
   floatMin: (~value: float, ~min: float) => string,
@@ -11,6 +13,8 @@ type t = {
 };
 
 let default = {
+  false_: () => "This value should be false",
+  true_: () => "This value should be true",
   intMin: (~value as _value, ~min) =>
     "This value must be greater than or equal to " ++ string_of_int(min),
   intMax: (~value as _value, ~max) =>

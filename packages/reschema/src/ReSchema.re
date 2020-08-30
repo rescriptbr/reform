@@ -97,6 +97,18 @@ module Make = (Lenses: Lenses) => {
           meta: 'meta,
           predicate: Lenses.state => fieldState,
         })
+        : t('meta)
+      | True({
+          field: Lenses.field(bool),
+          error: option(string),
+          meta: 'meta,
+        })
+        : t('meta)
+      | False({
+          field: Lenses.field(bool),
+          error: option(string),
+          meta: 'meta,
+        })
         : t('meta);
     type schema('meta) =
       | Schema(array(t('meta))): schema('meta);
@@ -112,6 +124,14 @@ module Make = (Lenses: Lenses) => {
     let custom = (predicate, ~meta=?, field) => {
       [|Custom({field, meta, predicate})|];
     };
+
+    let true_ = (~error=?, ~meta=?, field) => [|
+      True({field, meta, error}),
+    |];
+
+    let false_ = (~error=?, ~meta=?, field) => [|
+      False({field, meta, error}),
+    |];
 
     let email = (~error=?, ~meta=?, field) => [|
       Email({field, meta, error}),
@@ -157,6 +177,20 @@ module Make = (Lenses: Lenses) => {
   let validateField =
       (~validator, ~values, ~i18n: ReSchemaI18n.t): (field, fieldState) =>
     switch (validator) {
+    | Validation.True({field, error}) =>
+      let value = Lenses.get(values, field);
+      (
+        Field(field),
+        value
+          ? Valid : Error(error->Belt.Option.getWithDefault(i18n.true_())),
+      );
+    | Validation.False({field, error}) =>
+      let value = Lenses.get(values, field);
+      (
+        Field(field),
+        value == false
+          ? Valid : Error(error->Belt.Option.getWithDefault(i18n.false_())),
+      );
     | Validation.IntMin({field, min, error}) =>
       let value = Lenses.get(values, field);
       (
