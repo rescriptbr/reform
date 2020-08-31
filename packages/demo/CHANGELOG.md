@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.2-alpha.0](https://github.com/Astrocoders/reform/compare/demo@1.0.1-alpha.0...demo@1.0.2-alpha.0) (2020-08-31)
+
+
+### Features
+
+* **demo:** adding vanilla reschema ([e6d0702](https://github.com/Astrocoders/reform/commit/e6d07028c03130e5ba8f713505aae2b3640c6c84))
+* **namespace:** remove namespace ([f1b703a](https://github.com/Astrocoders/reform/commit/f1b703aa09d0e5b903898c575aed00e83ba9275e))
+* **reschema:** make errors straight strings ([72f7da4](https://github.com/Astrocoders/reform/commit/72f7da4133cf68492f8357b750814e0b4ab95807))
+
+
+
+
+
 ## [1.0.1-alpha.0](https://github.com/Astrocoders/reform/compare/demo@1.0.0-alpha.0...demo@1.0.1-alpha.0) (2020-07-30)
 
 

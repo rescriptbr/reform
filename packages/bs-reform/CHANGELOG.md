@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [10.0.2-alpha.0](https://github.com/Astrocoders/reform/compare/bs-reform@10.0.1-alpha.0...bs-reform@10.0.2-alpha.0) (2020-08-31)
+
+
+### Bug Fixes
+
+* **tests:** fixes ReForm's broken test ([071e35d](https://github.com/Astrocoders/reform/commit/071e35d9903bcff1508d7691418bfc7418f6b495))
+
+
+### Features
+
+* **namespace:** remove namespace ([f1b703a](https://github.com/Astrocoders/reform/commit/f1b703aa09d0e5b903898c575aed00e83ba9275e))
+* **reschema:** make errors straight strings ([72f7da4](https://github.com/Astrocoders/reform/commit/72f7da4133cf68492f8357b750814e0b4ab95807))
+* **validators:** update list of init ([3de6f02](https://github.com/Astrocoders/reform/commit/3de6f02d8f9039668b31b82342ce3de4481f888f))
+
+
+
+
+
 ## [10.0.1-alpha.0](https://github.com/Astrocoders/reform/compare/bs-reform@10.0.0-alpha.0...bs-reform@10.0.1-alpha.0) (2020-07-30)
 
 

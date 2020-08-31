@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.2-alpha.0](https://github.com/Astrocoders/reform/compare/reschema@2.0.1-alpha.0...reschema@2.0.2-alpha.0) (2020-08-31)
+
+
+### Features
+
+* **reschema:** add true_ and false_ validators ([b05d3d6](https://github.com/Astrocoders/reform/commit/b05d3d60564cd2a412935efe2e924a2156f19575))
+* **reschema:** make errors straight strings ([72f7da4](https://github.com/Astrocoders/reform/commit/72f7da4133cf68492f8357b750814e0b4ab95807))
+
+
+
+
+
 ## [2.0.1-alpha.0](https://github.com/Astrocoders/reform/compare/reschema@2.0.0-alpha.0...reschema@2.0.1-alpha.0) (2020-07-30)
 
 
