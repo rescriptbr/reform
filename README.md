@@ -212,7 +212,7 @@ lerna version major|patch|minor
 and then
 
 ```
-lerna publish from-git
+lerna publish
 ```
 
 #### Support
