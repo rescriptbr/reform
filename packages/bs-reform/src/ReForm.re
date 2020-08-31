@@ -116,6 +116,8 @@ module Make = (Config: Config) => {
             ReSchema.Field(field),
             Pristine: fieldState,
           )
+        | Validation.True({field}) => (Field(field), Pristine)
+        | Validation.False({field}) => (Field(field), Pristine)
         | Validation.IntMax({field}) => (Field(field), Pristine)
         | Validation.FloatMin({field}) => (Field(field), Pristine)
         | Validation.FloatMax({field}) => (Field(field), Pristine)
