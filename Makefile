@@ -26,7 +26,10 @@ all: serve
 serve:
 	trap 'kill %1' INT TERM
 	# BuckleScript doesn't like being run first.
-	yarn workspace demo server & $(MAKE) watch
+	$(MAKE) demo & $(MAKE) watch
+
+demo:
+	yarn workspace demo server
 
 $(SOURCE_DIRS_JSON): bsconfig.json
 	$(BSB) -install
