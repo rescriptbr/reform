@@ -14,8 +14,6 @@ module StateLenses = [%lenses
   }
 ];
 
-open BsReform;
-
 module Form = ReForm.Make(StateLenses);
 
 type meta =
@@ -75,7 +73,7 @@ let make = () => {
       <span> {"Name:" |> ReasonReact.string} </span>
       <input
         value={state.values.name}
-        onChange={BsReform.Helpers.handleChange(handleChange(Name))}
+        onChange={ReForm.Helpers.handleChange(handleChange(Name))}
       />
       <p>
         {getFieldError(Field(Name))
@@ -94,7 +92,7 @@ let make = () => {
              <span> {"Name:" |> ReasonReact.string} </span>
              <input
                value={favColor.name}
-               onChange={BsReform.Helpers.handleChange(name =>
+               onChange={ReForm.Helpers.handleChange(name =>
                  arrayUpdateByIndex(
                    ~field=FavoriteColors,
                    ~index,
@@ -107,7 +105,7 @@ let make = () => {
              <span> {"Hex:" |> ReasonReact.string} </span>
              <input
                value={favColor.hex}
-               onChange={Helpers.handleChange(hex =>
+               onChange={ReForm.Helpers.handleChange(hex =>
                  arrayUpdateByIndex(
                    ~field=FavoriteColors,
                    ~index,
@@ -128,7 +126,9 @@ let make = () => {
       <input
         value={string_of_int(state.values.numberOfFavoriteColors)}
         type_="number"
-        onChange={Helpers.handleChange(handleChange(NumberOfFavoriteColors))}
+        onChange={ReForm.Helpers.handleChange(
+          handleChange(NumberOfFavoriteColors),
+        )}
       />
       <p>
         {getFieldError(Field(NumberOfFavoriteColors))
@@ -142,7 +142,7 @@ let make = () => {
         value={Js.Float.toString(state.values.opacityOfColors)}
         type_="number"
         step=0.1
-        onChange={Helpers.handleChange(handleChange(OpacityOfColors))}
+        onChange={ReForm.Helpers.handleChange(handleChange(OpacityOfColors))}
       />
       <p>
         {getFieldError(Field(OpacityOfColors))

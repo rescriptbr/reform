@@ -1,4 +1,3 @@
-open BsReform;
 module StateLenses = [%lenses
   type state = {
     description: string,
@@ -20,7 +19,7 @@ module FieldString = {
           <span> {React.string(label)} </span>
           <input
             value
-            onChange={Helpers.handleChange(handleChange)}
+            onChange={ReForm.Helpers.handleChange(handleChange)}
             onBlur={_ => validate()}
           />
           <p> {error->Belt.Option.getWithDefault("")->React.string} </p>
@@ -51,12 +50,7 @@ let make = () => {
                 Title,
               )
             + nonEmpty(Description)
-            + custom(
-                values =>
-                  values.acceptTerms == false
-                    ? Error("You must accept all the terms") : Valid,
-                AcceptTerms,
-              ),
+            + true_(~error="You must accept all the terms", AcceptTerms),
           )
         );
       },

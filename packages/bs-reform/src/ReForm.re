@@ -1,5 +1,7 @@
 open ReSchema;
 
+module Helpers = ReForm__Helpers;
+
 module type Config = {
   type field('a);
   type state;
@@ -55,6 +57,12 @@ module Make = (Config: Config) => {
 
   type api = {
     state,
+    values: Config.state,
+    formState,
+    fieldsState: array((field, fieldState)),
+    isSubmitting: bool,
+    isDirty: bool,
+    isPristine: bool,
     getFieldState: field => fieldState,
     getFieldError: field => option(string),
     getNestedFieldError: (field, int) => option(string),
@@ -108,6 +116,8 @@ module Make = (Config: Config) => {
             ReSchema.Field(field),
             Pristine: fieldState,
           )
+        | Validation.True({field}) => (Field(field), Pristine)
+        | Validation.False({field}) => (Field(field), Pristine)
         | Validation.IntMax({field}) => (Field(field), Pristine)
         | Validation.FloatMin({field}) => (Field(field), Pristine)
         | Validation.FloatMax({field}) => (Field(field), Pristine)
@@ -253,12 +263,8 @@ module Make = (Config: Config) => {
                 submit ? self.send(Submit) : ();
               | Errors(erroredFields) =>
                 let newFieldsState: array((field, fieldState)) =
-                  erroredFields->Belt.Array.map(((field, fieldState)) =>
-                    switch (fieldState) {
-                    | NestedErrors(errors) => (field, NestedErrors(errors))
-                    | Error(message) => (field, Error(message))
-                    | Valid => (field, Valid)
-                    }
+                  erroredFields->Belt.Array.map(((field, errorMsg)) =>
+                    (field, Error(errorMsg))
                   );
                 self.send(SetFieldsState(newFieldsState));
                 submit
@@ -461,6 +467,12 @@ module Make = (Config: Config) => {
 
     let interface: api = {
       state,
+      formState: state.formState,
+      fieldsState: state.fieldsState,
+      values: state.values,
+      isSubmitting: state.formState == Submitting,
+      isDirty: state.formState == Dirty,
+      isPristine: state.formState == Pristine,
       submit: () => send(TrySubmit),
       resetForm: () => send(ResetForm),
       setValues: values => send(SetValues(values)),

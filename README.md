@@ -45,28 +45,10 @@ And update your bsconfig.json with `ppx-flags`
 ]
 ```
 
-## Features
-
-- Hook API
-- Schema API
-- Type safe, `handleChange` properly infers the value of the field it is handling
-- Context Provider
-- Field component
-- Validation strategy, OnDemand and OnChange
-
-## What this is and why
-
-Code that deals with strongly typed forms can quickly become walls of repeated text.
-We created ReForm to be both deadly simple and to make forms sound good leveraging ReasonML's powerful typesytem.
-Even the schemas we use are nothing more than constructors built-in in the language itself with a small size footprint.
-
-## Basic usage
+## Quick guide
 
 <details>
-  <summary>Click for spoiler!</summary>
-
-Checkout https://github.com/Astrocoders/reform/blob/master/packages/demo/src/PostAddNext.re for a more complete demo
-
+  <summary>Show</summary>
 ```reason
 open BsReform;
 
@@ -77,43 +59,20 @@ module StateLenses = [%lenses
     acceptTerms: bool,
   }
 ];
+
 module PostAddForm = ReForm.Make(StateLenses);
 
-module FieldString = {
-  [@react.component]
-  let make = (~field, ~label) => {
-    <PostAddForm.Field
-      field
-      render={({handleChange, error, value, validate}) =>
-        <label>
-          <span> {React.string(label)} </span>
-          <input
-            value
-            onChange={Helpers.handleChange(handleChange)}
-            onBlur={_ => validate()}
-          />
-          <p> {error->Belt.Option.getWithDefault("")->React.string} </p>
-        </label>
-      }
-    />;
-  };
-};
 
 [@react.component]
 let make = () => {
-  let reform =
+  let form: PostAddForm.api =
     PostAddForm.use(
       ~validationStrategy=OnDemand,
       ~schema={
         PostAddForm.Validation.(Schema(
           string(~min=20, ~minError="Title needs to be greater than 20", Title)
           + nonEmpty(Description),
-          + custom(
-            values =>
-              values.acceptTerms == false
-                ? Error("You must accept all the terms") : Valid,
-            AcceptTerms,
-          )
+          + true_(~error="You must accept the terms", AcceptTerms)
         |]));
       },
       ~onSubmit=
@@ -127,37 +86,42 @@ let make = () => {
       (),
     );
 
-  <PostAddForm.Provider value=reform>
-    <form
-      onSubmit={event => {
-        ReactEvent.Synthetic.preventDefault(event);
-        reform.submit();
-      }}>
-      <FieldString field=StateLenses.Title label="Title" />
-      <FieldString field=StateLenses.Description label="Description" />
-      <PostAddForm.Field
-        field=StateLenses.AcceptTerms
-        render={({handleChange, error, value}) =>
-          <label>
-            <p>
-              <span> {"Accept terms? " |> React.string} </span>
-              <input
-                type_="checkbox"
-                value={string_of_bool(value)}
-                onChange={event =>
-                  ReactEvent.Form.target(event)##checked |> handleChange
-                }
-              />
-            </p>
-            <p> {error->Belt.Option.getWithDefault("")->React.string} </p>
-          </label>
-        }
-      />
-      {reform.state.formState == Submitting
-         ? <p> {React.string("Saving...")} </p>
-         : <button type_="submit"> {"Submit" |> React.string} </button>}
-    </form>
-  </PostAddForm.Provider>;
+  <form
+    onSubmit={event => {
+      event->ReactEvent.Synthetic.preventDefault
+      reform.submit();
+    }}>
+
+    <input
+      type_="text"
+      placeholder="Title"
+      value=form.values.title
+      onChange={event => ReactEvent.Form.target(event)##value |> handleChange(Title)}
+    />
+
+    {form.getFieldError(Title)->Belt.mapWithDefault(React.null, React.string)}
+
+    <input
+      type_="text"
+      placeholder="Description"
+      value=form.values.description
+      onChange={event => ReactEvent.Form.target(event)##value |> handleChange(Title)}
+    />
+
+    {form.getFieldError(Description)->Belt.mapWithDefault(React.null, React.string)}
+
+    <input
+      type_="checkbox"
+      value={string_of_bool(form.values.acceptTerms)}
+      onChange={event =>
+        ReactEvent.Form.target(event)##checked |> handleChange(AcceptTerms)
+      }
+    />
+
+    {form.getFieldError(AcceptTerms)->Belt.mapWithDefault(React.null, React.string)}
+
+    <button type_="submit" disabled={form.formState == Submitting}> "Submit"->React.string </button>
+  </form>
 };
 ```
 
@@ -181,7 +145,7 @@ Then add it to bsconfig.json
 Then add lenses-ppx
 
 ```
-yarn add lenses-ppx@4.0.0 -D
+yarn add lenses-ppx -D
 ```
 
 And update your bsconfig.json with `ppx-flags`
@@ -248,7 +212,7 @@ lerna version major|patch|minor
 and then
 
 ```
-lerna publish from-git
+lerna publish
 ```
 
 #### Support

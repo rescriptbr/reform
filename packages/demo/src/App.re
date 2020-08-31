@@ -6,19 +6,31 @@ let make = (~message) => {
     <div className="flex align-center justify-center">
       <h2 className="text-2xl"> {React.string(message)} </h2>
     </div>
-    <a className="text-bold" href="/new-post">
-      "New post form demo "->React.string
-    </a>
-    <br />
-    <a className="text-bold" href="/fav-colors">
-      "Form with array field demo"->React.string
-    </a>
-    <br />
-    <a className="text-bold" href="/todo">
-      "Form with array todo demo"->React.string
-    </a>
+    <ul className="flex mt-6">
+      <li className="mr-6">
+        <a className="text-blue-500 hover:text-blue-800" href="/new-post">
+          "New post form demo "->React.string
+        </a>
+      </li>
+      <li className="mr-6">
+        <a className="text-blue-500 hover:text-blue-800" href="/fav-colors">
+          "Form with array field demo"->React.string
+        </a>
+      </li>
+      <li className="mr-6">
+        <a className="text-blue-500 hover:text-blue-800" href="/todo">
+          "Form with array todo demo"->React.string
+        </a>
+      </li>
+      <li className="mr-6">
+        <a className="text-blue-500 hover:text-blue-800" href="/reschema">
+          "Vanilla ReSchema"->React.string
+        </a>
+      </li>
+    </ul>
     <div style={ReactDOMRe.Style.make(~padding="100px", ())}>
       {switch (url.path) {
+       | ["reschema"] => <VanillaReSchema />
        | ["new-post"] => <PostAddNext />
        | ["fav-colors"] => <FavoriteColorsForm />
        | ["todo"] => <TodoListForm />
