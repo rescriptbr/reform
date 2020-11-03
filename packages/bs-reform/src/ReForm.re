@@ -167,7 +167,7 @@ module Make = (Config: Config) => {
           (),
         ) => {
       let fieldInterface = useField(field);
-      React.useMemo3(
+      React.useMemo4(
         () =>
           fieldInterface
           ->Belt.Option.map(render)
@@ -176,6 +176,7 @@ module Make = (Config: Config) => {
           Belt.Option.(fieldInterface->map(({error}) => error)),
           Belt.Option.(fieldInterface->map(({value}) => value)),
           Belt.Option.(fieldInterface->map(({state}) => state)),
+          render,
         ),
       );
     };
