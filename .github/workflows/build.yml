@@ -16,4 +16,4 @@ jobs:
     - name: yarn install, build, and test
       run: |
         yarn install
-        yarn bsb -make-world
+        yarn workspace demo -make-world
