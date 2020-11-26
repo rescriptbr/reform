@@ -18,7 +18,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "bs-platform": "^7.3.2",
+    "bs-platform": "8.4.0-dev.3",
     "bs-reform": "^10.0.2-alpha.0",
     "graphql": "14.5.4",
     "graphql-tag": "2.10.1",
@@ -28,7 +28,7 @@
     "react-dom": "^16.13.1",
     "reason-async-hook": "^1.0.1",
     "reason-promise": "^1.1.1",
-    "reason-react": "^0.7.0",
+    "reason-react": "^0.9.0",
     "reason-react-update": "2.0.0",
     "reschema": "^2.0.2-alpha.0",
     "tailwindcss": "^1.6.0"

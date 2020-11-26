@@ -18,7 +18,7 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "bs-platform": "^7.3.2"
+    "bs-platform": "8.4.0-dev.3"
   },
   "dependencies": {
     "reason-react-update": "2.0.0"

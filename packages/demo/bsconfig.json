@@ -11,6 +11,11 @@
     "reason-promise",
     "reschema"
   ],
+
+  "pinned-dependencies": [
+    "bs-reform",
+    "reschema"
+  ],
   "reason": {
     "react-jsx": 3
   },

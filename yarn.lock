@@ -2384,10 +2384,10 @@ browserslist@^4.12.0:
     escalade "^3.0.1"
     node-releases "^1.1.58"
 
-bs-platform@^7.3.2:
-  version "7.3.2"
-  resolved "https://registry.yarnpkg.com/bs-platform/-/bs-platform-7.3.2.tgz#301f5c9b4e8cf5713cb60ca22e145e56e793affe"
-  integrity sha512-seJL5g4anK9la4erv+B2o2sMHQCxDF6OCRl9en3hbaUos/S3JsusQ0sPp4ORsbx5eXfHLYBwPljwKXlgpXtsgQ==
+bs-platform@8.4.0-dev.3:
+  version "8.4.0-dev.3"
+  resolved "https://registry.yarnpkg.com/bs-platform/-/bs-platform-8.4.0-dev.3.tgz#f984399bd8a166bcff370bae52d6c16dae20a9cf"
+  integrity sha512-b05iPtL0dS49nvN7Ocks3NPnEE+ZGUJz9se/gaRT3c+8fAncLzebgwqY6g2jIFYEcr4HQ6x5uu1j+QlMijBxGw==
 
 bser@2.1.1:
   version "2.1.1"
@@ -7989,7 +7989,7 @@ raw-body@2.4.0:
     iconv-lite "0.4.24"
     unpipe "1.0.0"
 
-react-dom@>=16.8.1, react-dom@^16.13.1:
+react-dom@^16.13.1:
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.13.1.tgz#c1bd37331a0486c078ee54c4740720993b2e0e7f"
   integrity sha512-81PIMmVLnCNLO/fFOQxdQkvEq/+Hfpv24XNJfpyZhTRfO0QcmQIF/PgCa1zCOj2w1hrn12MFLyaJ/G0+Mxtfag==
@@ -8004,7 +8004,7 @@ react-is@^16.8.1, react-is@^16.8.4:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
 
-react@>=16.8.1, react@^16.13.1:
+react@^16.13.1:
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react/-/react-16.13.1.tgz#2e818822f1a9743122c063d6410d85c1e3afe48e"
   integrity sha512-YMZQQq32xHLX0bz5Mnibv1/LHb3Sqzngu7xstSM+vrkE5Kzr9xE0yMByK5kMoTK30YVJE61WfbxIFFvfeDKT1w==
@@ -8195,18 +8195,10 @@ reason-react-update@2.0.0, reason-react-update@^2.0.0:
   resolved "https://registry.yarnpkg.com/reason-react-update/-/reason-react-update-2.0.0.tgz#64aba8752d212582288996fe988b06087f854b98"
   integrity sha512-0dHC8p0GKYH2TMCtw8f7tuJTOwJonuB2mg8R0RxjuK5yr9Ne/cIoZOKqjGiwGZkjU9pcT4xowS5OaaBuJJuj9Q==
 
-reason-react@^0.7.0:
-  version "0.7.1"
-  resolved "https://registry.yarnpkg.com/reason-react/-/reason-react-0.7.1.tgz#e6acea88542cd44398cd980093b8a2ab2722744e"
-  integrity sha512-Ssx4jZYohMHW9ZiW893IfbYdZw/muSmPFKigAgL+AORUgyiaphb0PP4yRGlx9A7JAxR3EeBn294XKUaClJQhbA==
-  dependencies:
-    react ">=16.8.1"
-    react-dom ">=16.8.1"
-
-redemon@0.2.6:
-  version "0.2.6"
-  resolved "https://registry.yarnpkg.com/redemon/-/redemon-0.2.6.tgz#59e4d738eddc3c9369e8f6ab35aa01dc2760c265"
-  integrity sha512-kSZBy+b4q4P6/q5elqQe7NDZXDrZpbaklk+fYW6CJjb4JpeHW9rmczxkIVtWZc5MvxMmX0aDn8rlFafcnvUQJQ==
+reason-react@^0.9.0:
+  version "0.9.1"
+  resolved "https://registry.yarnpkg.com/reason-react/-/reason-react-0.9.1.tgz#30a887158200b659aa03e2d75ff4cc54dc462bb0"
+  integrity sha512-nlH0O2TDy9KzOLOW+vlEQk4ExHOeciyzFdoLcsmmiit6hx6H5+CVDrwJ+8aiaLT/kqK5xFOjy4PS7PftWz4plA==
 
 redent@^1.0.0:
   version "1.0.0"
