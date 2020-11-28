@@ -1,19 +1,15 @@
-name: Build
+name: build
 
 on: [push]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@master
-    - name: Use Node.js 10.x
-      uses: actions/setup-node@v1
-      with:
-        version: 10.x
-    - name: yarn install, build, and test
-      run: |
-        yarn install
-        yarn bsb -make-world
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2-beta
+        with:
+          node-version: 14
+          
+      - run: yarn install --pure-lockfile
+      - run: yarn bsb -make-world
