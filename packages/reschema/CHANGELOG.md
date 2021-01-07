@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.2](https://github.com/Astrocoders/reform/compare/reschema@2.0.2-alpha.0...reschema@2.0.2) (2021-01-07)
+
+
+### Features
+
+* **regexp:** better email regexp ([03e105b](https://github.com/Astrocoders/reform/commit/03e105bce60e842945641b83d5a45a645e39196a))
+
+
+
+
+
 ## [2.0.2-alpha.0](https://github.com/Astrocoders/reform/compare/reschema@2.0.1-alpha.0...reschema@2.0.2-alpha.0) (2020-08-31)
 
 
