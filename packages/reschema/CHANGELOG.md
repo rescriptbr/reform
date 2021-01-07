@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.3](https://github.com/Astrocoders/reform/compare/reschema@2.0.2...reschema@2.0.3) (2021-01-07)
+
+
+### Bug Fixes
+
+* **regex:** export ([3a880d0](https://github.com/Astrocoders/reform/commit/3a880d045de867b33b983b29b05ba29c64f0879e))
+
+
+
+
+
 ## [2.0.2](https://github.com/Astrocoders/reform/compare/reschema@2.0.2-alpha.0...reschema@2.0.2) (2021-01-07)
 
 
