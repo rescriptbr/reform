@@ -171,7 +171,7 @@ module Make = (Lenses: Lenses) => {
   };
 
   module RegExps = {
-    let email = [%bs.re {|/.*@.*\..+/|}];
+    [@bs.module "./ReSchemaRegExp"] external email: Js.Re.t = "email";
   };
 
   let validateField =
