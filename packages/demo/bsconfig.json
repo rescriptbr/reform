@@ -5,11 +5,14 @@
     "subdirs" : true
   },
   "bs-dependencies": [
-    "bs-reform",
+    "resform",
     "reason-react",
     "reason-async-hook",
     "reason-promise",
     "reschema"
+  ],
+  "pinned-dependencies": [
+    "resform"
   ],
   "reason": {
     "react-jsx": 3

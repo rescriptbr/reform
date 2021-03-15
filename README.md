@@ -19,14 +19,14 @@
 ## Installation
 
 ```
-yarn add bs-reform reschema
+yarn add resform reschema
 ```
 
 Then add it to bsconfig.json
 
 ```
 "bs-dependencies": [
- "bs-reform",
+ "resform",
  "reschema"
 ]
 ```

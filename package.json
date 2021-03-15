@@ -15,14 +15,12 @@
   "author": "Gabriel R. Abreu <grsabreu@gmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "@commitlint/cli": "7.2.1",
-    "@commitlint/config-conventional": "7.1.2",
-    "babel-loader": "^8.1.0",
-    "husky": "1.2.1",
-    "lerna": "^3.14.1",
-    "lint-staged": "^7.0.0",
-    "pre-commit": "^1.2.2",
-    "redemon": "0.2.6"
+    "@commitlint/cli": "12.0.1",
+    "@commitlint/config-conventional": "12.0.1",
+    "husky": "5.1.3",
+    "lerna": "^4.0.0",
+    "lint-staged": "^10.5.4",
+    "pre-commit": "^1.2.2"
   },
   "lint-staged": {
     "*.re": [
@@ -49,8 +47,5 @@
     "bs:watch": "lerna run bs:watch",
     "lint:staged": "lint-staged",
     "bs:setup": "bsb -make-world"
-  },
-  "dependencies": {
-    "bs-platform": "^7.3.2"
   }
 }
