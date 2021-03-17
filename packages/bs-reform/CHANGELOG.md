@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [10.0.3](https://github.com/Astrocoders/reform/compare/bs-reform@10.0.2...bs-reform@10.0.3) (2021-01-07)
+
+**Note:** Version bump only for package bs-reform
+
+
+
+
+
+## [10.0.2](https://github.com/Astrocoders/reform/compare/bs-reform@10.0.2-alpha.0...bs-reform@10.0.2) (2021-01-07)
+
+**Note:** Version bump only for package bs-reform
+
+
+
+
+
 ## [10.0.2-alpha.0](https://github.com/Astrocoders/reform/compare/bs-reform@10.0.1-alpha.0...bs-reform@10.0.2-alpha.0) (2020-08-31)
 
 
