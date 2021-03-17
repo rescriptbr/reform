@@ -1,0 +1,61 @@
+name: npm-publish
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - uses: actions/setup-node@v2-beta
+        with:
+          node-version: 14
+          registry-url: https://registry.npmjs.org/
+
+      - run: yarn install --pure-lockfile
+      - run: yarn bsb -make-world
+
+      - uses: dorny/paths-filter@v2
+        id: paths
+        with:
+          filters: |
+            reform:
+              - 'packages/bs-reform/**'
+            reschema:
+              - 'packages/reschema/**'
+
+      # If `bs-reform` have changed in the last commit
+      - if: steps.paths.outputs.reform == 'true'
+        run: |
+            cd packages/bs-reform
+            npm version patch
+            npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
+
+      # If `reschema` have changed in the last commit
+      - if: steps.paths.outputs.reschema == 'true'
+        run: |
+            cd packages/reschema
+            npm version patch
+            npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
+
+      - if: steps.paths.outputs.reform == 'true' || steps.paths.outputs.reschema == 'true'
+        run: |
+          git config --global user.email "github-actions@github.com" 
+          git config --global user.name "github-actions[bot]"
+          git commit --message "Update package.json" --all 
+      
+      - uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
