@@ -10,7 +10,11 @@
     "reason",
     "bucklescript",
     "react",
-    "form"
+    "form",
+    "rescript",
+    "rescript-react",
+    "rescript-forms",
+    "rescript-react-forms"
   ],
   "author": "Gabriel R. Abreu <grsabreu@gmail.com>",
   "license": "MIT",
@@ -51,6 +55,6 @@
     "bs:setup": "bsb -make-world"
   },
   "dependencies": {
-    "bs-platform": "^7.3.2"
+    "bs-platform": "8.4.2"
   }
 }
