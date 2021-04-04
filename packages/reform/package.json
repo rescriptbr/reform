@@ -1,5 +1,5 @@
 {
-  "name": "bs-reform",
+  "name": "reform",
   "version": "10.0.3",
   "description": "Reasonably making forms sound good again",
   "repository": "git@github.com:Astrocoders/reform.git",
@@ -14,7 +14,7 @@
   "author": "Astrocoders <astrocoders.com>",
   "license": "MIT",
   "peerDependencies": {
-    "bs-platform": "^8.3.2",
+    "bs-platform": "^8.4.2",
     "@rescript/react": "^0.10.1"
   },
   "devDependencies": {

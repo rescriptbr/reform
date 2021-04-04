@@ -30,9 +30,7 @@ test("should validate a correct record", () => {
   module ProfileValidation = ReSchema.Make(ProfileLenses);
 
   let schema =
-    ProfileValidation.Validation.(
-      Schema(email(Email) + int(~min=18, Age))
-    );
+    ProfileValidation.Validation.(Schema(email(Email) + int(~min=18, Age)));
 
   expect(schema |> ProfileValidation.validate(user))
   |> toBe(ReSchema.Errors([||]));

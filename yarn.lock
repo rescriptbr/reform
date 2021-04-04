@@ -2399,6 +2399,15 @@ bs-platform@^8.4.2:
   resolved "https://registry.yarnpkg.com/bs-platform/-/bs-platform-8.4.2.tgz#778dabd1dfb3bc95e0086c58dabae74e4ebdee8a"
   integrity sha512-9q7S4/LLV/a68CweN382NJdCCr/lOSsJR3oQYnmPK98ChfO/AdiA3lYQkQTp6T+U0I5Z5RypUAUprNstwDtMDQ==
 
+bs-reform@^10.0.3:
+  version "10.0.3"
+  resolved "https://registry.yarnpkg.com/bs-reform/-/bs-reform-10.0.3.tgz#babe65f729fcc12b4a020736bd6102abdf4c44ff"
+  integrity sha512-N9wcIUWkWEmmFNAvrxsaSt+uRnS8yQKnRhdsJnVIut0lQxAmzWHVU3OW1d6rs0PsiG61pDH/OF8ZsQoogo4A9g==
+  dependencies:
+    reason-react-compat "^0.4.0"
+    reason-react-update "2.0.0"
+    reschema "^2.0.3"
+
 bser@2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/bser/-/bser-2.1.1.tgz#e6787da20ece9d07998533cfd9de6f5c38f4bc05"
@@ -8194,6 +8203,11 @@ reason-promise@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/reason-promise/-/reason-promise-1.1.1.tgz#966133fed21e748a50ffb8839a1da04912bcf380"
   integrity sha512-xMXDiyzTjn7t9pq9aQrkgu8CLB5DILU70oWQ+LI20YecshypUwsw37TKOvCxgoFR3vo30ucF0/iWe2BZ181/jw==
+
+reason-react-compat@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/reason-react-compat/-/reason-react-compat-0.4.0.tgz#9c6705f9bd67e7ff7219355f3a95fd67442b578d"
+  integrity sha512-Bwwgb6AHusLiRhdd0aupFAuMYaG3gnwR6iHYYlj9gfLD6Uxp53dtJIhS2ZMTEpCSU1JE2X0k7x3rru1IRdx9FQ==
 
 reason-react-update@2.0.0, reason-react-update@^2.0.0:
   version "2.0.0"
