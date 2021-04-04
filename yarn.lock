@@ -1381,6 +1381,11 @@
   dependencies:
     "@types/node" ">= 8"
 
+"@rescript/react@0.10.1":
+  version "0.10.1"
+  resolved "https://registry.yarnpkg.com/@rescript/react/-/react-0.10.1.tgz#ddce66ba664a104354d559c350ca4ebf17ab5a26"
+  integrity sha512-5eIfGnV1yhjv03ktK6fQ6iEfsZKXKXXrq5hx4+ngEY4R/RU8o/oH9ne375m9RJMugV/jsE8hMoEeSSg2YQy3Ag==
+
 "@samverschueren/stream-to-observable@^0.3.0":
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/@samverschueren/stream-to-observable/-/stream-to-observable-0.3.0.tgz#ecdf48d532c58ea477acfcab80348424f8d0662f"
@@ -2383,6 +2388,11 @@ browserslist@^4.12.0:
     electron-to-chromium "^1.3.488"
     escalade "^3.0.1"
     node-releases "^1.1.58"
+
+bs-platform@8.4.2:
+  version "8.4.2"
+  resolved "https://registry.yarnpkg.com/bs-platform/-/bs-platform-8.4.2.tgz#778dabd1dfb3bc95e0086c58dabae74e4ebdee8a"
+  integrity sha512-9q7S4/LLV/a68CweN382NJdCCr/lOSsJR3oQYnmPK98ChfO/AdiA3lYQkQTp6T+U0I5Z5RypUAUprNstwDtMDQ==
 
 bs-platform@^7.3.2:
   version "7.3.2"
@@ -6019,10 +6029,10 @@ left-pad@^1.3.0:
   resolved "https://registry.yarnpkg.com/left-pad/-/left-pad-1.3.0.tgz#5b8a3a7765dfe001261dde915589e782f8c94d1e"
   integrity sha512-XI5MPzVNApjAyhQzphX8BkmKsKUxD4LdyK24iZeQGinBN9yTQT3bFlCBy/aVx2HrNcqQGsdot8ghrjyrvMCoEA==
 
-lenses-ppx@^6.1.3:
-  version "6.1.3"
-  resolved "https://registry.yarnpkg.com/lenses-ppx/-/lenses-ppx-6.1.3.tgz#cfb0a1c50aa65ac0784a38f562bbfc9995774fd0"
-  integrity sha512-Dk5VuMIytNSgkO5VXrnt9NdTlOMXNS8XTyXfi7gBgqo437F3/qCnDvNaHIWaXDmzoILE+Nxgi+xxcXoXb4SEpQ==
+lenses-ppx@^6.1.10:
+  version "6.1.10"
+  resolved "https://registry.yarnpkg.com/lenses-ppx/-/lenses-ppx-6.1.10.tgz#74b84a7c08191ff39c7f7e57d82c2b1d8a616a74"
+  integrity sha512-zN1RxPAvrKZtV7AqoUCjhSrS5NvjEg7isdde3G7eWUcVwcTzggM65mS1CuoVH5zgWB0JAF1VDmnli29DDQzbYQ==
 
 lerna@^3.14.1:
   version "3.22.1"
@@ -8185,11 +8195,6 @@ reason-promise@^1.1.1:
   resolved "https://registry.yarnpkg.com/reason-promise/-/reason-promise-1.1.1.tgz#966133fed21e748a50ffb8839a1da04912bcf380"
   integrity sha512-xMXDiyzTjn7t9pq9aQrkgu8CLB5DILU70oWQ+LI20YecshypUwsw37TKOvCxgoFR3vo30ucF0/iWe2BZ181/jw==
 
-reason-react-compat@^0.4.0:
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/reason-react-compat/-/reason-react-compat-0.4.0.tgz#9c6705f9bd67e7ff7219355f3a95fd67442b578d"
-  integrity sha512-Bwwgb6AHusLiRhdd0aupFAuMYaG3gnwR6iHYYlj9gfLD6Uxp53dtJIhS2ZMTEpCSU1JE2X0k7x3rru1IRdx9FQ==
-
 reason-react-update@2.0.0, reason-react-update@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/reason-react-update/-/reason-react-update-2.0.0.tgz#64aba8752d212582288996fe988b06087f854b98"
@@ -8360,6 +8365,11 @@ requires-port@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/requires-port/-/requires-port-1.0.0.tgz#925d2601d39ac485e091cf0da5c6e694dc3dcaff"
   integrity sha1-kl0mAdOaxIXgkc8NpcbmlNw9yv8=
+
+rescript-react-update@3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/rescript-react-update/-/rescript-react-update-3.0.1.tgz#6d087887c7e421610392d0e7f488d32b6eed3370"
+  integrity sha512-G5/Ebk+Pbd+StiO+b2/ccVD2tZpA7c/tR3qlYsM9qSXgTdcIf5OwILj6YaXb4/YUbI4/3ZNj9ELTf+eb05Jsaw==
 
 resolve-cwd@^2.0.0:
   version "2.0.0"

@@ -14,13 +14,13 @@
   "author": "Astrocoders <astrocoders.com>",
   "license": "MIT",
   "peerDependencies": {
-    "bs-platform": "^7.3.2",
-    "reason-react": "^0.7.0"
+    "bs-platform": "8.3.2",
+    "@rescript/react": "^0.10.1"
   },
   "devDependencies": {
     "@glennsl/bs-jest": "^0.4.9",
-    "bs-platform": "^7.3.2",
-    "reason-react": "^0.7.0"
+    "bs-platform": "8.4.2",
+    "@rescript/react": "0.10.1"
   },
   "scripts": {
     "start": "yarn bs:watch",
@@ -32,8 +32,7 @@
     "bs:setup": "bsb -make-world"
   },
   "dependencies": {
-    "reason-react-compat": "^0.4.0",
-    "reason-react-update": "2.0.0",
-    "reschema": "^2.0.3"
+    "rescript-react-update": "3.0.1",
+    "reschema": "2.0.3"
   }
 }

@@ -3,7 +3,7 @@
   "reason": {
     "react-jsx": 3
   },
-  "bs-dependencies": ["reason-react", "reason-react-update", "reschema", "reason-react-compat"],
+  "bs-dependencies": ["@rescript/react", "rescript-react-update", "reschema"],
   "bs-dev-dependencies": ["@glennsl/bs-jest"],
   "refmt": 3,
   "bsc-flags": ["-bs-super-errors"],
