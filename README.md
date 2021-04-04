@@ -7,7 +7,6 @@
 </p>
 <p align="center">
  <a href="#installation">Installation</a> • 
- <a target="_blank" href="https://astrocoders.dev/reform">Official Docs</a> • 
  <a href="#features">Features</a> •
  <a href="#usage">Usage</a> 
 </p>
@@ -19,14 +18,14 @@
 ## Installation
 
 ```
-yarn add bs-reform reschema
+yarn add reform reschema
 ```
 
 Then add it to bsconfig.json
 
 ```
 "bs-dependencies": [
- "bs-reform",
+ "reform",
  "reschema"
 ]
 ```
@@ -51,7 +50,7 @@ And update your bsconfig.json with `ppx-flags`
   <summary>Show</summary>
   
 ```reason
-open BsReform;
+open Reform;
 
 module StateLenses = [%lenses
   type state = {
@@ -127,35 +126,6 @@ let make = () => {
 ```
 
 </details>
-
-## Installation
-
-```
-yarn add bs-reform reschema
-```
-
-Then add it to bsconfig.json
-
-```
-"bs-dependencies": [
- "bs-reform",
- "reschema"
-]
-```
-
-Then add lenses-ppx
-
-```
-yarn add lenses-ppx -D
-```
-
-And update your bsconfig.json with `ppx-flags`
-
-```
-"ppx-flags": [
- "lenses-ppx/ppx"
-]
-```
 
 ## Features
 
