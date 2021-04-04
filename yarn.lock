@@ -1381,7 +1381,7 @@
   dependencies:
     "@types/node" ">= 8"
 
-"@rescript/react@0.10.1":
+"@rescript/react@^0.10.1":
   version "0.10.1"
   resolved "https://registry.yarnpkg.com/@rescript/react/-/react-0.10.1.tgz#ddce66ba664a104354d559c350ca4ebf17ab5a26"
   integrity sha512-5eIfGnV1yhjv03ktK6fQ6iEfsZKXKXXrq5hx4+ngEY4R/RU8o/oH9ne375m9RJMugV/jsE8hMoEeSSg2YQy3Ag==
@@ -2389,15 +2389,15 @@ browserslist@^4.12.0:
     escalade "^3.0.1"
     node-releases "^1.1.58"
 
-bs-platform@8.4.2:
-  version "8.4.2"
-  resolved "https://registry.yarnpkg.com/bs-platform/-/bs-platform-8.4.2.tgz#778dabd1dfb3bc95e0086c58dabae74e4ebdee8a"
-  integrity sha512-9q7S4/LLV/a68CweN382NJdCCr/lOSsJR3oQYnmPK98ChfO/AdiA3lYQkQTp6T+U0I5Z5RypUAUprNstwDtMDQ==
-
 bs-platform@^7.3.2:
   version "7.3.2"
   resolved "https://registry.yarnpkg.com/bs-platform/-/bs-platform-7.3.2.tgz#301f5c9b4e8cf5713cb60ca22e145e56e793affe"
   integrity sha512-seJL5g4anK9la4erv+B2o2sMHQCxDF6OCRl9en3hbaUos/S3JsusQ0sPp4ORsbx5eXfHLYBwPljwKXlgpXtsgQ==
+
+bs-platform@^8.4.2:
+  version "8.4.2"
+  resolved "https://registry.yarnpkg.com/bs-platform/-/bs-platform-8.4.2.tgz#778dabd1dfb3bc95e0086c58dabae74e4ebdee8a"
+  integrity sha512-9q7S4/LLV/a68CweN382NJdCCr/lOSsJR3oQYnmPK98ChfO/AdiA3lYQkQTp6T+U0I5Z5RypUAUprNstwDtMDQ==
 
 bser@2.1.1:
   version "2.1.1"
@@ -8366,7 +8366,7 @@ requires-port@^1.0.0:
   resolved "https://registry.yarnpkg.com/requires-port/-/requires-port-1.0.0.tgz#925d2601d39ac485e091cf0da5c6e694dc3dcaff"
   integrity sha1-kl0mAdOaxIXgkc8NpcbmlNw9yv8=
 
-rescript-react-update@3.0.1:
+rescript-react-update@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/rescript-react-update/-/rescript-react-update-3.0.1.tgz#6d087887c7e421610392d0e7f488d32b6eed3370"
   integrity sha512-G5/Ebk+Pbd+StiO+b2/ccVD2tZpA7c/tR3qlYsM9qSXgTdcIf5OwILj6YaXb4/YUbI4/3ZNj9ELTf+eb05Jsaw==
