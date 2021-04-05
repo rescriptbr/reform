@@ -25,7 +25,18 @@ module.exports = {
           to: "docs/",
           activeBasePath: "docs",
           label: "Docs",
-          position: "right",
+          position: "left",
+        },
+        {
+          to: "examples/",
+          activeBasePath: "docs",
+          label: "Examples",
+          position: "left",
+        },
+        {
+          href: "https://github.com/reasonbr/reform/blob/master/packages/bs-reform/CHANGELOG.md",
+          label: "Changelog",
+          position: "left",
         },
         {
           href: "https://github.com/reasonbr/reform",
