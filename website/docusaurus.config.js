@@ -10,6 +10,10 @@ module.exports = {
   organizationName: "@reasonbr",
   projectName: "reform",
   themeConfig: {
+    colorMode: {
+      defaultMode: "light",
+      disableSwitch: true,
+    },
     navbar: {
       title: "ReForm",
       logo: {
@@ -21,7 +25,7 @@ module.exports = {
           to: "docs/",
           activeBasePath: "docs",
           label: "Docs",
-          position: "left",
+          position: "right",
         },
         {
           href: "https://github.com/reasonbr/reform",
@@ -40,6 +44,10 @@ module.exports = {
               label: "Getting Started",
               to: "docs/",
             },
+            {
+              label: "Installation",
+              to: "docs/",
+            },
           ],
         },
         {
@@ -55,21 +63,8 @@ module.exports = {
             },
           ],
         },
-        {
-          title: "More",
-          items: [
-            {
-              label: "Blog",
-              to: "blog",
-            },
-            {
-              label: "GitHub",
-              href: "https://github.com/facebook/docusaurus",
-            },
-          ],
-        },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+      copyright: `Copyright © ${new Date().getFullYear()} ReForm. Built with Docusaurus.`,
     },
   },
   presets: [
@@ -78,7 +73,6 @@ module.exports = {
       {
         docs: {
           sidebarPath: require.resolve("./sidebars.js"),
-          // Please change this to your repo.
           editUrl: "https://github.com/reasonbr/reform/",
         },
         blog: {

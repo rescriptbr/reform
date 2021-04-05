@@ -1,37 +1,87 @@
-/* stylelint-disable docusaurus/copyright-header */
-
-/**
- * CSS files with the .module.css suffix will be treated as CSS modules
- * and scoped locally.
- */
-
-.heroBanner {
-  padding: 4rem 0;
+.main-wrapper {
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   text-align: center;
-  position: relative;
-  overflow: hidden;
 }
 
-@media screen and (max-width: 966px) {
-  .heroBanner {
-    padding: 2rem;
+.main-wrapper > img {
+  margin-bottom: 1.6rem;
+}
+
+.hero-title > span {
+  color: var(--purple);
+}
+
+@media (max-width: 600px) {
+  .main-wrapper > img {
+    width: 180px;
+    margin-bottom: 1.8rem;
+  }
+
+  .main-wrapper {
+    padding: 4rem 0;
+  }
+
+  .hero-title {
+    font-size: 1.8rem;
+    margin-bottom: 1.6rem;
   }
 }
 
-.buttons {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+@media (min-width: 600px) and (max-width: 900px) {
+  .main-wrapper > img {
+    width: 200px;
+    margin-bottom: 1.8rem;
+  }
+
+  .main-wrapper {
+    padding: 4rem 0;
+    max-width: 600px;
+  }
+
+  .hero-title {
+    font-size: 2.4rem;
+    margin-bottom: 1.6rem;
+  }
 }
 
-.features {
-  display: flex;
-  align-items: center;
-  padding: 2rem 0;
-  width: 100%;
+
+@media (min-width: 900px) and (max-width: 1440px) {
+  .main-wrapper > img {
+    width: 200px;
+    margin-bottom: 1.8rem;
+  }
+
+  .main-wrapper {
+    padding: 5rem 0;
+    max-width: 700px;
+  }
+
+  .hero-title {
+    font-size: 2.6rem;
+    margin-bottom: 1.6rem;
+  }
 }
 
-.featureImage {
-  height: 200px;
-  width: 200px;
+
+
+
+@media (min-width: 1440px) {
+  .main-wrapper > img {
+    width: 200px;
+    margin-bottom: 2.4rem;
+  }
+
+  .main-wrapper {
+    padding: 6rem 0;
+    max-width: 800px;
+  }
+
+  .hero-title {
+    font-size: 2.4rem;
+    margin-bottom: 1.6rem;
+  }
 }
