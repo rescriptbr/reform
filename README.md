@@ -1,7 +1,7 @@
 [![All Contributors](https://img.shields.io/badge/all_contributors-13-orange.svg?style=flat-square)](#contributors)
 
 <p align="center">
-  <img src="./assets/logo-readme.svg" width="600" /> 
+  <img src="./assets/logo.svg" width="600" /> 
   <br />
   <br />
 </p>
