@@ -1,15 +1,21 @@
 {
-  "name": "reform",
+  "name": "@reasonbr/reform",
   "version": "10.0.3",
-  "description": "Reasonably making forms sound good again",
-  "repository": "git@github.com:Astrocoders/reform.git",
-  "homepage": "https://github.com/Astrocoders/reform#readme",
-  "bugs": "https://github.com/Astrocoders/reform/issues",
+  "description": "Reasonably making forms with ReScript and React sound good",
+  "repository": "git@github.com:reasonbr/reform.git",
+  "homepage": "https://github.com/reasonbr/reform#readme",
+  "bugs": "https://github.com/reasonbr/reform/issues",
   "keywords": [
     "reason",
     "bucklescript",
     "react",
-    "form"
+    "form",
+    "rescript",
+    "rescript-react",
+    "rescript-forms",
+    "rescript-react-forms",
+    "rescript-reform",
+    "reform"
   ],
   "author": "Astrocoders <astrocoders.com>",
   "license": "MIT",
