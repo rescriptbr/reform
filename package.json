@@ -27,8 +27,7 @@
     "husky": "1.2.1",
     "lerna": "^3.14.1",
     "lint-staged": "^7.0.0",
-    "pre-commit": "^1.2.2",
-    "redemon": "0.2.6"
+    "pre-commit": "^1.2.2"
   },
   "lint-staged": {
     "*.res": [
