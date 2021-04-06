@@ -37,7 +37,8 @@
   "pre-commit": "lint:staged",
   "workspaces": {
     "packages": [
-      "packages/*"
+      "packages/*",
+      "website/"
     ]
   },
   "husky": {
@@ -47,6 +48,7 @@
     }
   },
   "scripts": {
+    "build:docs": "yarn workspace website build",
     "start": "yarn bs:watch",
     "test": "yarn bs:build",
     "bs:build": "lerna run bs:build",
