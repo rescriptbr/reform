@@ -6,11 +6,13 @@
   <br />
 </p>
 <p align="center">
- <a href="#installation">Installation</a> • 
- <a href="#features">Features</a> •
- <a href="#usage">Usage</a> 
+  <a href="https://reform.netlify.app">Documentation</a> • 
+  <a href="#installation">Installation</a> • 
+  <a href="#why">Why</a> • 
+  <a href="#features">Features</a> •
+  <a href="#basic-usage">Basic usage</a> •
+  <a href="#contributing">Contributing</a>
 </p>
-<br/>
 <br/>
 <hr />
 <br/>
@@ -44,88 +46,13 @@ And update your bsconfig.json with `ppx-flags`
 ]
 ```
 
-## Quick guide
-
-<details>
-  <summary>Show</summary>
-  
-```reason
-open Reform;
-
-module StateLenses = [%lenses
-  type state = {
-    description: string,
-    title: string,
-    acceptTerms: bool,
-  }
-];
-
-module PostAddForm = ReForm.Make(StateLenses);
-
-
-[@react.component]
-let make = () => {
-  let form: PostAddForm.api =
-    PostAddForm.use(
-      ~validationStrategy=OnDemand,
-      ~schema={
-        PostAddForm.Validation.(Schema(
-          string(~min=20, ~minError="Title needs to be greater than 20", Title)
-          + nonEmpty(Description),
-          + true_(~error="You must accept the terms", AcceptTerms)
-        |]));
-      },
-      ~onSubmit=
-        ({state}) => {
-          Js.log2("title", state.values.description);
-          Js.log2("description", state.values.description);
-          Js.log2("acceptTerms", state.values.description);
-          None;
-        },
-      ~initialState={title: "", description: "", acceptTerms: false},
-      (),
-    );
-
-  <form
-    onSubmit={event => {
-      event->ReactEvent.Synthetic.preventDefault
-      reform.submit();
-    }}>
-
-    <input
-      type_="text"
-      placeholder="Title"
-      value=form.values.title
-      onChange={event => ReactEvent.Form.target(event)##value |> handleChange(Title)}
-    />
-
-    {form.getFieldError(Title)->Belt.mapWithDefault(React.null, React.string)}
-
-    <input
-      type_="text"
-      placeholder="Description"
-      value=form.values.description
-      onChange={event => ReactEvent.Form.target(event)##value |> handleChange(Title)}
-    />
-
-    {form.getFieldError(Description)->Belt.mapWithDefault(React.null, React.string)}
-
-    <input
-      type_="checkbox"
-      value={string_of_bool(form.values.acceptTerms)}
-      onChange={event =>
-        ReactEvent.Form.target(event)##checked |> handleChange(AcceptTerms)
-      }
-    />
-
-    {form.getFieldError(AcceptTerms)->Belt.mapWithDefault(React.null, React.string)}
-
-    <button type_="submit" disabled={form.formState == Submitting}> "Submit"->React.string </button>
-  </form>
-};
-```
-
 </details>
+
+## Why?
+
+As you might know, you can use any existing React / JavaScript libraries with ReScript, including form libraries like Formik, react-hook-form, Final Form, since you install or create bindings for these libraries. ReForm is not a set of bindings for an existing form library, it was created from scratch to use with ReScript and React.
+
+Code that deals with strongly typed forms can quickly become walls of repeated text. We created ReForm to be both deadly simple and to make forms sound good leveraging ReScript's powerful typesytem. Even the schemas we use are nothing more than constructors built-in in the language itself with a small size footprint.
 
 ## Features
 
@@ -136,59 +63,23 @@ let make = () => {
 - Field component
 - Validation strategy, OnDemand and OnChange
 
-## What this is and why
+## Basic usage
 
-Code that deals with strongly typed forms can quickly become walls of repeated text.
-We created ReForm to be both deadly simple and to make forms sound good leveraging ReasonML's powerful typesytem.
-Even the schemas we use are nothing more than constructors built-in in the language itself with a small size footprint.
+`TODO`
 
 #### Contributing
 
-Requisites:
-
-- jq
-- node
-- esy
-
-Setup your env with:
-
-```
-$ esy
-```
-
-Then:
-
-```
-yarn install
-```
-
-##### Running
-
-Run everything in watch mode and serve the `demo` app with:
-
-```
-make serve
-```
+`TODO`
 
 #### Alternatives
 
 - [Formality](https://github.com/alexfedoseev/re-formality)
 
-#### Publishing
-
-```
-lerna version major|patch|minor
-```
-
-and then
-
-```
-lerna publish
-```
-
 #### Support
 
-We usually hang out at https://discord.gg/reasonml or https://reasonml.chat so feel free to ask anything there.
+🌍 We usually hang out at https://discord.gg/reasonml or https://forum.rescript-lang.org/ so feel free to ask anything there.
+
+🇧🇷 🇵🇹  Se você é Brasileiro, Portugês ou fala português, você pode entrar contato através do discord do [ReasonBR](http://discord.com/invite/SSDMNYQ)_
 
 ## Contributors ✨
 
