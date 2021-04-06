@@ -45,7 +45,7 @@ And update your bsconfig.json with `ppx-flags`
 
 </details>
 
-## Why? ❔
+## Why? 💡
 
 As you might know, you can use any existing React / JavaScript libraries with ReScript, including form libraries like Formik, react-hook-form, Final Form, since you install or create bindings for these libraries. ReForm is not a set of bindings for an existing form library, it was created from scratch to use with ReScript and React.
 
@@ -64,11 +64,11 @@ Code that deals with strongly typed forms can quickly become walls of repeated t
 
 `TODO`
 
-#### Contributing 🤝
+## Contributing 🤝
 
 `TODO`
 
-#### Alternatives 💡
+#### Alternatives 🔥
 
 - [Formality](https://github.com/alexfedoseev/re-formality)
 
