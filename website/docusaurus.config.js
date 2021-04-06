@@ -2,7 +2,7 @@
 module.exports = {
   title: "ReForm",
   tagline: "Reasonably making forms sound good",
-  url: "https://reasonbr.org/reform",
+  url: "https://reform.netlify.app/",
   baseUrl: "/",
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
