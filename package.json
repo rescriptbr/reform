@@ -29,18 +29,15 @@
     "redemon": "0.2.6"
   },
   "lint-staged": {
-    "*.re": [
-      "bsrefmt --in-place",
+    "*.res": [
       "git add"
     ]
   },
   "pre-commit": "lint:staged",
-  "workspaces": {
-    "packages": [
-      "packages/*",
-      "website/"
-    ]
-  },
+  "workspaces": [
+    "reform",
+    "website"
+  ],
   "husky": {
     "hooks": {
       "pre-commit": "npm run lint:staged",
@@ -48,13 +45,7 @@
     }
   },
   "scripts": {
-    "build:docs": "yarn workspace website build",
-    "start": "yarn bs:watch",
-    "test": "yarn bs:build",
-    "bs:build": "lerna run bs:build",
-    "bs:watch": "lerna run bs:watch",
-    "lint:staged": "lint-staged",
-    "bs:setup": "bsb -make-world"
+    "lint:staged": "lint-staged"
   },
   "dependencies": {
     "bs-platform": "^8.4.2"
