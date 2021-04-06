@@ -45,7 +45,20 @@ module.exports = {
       links: [
         {
           title: "Docs",
-          items: [],
+          items: [
+            {
+              label: "Installation",
+              to: "docs/installation",
+            },
+            {
+              label: "Getting started",
+              to: "docs/getting-started",
+            },
+            {
+              label: "Basic usage",
+              to: "docs/basic-usage",
+            },
+          ],
         },
         {
           title: "Community",
@@ -70,7 +83,7 @@ module.exports = {
       {
         docs: {
           sidebarPath: require.resolve("./sidebars.js"),
-          editUrl: "https://github.com/reasonbr/reform/",
+          editUrl: "https://github.com/reasonbr/reform/edit/master/website/",
         },
         theme: {
           customCss: require.resolve("./src/css/custom.css"),
