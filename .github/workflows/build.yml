@@ -12,4 +12,4 @@ jobs:
           node-version: 14
           
       - run: yarn install --pure-lockfile
-      - run: yarn bsb -make-world
+      - run: yarn bs:setup
