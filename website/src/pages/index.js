@@ -17,7 +17,7 @@ export default function Home() {
       <main>
         <div className={clsx(styles["main-wrapper"])}>
           <div className={clsx(styles.hero)}>
-            <img src="/static/img/hero-logo.svg" />
+            <img src="/img/hero-logo.svg" />
             <h1 className={styles["hero-title"]}>
               Reasonably making forms with <span>ReScript</span> and{" "}
               <span>React</span> sound good
@@ -36,7 +36,7 @@ export default function Home() {
           <div className="container text--center margin-top--xl margin-bottom--xl">
             <div className={clsx("row", styles.highlights)}>
               <section className="col margin-bottom--xl">
-                <img src="/static/img/focus.svg" />
+                <img src="/img/focus.svg" />
                 <h2>Focused in ReScript</h2>
                 <p className=" padding-horiz--md">
                   We created ReForm to be both deadly simple and to make forms
@@ -46,7 +46,7 @@ export default function Home() {
                 </p>
               </section>
               <section className="col margin-bottom--xl">
-                <img src="/static/img/powerful.svg" />
+                <img src="/img/powerful.svg" />
                 <h2>Powerful and type-safe</h2>
                 <p className=" padding-horiz--md">
                   ReForm is a powerful, type-safe and fully-featured form
@@ -55,7 +55,7 @@ export default function Home() {
                 </p>
               </section>
               <section className="col margin-bottom--xl">
-                <img src="/static/img/activity.svg" />
+                <img src="/img/activity.svg" />
                 <h2>Actively maintained</h2>
                 <p className=" padding-horiz--md">
                   ReForm is used in production projects. This incentivizes us to
