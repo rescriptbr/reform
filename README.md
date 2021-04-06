@@ -2,7 +2,6 @@
 
 <p align="center">
   <br />
-  <img src="./assets/logo-readme.svg" width="600" /> 
   <br />
 </p>
 <p align="center">
