@@ -68,11 +68,11 @@ Code that deals with strongly typed forms can quickly become walls of repeated t
 
 `TODO`
 
-#### Alternatives 🔥
+## Alternatives 🔥
 
 - [Formality](https://github.com/alexfedoseev/re-formality)
 
-#### Support 🚀
+## Support 🚀
 
 🌍 We usually hang out at https://discord.gg/reasonml or https://forum.rescript-lang.org/ so feel free to ask anything there.
 
