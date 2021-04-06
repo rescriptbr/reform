@@ -76,7 +76,7 @@ Code that deals with strongly typed forms can quickly become walls of repeated t
 
 🌍 We usually hang out at https://discord.gg/reasonml or https://forum.rescript-lang.org/ so feel free to ask anything there.
 
-🇧🇷 🇵🇹  Se você é Brasileiro, Portugês ou fala português, você pode entrar contato através do discord do [ReasonBR](http://discord.com/invite/SSDMNYQ)_
+🇧🇷 🇵🇹  Se você é Brasileiro, Portugês ou fala português, você pode entrar contato através do discord do [ReasonBR](http://discord.com/invite/SSDMNYQ)
 
 ## Contributors ✨
 
