@@ -17,8 +17,8 @@
     "reschema": "2.0.3"
   },
   "scripts": {
-    "start": "concurrently \"yarn bsb\" \"yarn start:rescripts\"",
-    "build": "yarn bsb:build && rescripts build",
+    "start": "concurrently \"yarn bs:watch\" \"yarn start:rescripts\"",
+    "build": "yarn bs:build && rescripts build",
     "test": "rescripts test",
     "eject": "react-scripts eject",
     "bs:watch": "bsb -make-world -w",

@@ -36,7 +36,8 @@
   "pre-commit": "lint:staged",
   "workspaces": [
     "reform",
-    "website"
+    "website",
+    "demo"
   ],
   "husky": {
     "hooks": {
@@ -52,7 +53,9 @@
     "bs:setup": "yarn workspace @reasonbr/reform bs:setup",
     "test": "yarn workspace @reasonbr/reform test",
     "test:watch": "yarn workspace @reasonbr/reform test:watch",
-    "lint:staged": "lint-staged"
+    "lint:staged": "lint-staged",
+    "demo:start": "yarn workspace demo start",
+    "demo:build": "yarn workspace demo build"
   },
   "dependencies": {
     "bs-platform": "^8.4.2"
