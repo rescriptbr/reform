@@ -45,9 +45,14 @@
     }
   },
   "scripts": {
-    "lint:staged": "lint-staged",
+    "docs:watch": "yarn workspace website start",
+    "docs:build": "yarn workspace website build",
     "bs:watch": "yarn workspace reform bs:watch",
-    "bs:build": "yarn workspace reform bs:build"
+    "bs:build": "yarn workspace reform bs:build",
+    "bs:setup": "yarn workspace reform bs:setup",
+    "test": "yarn workspace reform test",
+    "test:watch": "yarn workspace reform test:watch",
+    "lint:staged": "lint-staged"
   },
   "dependencies": {
     "bs-platform": "^8.4.2"
