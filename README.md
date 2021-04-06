@@ -3,7 +3,6 @@
 <p align="center">
   <img src="./assets/logo.svg" /> 
   <br />
-  <br />
 </p>
 <p align="center">
   <a href="https://reform.netlify.app">Documentation</a> • 
@@ -14,10 +13,8 @@
   <a href="#contributing">Contributing</a>
 </p>
 <br/>
-<hr />
-<br/>
 
-## Installation
+## Installation 📦
 
 ```
 yarn add reform reschema
@@ -48,13 +45,13 @@ And update your bsconfig.json with `ppx-flags`
 
 </details>
 
-## Why?
+## Why? ❔
 
 As you might know, you can use any existing React / JavaScript libraries with ReScript, including form libraries like Formik, react-hook-form, Final Form, since you install or create bindings for these libraries. ReForm is not a set of bindings for an existing form library, it was created from scratch to use with ReScript and React.
 
 Code that deals with strongly typed forms can quickly become walls of repeated text. We created ReForm to be both deadly simple and to make forms sound good leveraging ReScript's powerful typesytem. Even the schemas we use are nothing more than constructors built-in in the language itself with a small size footprint.
 
-## Features
+## Features ⚡
 
 - Hook API
 - Schema API
@@ -67,15 +64,15 @@ Code that deals with strongly typed forms can quickly become walls of repeated t
 
 `TODO`
 
-#### Contributing
+#### Contributing 🤝
 
 `TODO`
 
-#### Alternatives
+#### Alternatives 💡
 
 - [Formality](https://github.com/alexfedoseev/re-formality)
 
-#### Support
+#### Support 🚀
 
 🌍 We usually hang out at https://discord.gg/reasonml or https://forum.rescript-lang.org/ so feel free to ask anything there.
 
