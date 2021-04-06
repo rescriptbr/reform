@@ -5,7 +5,7 @@ import Link from "@docusaurus/Link";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import useBaseUrl from "@docusaurus/useBaseUrl";
 import styles from "./styles.module.css";
-console.log(styles);
+
 export default function Home() {
   const context = useDocusaurusContext();
   const { siteConfig = {} } = context;
@@ -25,7 +25,7 @@ export default function Home() {
             <div>
               <Link
                 className={clsx("button button--primary button--lg")}
-                to={useBaseUrl("docs/")}
+                to={useBaseUrl("docs/getting-started")}
               >
                 Get Started
               </Link>

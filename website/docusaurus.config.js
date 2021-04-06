@@ -28,13 +28,8 @@ module.exports = {
           position: "left",
         },
         {
-          to: "examples/",
-          activeBasePath: "docs",
-          label: "Examples",
-          position: "left",
-        },
-        {
-          href: "https://github.com/reasonbr/reform/blob/master/packages/bs-reform/CHANGELOG.md",
+          href:
+            "https://github.com/reasonbr/reform/blob/master/packages/bs-reform/CHANGELOG.md",
           label: "Changelog",
           position: "left",
         },
@@ -50,16 +45,7 @@ module.exports = {
       links: [
         {
           title: "Docs",
-          items: [
-            {
-              label: "Getting Started",
-              to: "docs/",
-            },
-            {
-              label: "Installation",
-              to: "docs/",
-            },
-          ],
+          items: [],
         },
         {
           title: "Community",
@@ -84,10 +70,6 @@ module.exports = {
       {
         docs: {
           sidebarPath: require.resolve("./sidebars.js"),
-          editUrl: "https://github.com/reasonbr/reform/",
-        },
-        blog: {
-          showReadingTime: true,
           editUrl: "https://github.com/reasonbr/reform/",
         },
         theme: {
