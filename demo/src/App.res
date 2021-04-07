@@ -1,44 +1,28 @@
-module FormLenses = %lenses(
-  type state = {
-    name: string,
-    age: int,
-  }
-)
-
-module UserForm = ReForm.Make(FormLenses)
-
-let str = React.string
-
-let onSubmit = state => {
-  Js.log(state)
-  None
-}
-
-let updateField = (field, fn, event) => fn(field, ReactEvent.Form.target(event)["value"])
+open Render
 
 @react.component
 let make = () => {
-  let form: UserForm.api = UserForm.use(
-    ~onSubmit,
-    ~initialState={name: "", age: 0},
-    ~schema={
-      open UserForm.Validation
-      Schema(string(~min=12, Name))
-    },
-    (),
-  )
+  let url = RescriptReactRouter.useUrl()
 
-  <form
-    onSubmit={event => {
-      event->ReactEvent.Synthetic.preventDefault
-      form.submit()
-    }}>
-    <input
-      type_="text"
-      placeholder="Name"
-      value=form.values.name
-      onChange={updateField(FormLenses.Name, form.handleChange)}
-    />
-    <button type_="submit"> {str(`Click here`)} </button>
-  </form>
+  <div className=GlobalStyles.wrapper>
+    <header>
+      <nav className="navbar" role="navigation" ariaLabel="main navigation">
+        <div className="navbar-brand">
+          <a className="navbar-item" href="https://bulma.io">
+            <img src="https://bulma.io/images/bulma-logo.png" width="113" height="28" />
+          </a>
+        </div>
+        <div className="navbar-end">
+          <div className="navbar-start">
+            <a className="navbar-item"> {str("New Post")} </a>
+            <a className="navbar-item"> {str("Todo Form")} </a>
+          </div>
+        </div>
+      </nav>
+    </header>
+    {switch url.path {
+    | list{"new-post"} => <NewPost />
+    | _ => <Home />
+    }}
+  </div>
 }

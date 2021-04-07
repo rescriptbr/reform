@@ -55,6 +55,8 @@
     "test:watch": "yarn workspace @reasonbr/reform test:watch",
     "lint:staged": "lint-staged",
     "demo:start": "yarn workspace demo start",
+    "demo:bs": "yarn workspace demo bs:watch",
+    "demo:rescripts": "yarn workspace demo start:rescripts",
     "demo:build": "yarn workspace demo build"
   },
   "dependencies": {
