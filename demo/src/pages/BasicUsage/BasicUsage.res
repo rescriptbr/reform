@@ -1,16 +1,3 @@
----
-title: Getting Started
-id: getting-started
-slug: /getting-started
----
-
-## Quick start
-
-The following code excerpt demonstrates a quick start example:
-
-```reason
-// UserForm.res
-
 module FormFields = %lenses(
   type state = {
     name: string,
@@ -72,4 +59,3 @@ let make = () => {
     </button>
   </form>
 }
-```

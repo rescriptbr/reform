@@ -7,6 +7,7 @@ let make = () => {
     <Header />
     <Layout.Content>
       {switch url.path {
+      | list{"basic-usage"} => <BasicUsage />
       | list{"sign-up"} => <SignUp />
       | list{"todo-list"} => <div> {str("Todo List...")} </div>
       | _ => <SignUp />

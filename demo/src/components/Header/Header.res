@@ -1,7 +1,11 @@
 open Render
 module Styles = Header_Styles
 
-let links: array<(string, string)> = [("sign-up", "Sign up"), ("/todo-list", "Todo List")]
+let links: array<(string, string)> = [
+  ("basic-usage", "Basic usage"),
+  ("sign-up", "Sign up"),
+  ("/todo-list", "Todo List"),
+]
 
 @react.component
 let make = () => {
