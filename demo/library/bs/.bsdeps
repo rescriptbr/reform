@@ -1,0 +1,19 @@
+8.4.2
+/home/bvihjcep/Projects/reform/demo
+0
+bsconfig.json	0x1.81b3b384f1b14p+30
+src	0x1.81be90f1d2b9p+30
+src/components	0x1.81b96c1944f59p+30
+src/components/Layout	0x1.81be6386a6b34p+30
+src/components/Button	0x1.81b976fc8a745p+30
+src/components/Box	0x1.81b966dc1577ap+30
+src/components/Header	0x1.81be90a72cd5bp+30
+src/components/Input	0x1.81b99058585fep+30
+src/pages	0x1.81be80ba2df99p+30
+src/pages/SignUp	0x1.81be687b6cebdp+30
+src/pages/TodoList	0x1.81b9450cf5729p+30
+src/pages/BasicUsage	0x1.81be903cb2fcep+30
+src/lib	0x1.81b991c2cd373p+30
+src/assets	0x1.81b9109c31fb1p+30
+===
+/home/bvihjcep/Projects/reform/node_modules/lenses-ppx/ppx	0x1.81a6d33122d0ep+30

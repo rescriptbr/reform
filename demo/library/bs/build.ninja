@@ -1,0 +1,76 @@
+rescript = 1
+g_finger := /home/bvihjcep/Projects/reform/node_modules/@rescript/react/lib/ocaml/install.stamp
+g_finger := /home/bvihjcep/Projects/reform/node_modules/bs-css/lib/ocaml/install.stamp
+g_finger := /home/bvihjcep/Projects/reform/node_modules/bs-css-emotion/lib/ocaml/install.stamp
+g_finger := /home/bvihjcep/Projects/reform/node_modules/@reasonbr/reform/lib/ocaml/install.stamp
+g_finger := /home/bvihjcep/Projects/reform/node_modules/reschema/lib/ocaml/install.stamp
+rule astj
+  command = /home/bvihjcep/Projects/reform/node_modules/bs-platform/linux/bsc.exe -w -44 -warn-error +5 -bs-v 8.4.2,1617540300.28 -ppx /home/bvihjcep/Projects/reform/node_modules/lenses-ppx/ppx -bs-jsx 3 -bs-super-errors -bs-no-version-header -open Belt -absname -bs-ast -o $out $i
+o src/App.ast : astj ../../src/App.res
+rule deps
+  command = /home/bvihjcep/Projects/reform/node_modules/bs-platform/linux/bsb_helper.exe -hash d4b83edaf6b0bdf023bc63844b364bb5 -bs-ns FerrettoStatus $in
+  restat = 1
+o src/App.d : deps src/App.ast
+rule mij
+  command = /home/bvihjcep/Projects/reform/node_modules/bs-platform/linux/bsc.exe -bs-ns FerrettoStatus -I . -I src/assets -I src/lib -I src/pages/BasicUsage -I src/pages/TodoList -I src/pages/SignUp -I src/pages -I src/components/Input -I src/components/Header -I src/components/Box -I src/components/Button -I src/components/Layout -I src/components -I src -I /home/bvihjcep/Projects/reform/node_modules/@rescript/react/lib/ocaml -I /home/bvihjcep/Projects/reform/node_modules/bs-css/lib/ocaml -I /home/bvihjcep/Projects/reform/node_modules/bs-css-emotion/lib/ocaml -I /home/bvihjcep/Projects/reform/node_modules/@reasonbr/reform/lib/ocaml -I /home/bvihjcep/Projects/reform/node_modules/reschema/lib/ocaml -bs-super-errors -bs-no-version-header -open Belt -w -44 -warn-error +5 -bs-package-name ferretto-status -bs-package-output es6:$in_d:.bs.js -bs-v $g_finger $i
+  dyndep = 1
+  restat = 1
+o src/App-FerrettoStatus.cmj src/App-FerrettoStatus.cmi ../../src/App.bs.js : mij src/App.ast
+o src/Index.ast : astj ../../src/Index.res
+o src/Index.d : deps src/Index.ast
+o src/Index-FerrettoStatus.cmj src/Index-FerrettoStatus.cmi ../../src/Index.bs.js : mij src/Index.ast
+o src/components/Layout/Layout.ast : astj ../../src/components/Layout/Layout.res
+o src/components/Layout/Layout.d : deps src/components/Layout/Layout.ast
+o src/components/Layout/Layout-FerrettoStatus.cmj src/components/Layout/Layout-FerrettoStatus.cmi ../../src/components/Layout/Layout.bs.js : mij src/components/Layout/Layout.ast
+o src/components/Button/Button.ast : astj ../../src/components/Button/Button.res
+o src/components/Button/Button.d : deps src/components/Button/Button.ast
+o src/components/Button/Button-FerrettoStatus.cmj src/components/Button/Button-FerrettoStatus.cmi ../../src/components/Button/Button.bs.js : mij src/components/Button/Button.ast
+o src/components/Box/Box.ast : astj ../../src/components/Box/Box.res
+o src/components/Box/Box.d : deps src/components/Box/Box.ast
+o src/components/Box/Box-FerrettoStatus.cmj src/components/Box/Box-FerrettoStatus.cmi ../../src/components/Box/Box.bs.js : mij src/components/Box/Box.ast
+o src/components/Header/Header.ast : astj ../../src/components/Header/Header.res
+o src/components/Header/Header.d : deps src/components/Header/Header.ast
+o src/components/Header/Header-FerrettoStatus.cmj src/components/Header/Header-FerrettoStatus.cmi ../../src/components/Header/Header.bs.js : mij src/components/Header/Header.ast
+o src/components/Header/Header_Styles.ast : astj ../../src/components/Header/Header_Styles.res
+o src/components/Header/Header_Styles.d : deps src/components/Header/Header_Styles.ast
+o src/components/Header/Header_Styles-FerrettoStatus.cmj src/components/Header/Header_Styles-FerrettoStatus.cmi ../../src/components/Header/Header_Styles.bs.js : mij src/components/Header/Header_Styles.ast
+o src/components/Input/Input.ast : astj ../../src/components/Input/Input.res
+o src/components/Input/Input.d : deps src/components/Input/Input.ast
+o src/components/Input/Input-FerrettoStatus.cmj src/components/Input/Input-FerrettoStatus.cmi ../../src/components/Input/Input.bs.js : mij src/components/Input/Input.ast
+o src/components/Input/Input_Styles.ast : astj ../../src/components/Input/Input_Styles.res
+o src/components/Input/Input_Styles.d : deps src/components/Input/Input_Styles.ast
+o src/components/Input/Input_Styles-FerrettoStatus.cmj src/components/Input/Input_Styles-FerrettoStatus.cmi ../../src/components/Input/Input_Styles.bs.js : mij src/components/Input/Input_Styles.ast
+o src/pages/SignUp/SignUp.ast : astj ../../src/pages/SignUp/SignUp.res
+o src/pages/SignUp/SignUp.d : deps src/pages/SignUp/SignUp.ast
+o src/pages/SignUp/SignUp-FerrettoStatus.cmj src/pages/SignUp/SignUp-FerrettoStatus.cmi ../../src/pages/SignUp/SignUp.bs.js : mij src/pages/SignUp/SignUp.ast
+o src/pages/SignUp/SignUp_Form.ast : astj ../../src/pages/SignUp/SignUp_Form.res
+o src/pages/SignUp/SignUp_Form.d : deps src/pages/SignUp/SignUp_Form.ast
+o src/pages/SignUp/SignUp_Form-FerrettoStatus.cmj src/pages/SignUp/SignUp_Form-FerrettoStatus.cmi ../../src/pages/SignUp/SignUp_Form.bs.js : mij src/pages/SignUp/SignUp_Form.ast
+o src/pages/SignUp/SignUp_Styles.ast : astj ../../src/pages/SignUp/SignUp_Styles.res
+o src/pages/SignUp/SignUp_Styles.d : deps src/pages/SignUp/SignUp_Styles.ast
+o src/pages/SignUp/SignUp_Styles-FerrettoStatus.cmj src/pages/SignUp/SignUp_Styles-FerrettoStatus.cmi ../../src/pages/SignUp/SignUp_Styles.bs.js : mij src/pages/SignUp/SignUp_Styles.ast
+o src/pages/TodoList/TodoList.ast : astj ../../src/pages/TodoList/TodoList.res
+o src/pages/TodoList/TodoList.d : deps src/pages/TodoList/TodoList.ast
+o src/pages/TodoList/TodoList-FerrettoStatus.cmj src/pages/TodoList/TodoList-FerrettoStatus.cmi ../../src/pages/TodoList/TodoList.bs.js : mij src/pages/TodoList/TodoList.ast
+o src/pages/BasicUsage/BasicUsage.ast : astj ../../src/pages/BasicUsage/BasicUsage.res
+o src/pages/BasicUsage/BasicUsage.d : deps src/pages/BasicUsage/BasicUsage.ast
+o src/pages/BasicUsage/BasicUsage-FerrettoStatus.cmj src/pages/BasicUsage/BasicUsage-FerrettoStatus.cmi ../../src/pages/BasicUsage/BasicUsage.bs.js : mij src/pages/BasicUsage/BasicUsage.ast
+o src/lib/Theme.ast : astj ../../src/lib/Theme.res
+o src/lib/Theme.d : deps src/lib/Theme.ast
+o src/lib/Theme-FerrettoStatus.cmj src/lib/Theme-FerrettoStatus.cmi ../../src/lib/Theme.bs.js : mij src/lib/Theme.ast
+o src/lib/Render.ast : astj ../../src/lib/Render.res
+o src/lib/Render.d : deps src/lib/Render.ast
+o src/lib/Render-FerrettoStatus.cmj src/lib/Render-FerrettoStatus.cmi ../../src/lib/Render.bs.js : mij src/lib/Render.ast
+o src/lib/FormHelpers.ast : astj ../../src/lib/FormHelpers.res
+o src/lib/FormHelpers.d : deps src/lib/FormHelpers.ast
+o src/lib/FormHelpers-FerrettoStatus.cmj src/lib/FormHelpers-FerrettoStatus.cmi ../../src/lib/FormHelpers.bs.js : mij src/lib/FormHelpers.ast
+o src/lib/GlobalStyles.ast : astj ../../src/lib/GlobalStyles.res
+o src/lib/GlobalStyles.d : deps src/lib/GlobalStyles.ast
+o src/lib/GlobalStyles-FerrettoStatus.cmj src/lib/GlobalStyles-FerrettoStatus.cmi ../../src/lib/GlobalStyles.bs.js : mij src/lib/GlobalStyles.ast
+o src/assets/Assets.ast : astj ../../src/assets/Assets.res
+o src/assets/Assets.d : deps src/assets/Assets.ast
+o src/assets/Assets-FerrettoStatus.cmj src/assets/Assets-FerrettoStatus.cmi ../../src/assets/Assets.bs.js : mij src/assets/Assets.ast
+rule build_package
+  command = /home/bvihjcep/Projects/reform/node_modules/bs-platform/linux/bsc.exe -w -49 -color always -no-alias-deps  $i
+  restat = 1
+o FerrettoStatus.cmi : build_package FerrettoStatus.mlmap
