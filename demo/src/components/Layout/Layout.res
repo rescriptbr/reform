@@ -7,7 +7,10 @@ module Styles = {
   let content = style(.[
     flexGrow(3.0),
     backgroundColor("191818"->hex),
-    selector("> div", [maxWidth(Theme.Constants.maxWidth), margin2(~v=zero, ~h=auto)]),
+    selector(
+      "> div",
+      [height(100.0->pct), maxWidth(Theme.Constants.maxWidth), margin2(~v=zero, ~h=auto)],
+    ),
   ])
 
   let footer = style(.[
@@ -15,7 +18,7 @@ module Styles = {
     display(#flex),
     justifyContent(#center),
     backgroundColor(Theme.Colors.black),
-    selector("> p", [color(white), fontWeight(700->#num)]),
+    selector("> p", [fontSize(1.6->rem), color(white), fontWeight(700->#num)]),
   ])
 }
 

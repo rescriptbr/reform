@@ -1,7 +1,11 @@
 open CssJs
 
-let form = style(.[
+let form = style(.[maxWidth(400->px), margin2(~v=32->px, ~h=auto)])
+
+let wrapper = style(.[
   //
-  maxWidth(400->px),
-  margin2(~v=32->px, ~h=auto),
+  height(100.0->pct),
+  display(#flex),
+  alignItems(center),
+  justifyContent(center),
 ])

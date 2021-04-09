@@ -16,7 +16,6 @@ let make = () => {
     | list{current} when path === current => Styles.activeLink
     | _ => ""
     }
-  Js.log(url)
 
   <header className={Styles.header}>
     <nav className={Styles.navbar}>
