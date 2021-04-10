@@ -2,7 +2,7 @@
 module.exports = {
   title: "ReForm",
   tagline: "Reasonably making forms sound good",
-  url: "https://reform.netlify.app/",
+  url: "https://rescript-reform.netlify.app/",
   baseUrl: "/",
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
@@ -65,7 +65,7 @@ module.exports = {
           items: [
             {
               label: "Discord",
-              href: "https://discordapp.com/invite/docusaurus",
+              href: "http://discord.com/invite/SSDMNYQ",
             },
             {
               label: "Twitter",

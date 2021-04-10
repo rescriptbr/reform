@@ -5,12 +5,11 @@
   <br />
 </p>
 <p align="center">
-  <a href="https://reform.netlify.app">Documentation</a> • 
+  <a href="https://rescript-reform.netlify.app">Documentation</a> • 
   <a href="#installation">Installation</a> • 
   <a href="#why">Why</a> • 
   <a href="#features">Features</a> •
-  <a href="#basic-usage">Basic usage</a> •
-  <a href="#contributing">Contributing</a>
+  <a target="_blank" href="https://rescript-reform.netlify.app/docs/getting-started#quick-start">Basic usage</a> •
 </p>
 <br/>
 
@@ -59,14 +58,6 @@ Code that deals with strongly typed forms can quickly become walls of repeated t
 - Context Provider
 - Field component
 - Validation strategy, OnDemand and OnChange
-
-## Basic usage
-
-`TODO`
-
-## Contributing 🤝
-
-`TODO`
 
 ## Alternatives 🔥
 
