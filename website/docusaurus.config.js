@@ -7,7 +7,7 @@ module.exports = {
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
   favicon: "img/favicon.ico",
-  organizationName: "@reasonbr",
+  organizationName: "@rescriptbr",
   projectName: "reform",
   themeConfig: {
     colorMode: {
@@ -29,12 +29,12 @@ module.exports = {
         },
         {
           href:
-            "https://github.com/reasonbr/reform/blob/master/packages/bs-reform/CHANGELOG.md",
+            "https://github.com/rescriptbr/reform/blob/master/reform/CHANGELOG.md",
           label: "Changelog",
           position: "left",
         },
         {
-          href: "https://github.com/reasonbr/reform",
+          href: "https://github.com/rescriptbr/reform",
           label: "GitHub",
           position: "right",
         },
@@ -83,7 +83,7 @@ module.exports = {
       {
         docs: {
           sidebarPath: require.resolve("./sidebars.js"),
-          editUrl: "https://github.com/reasonbr/reform/edit/master/website/",
+          editUrl: "https://github.com/rescriptbr/reform/edit/master/website/",
         },
         theme: {
           customCss: require.resolve("./src/css/custom.css"),
