@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@reasonbr/reform": "11.0.0-alpha.1",
+    "@rescriptbr/reform": "11.0.0-alpha.1",
     "@rescript/react": "0.10.1",
     "@rescripts/cli": "0.0.14",
     "@rescripts/rescript-env": "0.0.12",

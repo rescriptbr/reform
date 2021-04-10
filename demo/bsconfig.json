@@ -21,7 +21,7 @@
     "@rescript/react",
     "bs-css",
     "bs-css-emotion",
-    "@reasonbr/reform",
+    "@rescriptbr/reform",
     "reschema"
   ],
   "bs-dev-dependencies": [],
