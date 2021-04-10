@@ -1,0 +1,35 @@
+{
+  "name": "demo",
+  "reason": {
+    "react-jsx": 3
+  },
+  "sources": [
+    {
+      "dir": "src",
+      "subdirs": true
+    }
+  ],
+  "package-specs": [
+    {
+      "module": "es6",
+      "in-source": true
+    }
+  ],
+  "suffix": ".bs.js",
+  "namespace": true,
+  "bs-dependencies": [
+    "@rescript/react",
+    "bs-css",
+    "bs-css-emotion",
+    "@rescriptbr/reform",
+    "reschema"
+  ],
+  "bs-dev-dependencies": [],
+  "ppx-flags": ["lenses-ppx/ppx"],
+  "refmt": 3,
+  "warnings": {
+    "error": "+5",
+    "number": "-44"
+  },
+  "bsc-flags": ["-bs-super-errors", "-bs-no-version-header", "-open Belt"]
+}

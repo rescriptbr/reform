@@ -1,0 +1,44 @@
+{
+  "name": "@rescriptbr/reform",
+  "version": "11.0.0-alpha.1",
+  "description": "Reasonably making forms with ReScript and React sound good",
+  "repository": "git@github.com:reasonbr/reform.git",
+  "homepage": "https://github.com/reasonbr/reform#readme",
+  "bugs": "https://github.com/reasonbr/reform/issues",
+  "keywords": [
+    "reason",
+    "bucklescript",
+    "react",
+    "form",
+    "rescript",
+    "rescript-react",
+    "rescript-forms",
+    "rescript-react-forms",
+    "rescript-reform",
+    "reform"
+  ],
+  "author": "Astrocoders <astrocoders.com>",
+  "license": "MIT",
+  "peerDependencies": {
+    "bs-platform": "^8.4.2",
+    "@rescript/react": "^0.10.1"
+  },
+  "devDependencies": {
+    "@glennsl/bs-jest": "^0.4.9",
+    "bs-platform": "^8.4.2",
+    "@rescript/react": "^0.10.1"
+  },
+  "scripts": {
+    "start": "yarn bs:watch",
+    "test": "yarn bs:build",
+    "test:watch": "jest --watch",
+    "bs:build": "bsb -make-world -clean-world",
+    "bs:watch": "bsb -make-world -clean-world -w",
+    "lint:staged": "lint-staged",
+    "bs:setup": "bsb -make-world"
+  },
+  "dependencies": {
+    "rescript-react-update": "^3.0.1",
+    "reschema": "^2.0.3"
+  }
+}

@@ -2,15 +2,21 @@
   "name": "reform",
   "version": "0.0.0",
   "private": true,
-  "description": "Reasonably making forms sound good again",
-  "repository": "git@github.com:Astrocoders/reform.git",
-  "homepage": "https://github.com/Astrocoders/reform#readme",
-  "bugs": "https://github.com/Astrocoders/reform/issues",
+  "description": "Reasonably making forms with ReScript and React sound good",
+  "repository": "git@github.com:reasonbr/reform.git",
+  "homepage": "https://github.com/reasonbr/reform#readme",
+  "bugs": "https://github.com/reasonbr/reform/issues",
   "keywords": [
     "reason",
     "bucklescript",
     "react",
-    "form"
+    "form",
+    "rescript",
+    "rescript-react",
+    "rescript-forms",
+    "rescript-react-forms",
+    "rescript-reform",
+    "reform"
   ],
   "author": "Gabriel R. Abreu <grsabreu@gmail.com>",
   "license": "MIT",
@@ -19,23 +25,20 @@
     "@commitlint/config-conventional": "7.1.2",
     "babel-loader": "^8.1.0",
     "husky": "1.2.1",
-    "lerna": "^3.14.1",
     "lint-staged": "^7.0.0",
-    "pre-commit": "^1.2.2",
-    "redemon": "0.2.6"
+    "pre-commit": "^1.2.2"
   },
   "lint-staged": {
-    "*.re": [
-      "bsrefmt --in-place",
+    "*.res": [
       "git add"
     ]
   },
   "pre-commit": "lint:staged",
-  "workspaces": {
-    "packages": [
-      "packages/*"
-    ]
-  },
+  "workspaces": [
+    "reform",
+    "website",
+    "demo"
+  ],
   "husky": {
     "hooks": {
       "pre-commit": "npm run lint:staged",
@@ -43,14 +46,20 @@
     }
   },
   "scripts": {
-    "start": "yarn bs:watch",
-    "test": "yarn bs:build",
-    "bs:build": "lerna run bs:build",
-    "bs:watch": "lerna run bs:watch",
+    "docs:watch": "yarn workspace website start",
+    "docs:build": "yarn workspace website build",
+    "bs:watch": "yarn workspace @reasonbr/reform bs:watch",
+    "bs:build": "yarn workspace @reasonbr/reform bs:build",
+    "bs:setup": "yarn workspace @reasonbr/reform bs:setup",
+    "test": "yarn workspace @reasonbr/reform test",
+    "test:watch": "yarn workspace @reasonbr/reform test:watch",
     "lint:staged": "lint-staged",
-    "bs:setup": "bsb -make-world"
+    "demo:start": "yarn workspace demo start",
+    "demo:bs": "yarn workspace demo bs:watch",
+    "demo:rescripts": "yarn workspace demo start:rescripts",
+    "demo:build": "yarn workspace demo build"
   },
   "dependencies": {
-    "bs-platform": "^7.3.2"
+    "bs-platform": "^8.4.2"
   }
 }

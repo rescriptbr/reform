@@ -20,36 +20,25 @@ jobs:
           registry-url: https://registry.npmjs.org/
 
       - run: yarn install --pure-lockfile
-      - run: yarn bsb -make-world
+      - run: yarn bs:setup
 
       - uses: dorny/paths-filter@v2
         id: paths
         with:
           filters: |
             reform:
-              - 'packages/bs-reform/**'
-            reschema:
-              - 'packages/reschema/**'
+              - 'reform/**'
 
-      # If `bs-reform` have changed in the last commit
+      # If `reform` have changed in the last commit
       - if: steps.paths.outputs.reform == 'true'
         run: |
-            cd packages/bs-reform
+            cd reform
             npm version patch
             npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
-
-      # If `reschema` have changed in the last commit
-      - if: steps.paths.outputs.reschema == 'true'
-        run: |
-            cd packages/reschema
-            npm version patch
-            npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
-
-      - if: steps.paths.outputs.reform == 'true' || steps.paths.outputs.reschema == 'true'
+          
+      - if: steps.paths.outputs.reform == 'true'
         run: |
           git config --global user.email "github-actions@github.com" 
           git config --global user.name "github-actions[bot]"

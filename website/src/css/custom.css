@@ -1,0 +1,37 @@
+:root {
+  --red: #DD1350;
+  --red-hover: #C11347;
+  --red-dark: #87092F;
+  --red-dark-01: #181325;
+  /*
+   * Overriding
+   **/
+  --ifm-color-primary: var(--red);
+  --ifm-color-primary-dark: var(--red-hover);
+  --ifm-color-primary-darker: var(--red-hover);
+  --ifm-color-primary-darkest:var(--red-hover);
+  --ifm-color-primary-light: rgb(70, 203, 174);
+  --ifm-color-primary-lighter: rgb(102, 212, 189);
+  --ifm-color-primary-lightest: rgb(146, 224, 208);
+  --ifm-code-font-size: 95%;
+}
+
+html[data-theme="dark"] {
+  --ifm-navbar-background-color: var(--red-dark);
+  --ifm-background-color: var(--red-dark-01);
+}
+
+.footer--dark {
+  --ifm-footer-background-color: var(--red);
+}
+
+.docusaurus-highlight-code-line {
+  background-color: rgb(72, 77, 91);
+  display: block;
+  margin: 0 calc(-1 * var(--ifm-pre-padding));
+  padding: 0 var(--ifm-pre-padding);
+}
+
+.footer__copyright{
+  margin-top: 2.4rem;
+}
