@@ -17,7 +17,7 @@ yarn add @rescriptbr/reform reschema
 Then add `lenses-ppx`:
 
 ```sh
-yarn add lenses-ppx@4.0.0 -D
+yarn add lenses-ppx -D
 ```
 
 > `lenses-ppx` is a preprocessor that you can use to generate type-safe "getters" and "setters" to the form values. Check out the official [documentation](https://github.com/Astrocoders/lenses-ppx).
