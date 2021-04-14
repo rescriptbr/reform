@@ -29,7 +29,7 @@ Then add it to bsconfig.json
 Then add lenses-ppx
 
 ```
-yarn add lenses-ppx@4.0.0 -D
+yarn add lenses-ppx -D
 ```
 
 And update your bsconfig.json with `ppx-flags`
