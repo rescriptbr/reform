@@ -48,18 +48,18 @@
   "scripts": {
     "docs:watch": "yarn workspace website start",
     "docs:build": "yarn workspace website build",
-    "bs:watch": "yarn workspace @rescriptbr/reform bs:watch",
-    "bs:build": "yarn workspace @rescriptbr/reform bs:build",
-    "bs:setup": "yarn workspace @rescriptbr/reform bs:setup",
+    "res:watch": "yarn workspace @rescriptbr/reform res:watch",
+    "res:build": "yarn workspace @rescriptbr/reform res:build",
+    "res:setup": "yarn workspace @rescriptbr/reform res:setup",
     "test": "yarn workspace @rescriptbr/reform test",
     "test:watch": "yarn workspace @rescriptbr/reform test:watch",
     "lint:staged": "lint-staged",
     "demo:start": "yarn workspace demo start",
-    "demo:bs": "yarn workspace demo bs:watch",
+    "demo:bs": "yarn workspace demo res:watch",
     "demo:rescripts": "yarn workspace demo start:rescripts",
     "demo:build": "yarn workspace demo build"
   },
   "dependencies": {
-    "bs-platform": "^8.4.2"
+    "rescript": "^9.1.1"
   }
 }

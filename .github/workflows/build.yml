@@ -10,6 +10,6 @@ jobs:
       - uses: actions/setup-node@v2-beta
         with:
           node-version: 14
-          
+
       - run: yarn install --pure-lockfile
-      - run: yarn bs:setup
+      - run: yarn res:setup
