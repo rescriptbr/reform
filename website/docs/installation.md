@@ -28,7 +28,7 @@ Then add these dependencies to `bsconfig.json`:
   ...
   "bs-dependencies": [
 +    "@rescriptbr/reform",
-+   "@rescriptbr/reschema"
++    "reschema"
   ],
   "ppx-flags": [
 +    "@rescriptbr/lenses-ppx/ppx"
