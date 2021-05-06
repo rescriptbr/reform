@@ -165,11 +165,21 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "JasoonS",
+      "name": "Jason Smythe",
+      "avatar_url": "https://avatars.githubusercontent.com/u/6032276?v=4",
+      "profile": "https://github.com/JasoonS",
+      "contributions": [
+        "code",
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
   "projectName": "reform",
-  "projectOwner": "Astrocoders",
+  "projectOwner": "rescriptbr",
   "repoType": "github",
   "repoHost": "https://github.com",
   "skipCi": true
