@@ -8,7 +8,7 @@ slug: /getting-started
 
 The following code excerpt demonstrates a quick start example:
 
-```reason
+```rescript
 // UserForm.res
 
 module FormFields = %lenses(
@@ -20,23 +20,20 @@ module FormFields = %lenses(
 
 module UserForm = ReForm.Make(FormFields)
 
-let onSubmit = ({state}: UserForm.onSubmitAPI) => {
-  Js.log(state.values)
-
-  None
-}
-
-let initialState: FormFields.state = {
-  name: "",
-  email: "",
-}
-
 @react.component
-let make = () => {
+let make = (~email) => {
   let form: UserForm.api = UserForm.use(
     ~validationStrategy=OnChange,
-    ~onSubmit,
-    ~initialState,
+    ~onSubmit={(state) => {
+      Js.log(state.values)
+
+      None
+    }},
+    ~initialState={
+      name: "",
+      // Initialize from external values if you want
+      email,
+    },
     ~schema={
       open UserForm.Validation
       Schema(nonEmpty(Name) + email(Email))
@@ -54,7 +51,7 @@ let make = () => {
       <input
         className="input"
         value={form.values.name}
-        onChange={ReForm.Helpers.handleChange(form.handleChange(FormFields.Name))}
+        onChange={event => onChange((event->ReactEvent.Form.target)["value"])}
         type_="text"
       />
     </div>
@@ -63,7 +60,7 @@ let make = () => {
       <input
         className="input"
         value={form.values.email}
-        onChange={ReForm.Helpers.handleChange(form.handleChange(FormFields.Email))}
+        onChange={evt => onChange((event->ReactEvent.Form.target)["value"])}
         type_="email"
       />
     </div>
