@@ -20,22 +20,23 @@
   "author": "Astrocoders <astrocoders.com>",
   "license": "MIT",
   "peerDependencies": {
-    "bs-platform": "^8.4.2",
+    "rescript": "^9.1.1",
     "@rescript/react": "^0.10.1"
   },
   "devDependencies": {
     "@glennsl/bs-jest": "^0.4.9",
-    "bs-platform": "^8.4.2",
+    "rescript": "^9.1.1",
     "@rescript/react": "^0.10.1"
   },
   "scripts": {
-    "start": "yarn bs:watch",
-    "test": "yarn bs:build",
+    "start": "yarn res:watch",
+    "test": "yarn res:build",
     "test:watch": "jest --watch",
-    "bs:build": "bsb -make-world -clean-world",
-    "bs:watch": "bsb -make-world -clean-world -w",
+    "res:clean": "rescript clean",
+    "res:build": "yarn res:clean; rescript build",
+    "res:watch": "yarn res:clean; rescript build -w",
     "lint:staged": "lint-staged",
-    "bs:setup": "bsb -make-world"
+    "res:setup": "rescript build"
   },
   "dependencies": {
     "rescript-react-update": "^3.0.1",

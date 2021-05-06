@@ -20,7 +20,7 @@ jobs:
           registry-url: https://registry.npmjs.org/
 
       - run: yarn install --pure-lockfile
-      - run: yarn bs:setup
+      - run: yarn res:setup
 
       - uses: dorny/paths-filter@v2
         id: paths
@@ -32,18 +32,18 @@ jobs:
       # If `reform` have changed in the last commit
       - if: steps.paths.outputs.reform == 'true'
         run: |
-            cd reform
-            npm version patch
-            npm publish --access public
+          cd reform
+          npm version patch
+          npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
-          
+
       - if: steps.paths.outputs.reform == 'true'
         run: |
           git config --global user.email "github-actions@github.com" 
           git config --global user.name "github-actions[bot]"
-          git commit --message "Update package.json" --all 
-      
+          git commit --message "Update package.json" --all
+
       - uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}

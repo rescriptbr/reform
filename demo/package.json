@@ -8,7 +8,7 @@
     "@rescripts/cli": "0.0.14",
     "@rescripts/rescript-env": "0.0.12",
     "bs-css-emotion": "2.4.0",
-    "bs-platform": "8.4.2",
+    "rescript": "9.1.1",
     "concurrently": "5.3.0",
     "lenses-ppx": "6.1.10",
     "react": "^17.0.2",
@@ -17,15 +17,15 @@
     "reschema": "2.0.3"
   },
   "scripts": {
-    "start": "concurrently \"yarn bs:watch\" \"yarn start:rescripts\"",
-    "build": "yarn bs:build && rescripts build",
+    "start": "concurrently \"yarn res:watch\" \"yarn start:rescripts\"",
+    "build": "yarn res:build && rescripts build",
     "test": "rescripts test",
     "eject": "react-scripts eject",
-    "bs:watch": "bsb -make-world -w",
+    "res:watch": "rescript build -w",
     "start:rescripts": "rescripts start",
-    "bs:build": "bsb -make-world",
-    "bs:clean": "bsb -clean",
-    "postinstall": "yarn bs:build"
+    "res:build": "rescript build",
+    "res:clean": "rescript clean",
+    "postinstall": "yarn res:build"
   },
   "eslintConfig": {
     "extends": "react-app"

@@ -2439,6 +2439,14 @@
   resolved "https://registry.yarnpkg.com/@rescript/react/-/react-0.10.1.tgz#ddce66ba664a104354d559c350ca4ebf17ab5a26"
   integrity sha512-5eIfGnV1yhjv03ktK6fQ6iEfsZKXKXXrq5hx4+ngEY4R/RU8o/oH9ne375m9RJMugV/jsE8hMoEeSSg2YQy3Ag==
 
+"@rescriptbr/reform@11.0.0-alpha.1":
+  version "11.0.0-alpha.1"
+  resolved "https://registry.yarnpkg.com/@rescriptbr/reform/-/reform-11.0.0-alpha.1.tgz#60c4b1f10dd86d468e6cb714abe111733e45f4b3"
+  integrity sha512-rlIEtZ0rkq5iGO7tLFhWaElxHZ24SrvjE4V/pLIeoKm5LEGWv632aX7BEhIMvn3zD9THp24ArRLufmSekB43GQ==
+  dependencies:
+    reschema "^2.0.3"
+    rescript-react-update "^3.0.1"
+
 "@rescripts/cli@0.0.14":
   version "0.0.14"
   resolved "https://registry.yarnpkg.com/@rescripts/cli/-/cli-0.0.14.tgz#1ec700148e754337bff1cedaefd757e016664978"
@@ -4342,11 +4350,6 @@ bs-css@13.4.0:
   version "13.4.0"
   resolved "https://registry.yarnpkg.com/bs-css/-/bs-css-13.4.0.tgz#0918841c2812b0ae0ce1c9c569b98347ae25aa48"
   integrity sha512-/vmbAeccXdngc9Ky2rXYtEoO9C5cqgrlUjnoseltFjY5S+HaI2PBFw+bIJ+pp5iTaJmn5Ip3cNj+Vsdex4ULaA==
-
-bs-platform@8.4.2, bs-platform@^8.4.2:
-  version "8.4.2"
-  resolved "https://registry.yarnpkg.com/bs-platform/-/bs-platform-8.4.2.tgz#778dabd1dfb3bc95e0086c58dabae74e4ebdee8a"
-  integrity sha512-9q7S4/LLV/a68CweN382NJdCCr/lOSsJR3oQYnmPK98ChfO/AdiA3lYQkQTp6T+U0I5Z5RypUAUprNstwDtMDQ==
 
 bser@2.1.1:
   version "2.1.1"
@@ -13530,6 +13533,11 @@ rescript-react-update@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/rescript-react-update/-/rescript-react-update-3.0.1.tgz#6d087887c7e421610392d0e7f488d32b6eed3370"
   integrity sha512-G5/Ebk+Pbd+StiO+b2/ccVD2tZpA7c/tR3qlYsM9qSXgTdcIf5OwILj6YaXb4/YUbI4/3ZNj9ELTf+eb05Jsaw==
+
+rescript@9.1.1, rescript@^9.1.1:
+  version "9.1.1"
+  resolved "https://registry.yarnpkg.com/rescript/-/rescript-9.1.1.tgz#de2eb5470a463d7eea493b59537d49bafa6bc5e9"
+  integrity sha512-c+zR5aZ5mXDpAx6oyS61t4sUPiq2VXgHigilYSMazDLp1uUGbf2JvgbSfRJFaKAjfsTKcohJyH0vtdihhdZmMA==
 
 resolve-cwd@^2.0.0:
   version "2.0.0"
