@@ -1,11 +1,10 @@
 {
+  "$schema": "https://raw.githubusercontent.com/rescript-lang/rescript-compiler/master/docs/docson/build-schema.json",
   "name": "@rescriptbr/reform",
-  "reason": {
-    "react-jsx": 3
-  },
+  "reason": {"react-jsx": 3},
+  "refmt": 3,
   "bs-dependencies": ["@rescript/react", "rescript-react-update", "reschema"],
   "bs-dev-dependencies": ["@glennsl/bs-jest"],
-  "refmt": 3,
   "bsc-flags": ["-bs-super-errors"],
   "package-specs": {
     "module": "commonjs",
