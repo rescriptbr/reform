@@ -60,7 +60,6 @@ typings/
 # BS
 .merlin
 lib/
-*.bs.js
 .bsb.lock
 
 # Tooling
