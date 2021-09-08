@@ -31,7 +31,7 @@ Then add these dependencies to `bsconfig.json`:
 +    "reschema"
   ],
   "ppx-flags": [
-+    "@rescriptbr/lenses-ppx/ppx"
++    "lenses-ppx/ppx"
   ]
 }
 ```
