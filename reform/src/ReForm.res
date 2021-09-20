@@ -45,7 +45,7 @@ module Make = (Config: Config) => {
     | FieldArrayRemoveBy(Config.field<array<'a>>, 'a => bool): action
     | SetFormState(formState)
     | ResetForm
-    | SetValues(Config.state)
+    | SetValues(Config.state => Config.state)
     | SetFieldValue(Config.field<'a>, 'a): action
     | RaiseSubmitFailed(option<string>)
 
@@ -74,7 +74,7 @@ module Make = (Config: Config) => {
     arrayRemoveBy: 'a. (Config.field<array<'a>>, 'a => bool) => unit,
     submit: unit => unit,
     resetForm: unit => unit,
-    setValues: Config.state => unit,
+    setValues: (Config.state => Config.state) => unit,
     setFieldValue: 'a. (Config.field<'a>, 'a, ~shouldValidate: bool=?, unit) => unit,
     validateField: field => unit,
     validateForm: unit => unit,
@@ -345,7 +345,7 @@ module Make = (Config: Config) => {
           values: initialState,
           formState: Pristine,
         })
-      | SetValues(values) => Update({...state, values: values})
+      | SetValues(fn) => Update({...state, values: fn(state.values)})
       | SetFieldValue(field, value) =>
         Update({...state, values: Config.set(state.values, field, value)})
       | RaiseSubmitFailed(err) => Update({...state, formState: SubmitFailed(err)})
@@ -437,7 +437,7 @@ module Make = (Config: Config) => {
       isPristine: state.formState == Pristine,
       submit: () => send(TrySubmit),
       resetForm: () => send(ResetForm),
-      setValues: values => send(SetValues(values)),
+      setValues: fn => send(SetValues(fn)),
       setFieldValue: (field, value, ~shouldValidate=true, ()) =>
         shouldValidate ? send(FieldChangeValue(field, value)) : send(SetFieldValue(field, value)),
       getFieldState: getFieldState,

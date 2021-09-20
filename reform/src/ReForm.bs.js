@@ -354,7 +354,7 @@ function Make(Config) {
                             TAG: /* Update */0,
                             _0: {
                               formState: state.formState,
-                              values: action._0,
+                              values: Curry._1(action._0, state.values),
                               fieldsState: state.fieldsState
                             }
                           };
@@ -536,10 +536,10 @@ function Make(Config) {
             resetForm: (function (param) {
                 return Curry._1(send, /* ResetForm */2);
               }),
-            setValues: (function (values) {
+            setValues: (function (fn) {
                 return Curry._1(send, {
                             TAG: /* SetValues */11,
-                            _0: values
+                            _0: fn
                           });
               }),
             setFieldValue: (function (field, value, shouldValidateOpt, param) {
