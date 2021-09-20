@@ -11,6 +11,9 @@
     "in-source": true
   },
   "suffix": ".bs.js",
+  "warnings": {
+    "number": "-44-45"
+  },
   "sources": [
     {
       "dir": "src"
