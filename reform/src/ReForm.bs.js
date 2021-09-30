@@ -117,6 +117,12 @@ function Make(Config) {
                             _1: (function (self) {
                                 return Curry._1(onSubmit, {
                                             send: self.send,
+                                            setFormState: (function (state) {
+                                                return Curry._1(self.send, {
+                                                            TAG: /* SetFormState */10,
+                                                            _0: state
+                                                          });
+                                              }),
                                             state: self.state,
                                             raiseSubmitFailed: (function (error) {
                                                 return Curry._1(self.send, {
@@ -198,6 +204,12 @@ function Make(Config) {
                                     var init = self.state;
                                     Curry._1(onSubmitFail, {
                                           send: self.send,
+                                          setFormState: (function (state) {
+                                              return Curry._1(self.send, {
+                                                          TAG: /* SetFormState */10,
+                                                          _0: state
+                                                        });
+                                            }),
                                           state: {
                                             formState: init.formState,
                                             values: init.values,
@@ -218,7 +230,7 @@ function Make(Config) {
                                 } else {
                                   Curry._1(self.send, {
                                         TAG: /* SetFormState */10,
-                                        _0: /* Valid */4
+                                        _0: /* Valid */5
                                       });
                                   if (submit) {
                                     Curry._1(self.send, /* Submit */1);

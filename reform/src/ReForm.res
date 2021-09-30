@@ -21,6 +21,7 @@ type formState =
   | Pristine
   | Errored
   | SubmitFailed(option<string>)
+  | Submitted
   | Valid
 
 module Make = (Config: Config) => {
@@ -84,6 +85,7 @@ module Make = (Config: Config) => {
 
   type onSubmitAPI = {
     send: action => unit,
+    setFormState: formState => unit,
     state: state,
     raiseSubmitFailed: option<string> => unit,
   }
@@ -204,6 +206,7 @@ module Make = (Config: Config) => {
             onSubmit({
               send: self.send,
               state: self.state,
+              setFormState: state => self.send(SetFormState(state)),
               raiseSubmitFailed: error => self.send(RaiseSubmitFailed(error)),
             }),
         )
@@ -260,6 +263,7 @@ module Make = (Config: Config) => {
                       ...self.state,
                       fieldsState: newFieldsState,
                     },
+                    setFormState: state => self.send(SetFormState(state)),
                     raiseSubmitFailed: error => self.send(RaiseSubmitFailed(error)),
                   })
                 : ()
