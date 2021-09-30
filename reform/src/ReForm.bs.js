@@ -7,7 +7,6 @@ var Caml_obj = require("rescript/lib/js/caml_obj.js");
 var ReSchema = require("reschema/src/ReSchema.bs.js");
 var Belt_Array = require("rescript/lib/js/belt_Array.js");
 var Belt_Option = require("rescript/lib/js/belt_Option.js");
-var Caml_option = require("rescript/lib/js/caml_option.js");
 var ReactUpdate = require("rescript-react-update/src/ReactUpdate.bs.js");
 var ReSchemaI18n = require("reschema/src/ReSchemaI18n.bs.js");
 
@@ -28,29 +27,27 @@ function Make(Config) {
     return React.useContext(formContext);
   };
   var useField = function (field) {
-    var $$interface = React.useContext(formContext);
-    return Belt_Option.map($$interface, (function (param) {
-                  var validateField = param.validateField;
-                  return {
-                          handleChange: Curry._1(param.handleChange, field),
-                          error: Curry._1(param.getFieldError, /* Field */{
-                                _0: field
-                              }),
-                          state: Curry._1(param.getFieldState, /* Field */{
-                                _0: field
-                              }),
-                          validate: (function (param) {
-                              return Curry._1(validateField, /* Field */{
-                                          _0: field
-                                        });
-                            }),
-                          value: Curry._2(Config.get, param.state.values, field)
-                        };
-                }));
+    var match = React.useContext(formContext);
+    var validateField = match.validateField;
+    return {
+            handleChange: Curry._1(match.handleChange, field),
+            error: Curry._1(match.getFieldError, /* Field */{
+                  _0: field
+                }),
+            state: Curry._1(match.getFieldState, /* Field */{
+                  _0: field
+                }),
+            validate: (function (param) {
+                return Curry._1(validateField, /* Field */{
+                            _0: field
+                          });
+              }),
+            value: Curry._2(Config.get, match.state.values, field)
+          };
   };
   var makeProps = function (value, children, param) {
     return {
-            value: Caml_option.some(value),
+            value: value,
             children: children
           };
   };
@@ -62,21 +59,13 @@ function Make(Config) {
   var ReForm$Make$Field = function (Props) {
     var field = Props.field;
     var render = Props.render;
-    var renderOnMissingContextOpt = Props.renderOnMissingContext;
-    var renderOnMissingContext = renderOnMissingContextOpt !== undefined ? Caml_option.valFromOption(renderOnMissingContextOpt) : null;
     var fieldInterface = useField(field);
     return React.useMemo((function () {
-                  return Belt_Option.getWithDefault(Belt_Option.map(fieldInterface, render), renderOnMissingContext);
+                  return Curry._1(render, fieldInterface);
                 }), [
-                Belt_Option.map(fieldInterface, (function (param) {
-                        return param.error;
-                      })),
-                Belt_Option.map(fieldInterface, (function (param) {
-                        return param.value;
-                      })),
-                Belt_Option.map(fieldInterface, (function (param) {
-                        return param.state;
-                      }))
+                fieldInterface.error,
+                fieldInterface.value,
+                fieldInterface.state
               ]);
   };
   var Field = {

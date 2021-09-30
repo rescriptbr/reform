@@ -123,30 +123,27 @@ module Make = (Config: Config) => {
     )
   }
 
-  let formContext: React.Context.t<option<api>> = React.createContext(None)
+  let formContext: React.Context.t<api> = React.createContext(
+    // Less type safety but more ergonomic
+    Obj.magic(None),
+  )
 
   let useFormContext = () => React.useContext(formContext)
   let useField = field => {
-    let interface = useFormContext()
-    interface->Belt.Option.map(({
-      handleChange,
-      getFieldError,
-      getFieldState,
-      validateField,
-      state,
-    }) => {
+    let {handleChange, getFieldError, getFieldState, validateField, state} = useFormContext()
+    {
       handleChange: handleChange(field),
       error: getFieldError(Field(field)),
       state: getFieldState(Field(field)),
       validate: () => validateField(Field(field)),
       value: state.values->Config.get(field),
-    })
+    }
   }
 
   module Provider = {
     let makeProps = (~value, ~children, ()) =>
       {
-        "value": Some(value),
+        "value": value,
         "children": children,
       }
     let make = React.Context.provider(formContext)
@@ -154,32 +151,11 @@ module Make = (Config: Config) => {
 
   module Field = {
     @react.component
-    let make = (
-      ~field: Config.field<'a>,
-      ~render: fieldInterface<'a> => React.element,
-      ~renderOnMissingContext=React.null,
-      (),
-    ) => {
+    let make = (~field: Config.field<'a>, ~render: fieldInterface<'a> => React.element, ()) => {
       let fieldInterface = useField(field)
       React.useMemo3(
-        () =>
-          fieldInterface
-          ->Belt.Option.map(render)
-          ->Belt.Option.getWithDefault(renderOnMissingContext),
-        (
-          {
-            open Belt.Option
-            fieldInterface->map(({error}) => error)
-          },
-          {
-            open Belt.Option
-            fieldInterface->map(({value}) => value)
-          },
-          {
-            open Belt.Option
-            fieldInterface->map(({state}) => state)
-          },
-        ),
+        () => fieldInterface->render,
+        (fieldInterface.error, fieldInterface.value, fieldInterface.state),
       )
     }
   }
@@ -193,167 +169,169 @@ module Make = (Config: Config) => {
     ~validationStrategy=OnChange,
     (),
   ) => {
-    let (state, send) = ReactUpdate.useReducer({
-      fieldsState: getInitialFieldsState(schema),
-      values: initialState,
-      formState: Pristine,
-    }, (action, state) =>
-      switch action {
-      | Submit =>
-        UpdateWithSideEffects(
-          {...state, formState: Submitting},
-          self =>
-            onSubmit({
-              send: self.send,
-              state: self.state,
-              setFormState: state => self.send(SetFormState(state)),
-              raiseSubmitFailed: error => self.send(RaiseSubmitFailed(error)),
-            }),
-        )
-      | TrySubmit =>
-        SideEffects(
-          self => {
-            self.send(ValidateForm(true))
-            None
-          },
-        )
-      | SetFieldsState(fieldsState) => Update({...state, fieldsState: fieldsState})
-      | ValidateField(field) =>
-        SideEffects(
-          self => {
-            let fieldState =
-              schema |> ReSchema.validateOne(~field, ~values=self.state.values, ~i18n)
-            let newFieldState: fieldState = switch fieldState {
-            | None => Valid
-            | Some(fieldState) =>
-              switch fieldState {
-              | (_, Error(message)) => Error(message)
-              | (_, NestedErrors(errors)) => NestedErrors(errors)
-              | (_, Valid) => Valid
+    let (state, send) = ReactUpdate.useReducer(
+      {
+        fieldsState: getInitialFieldsState(schema),
+        values: initialState,
+        formState: Pristine,
+      },
+      (action, state) =>
+        switch action {
+        | Submit =>
+          UpdateWithSideEffects(
+            {...state, formState: Submitting},
+            self =>
+              onSubmit({
+                send: self.send,
+                state: self.state,
+                setFormState: state => self.send(SetFormState(state)),
+                raiseSubmitFailed: error => self.send(RaiseSubmitFailed(error)),
+              }),
+          )
+        | TrySubmit =>
+          SideEffects(
+            self => {
+              self.send(ValidateForm(true))
+              None
+            },
+          )
+        | SetFieldsState(fieldsState) => Update({...state, fieldsState: fieldsState})
+        | ValidateField(field) =>
+          SideEffects(
+            self => {
+              let fieldState =
+                schema |> ReSchema.validateOne(~field, ~values=self.state.values, ~i18n)
+              let newFieldState: fieldState = switch fieldState {
+              | None => Valid
+              | Some(fieldState) =>
+                switch fieldState {
+                | (_, Error(message)) => Error(message)
+                | (_, NestedErrors(errors)) => NestedErrors(errors)
+                | (_, Valid) => Valid
+                }
               }
-            }
 
-            let newFieldsState =
-              state.fieldsState
-              ->Belt.Array.keep(elem =>
-                elem |> (((fieldValue, _fieldState)) => fieldValue != field)
-              )
-              ->Belt.Array.concat([(field, newFieldState)])
-            self.send(SetFieldsState(newFieldsState))
-            None
-          },
-        )
-      | ValidateForm(submit) =>
-        SideEffects(
-          self => {
-            let recordState = schema |> ReSchema.validate(~i18n, self.state.values)
-
-            switch recordState {
-            | Valid =>
-              self.send(SetFormState(Valid))
-              submit ? self.send(Submit) : ()
-            | Errors(erroredFields) =>
-              let newFieldsState: array<(field, fieldState)> =
-                erroredFields->Belt.Array.map(((field, errorMsg)) => (field, Error(errorMsg)))
+              let newFieldsState =
+                state.fieldsState
+                ->Belt.Array.keep(elem =>
+                  elem |> (((fieldValue, _fieldState)) => fieldValue != field)
+                )
+                ->Belt.Array.concat([(field, newFieldState)])
               self.send(SetFieldsState(newFieldsState))
-              submit
-                ? onSubmitFail({
-                    send: self.send,
-                    state: {
-                      ...self.state,
-                      fieldsState: newFieldsState,
-                    },
-                    setFormState: state => self.send(SetFormState(state)),
-                    raiseSubmitFailed: error => self.send(RaiseSubmitFailed(error)),
-                  })
-                : ()
-              self.send(SetFormState(Errored))
-            }
-            None
-          },
-        )
-      | FieldChangeValue(field, value) =>
-        UpdateWithSideEffects(
-          {
+              None
+            },
+          )
+        | ValidateForm(submit) =>
+          SideEffects(
+            self => {
+              let recordState = schema |> ReSchema.validate(~i18n, self.state.values)
+
+              switch recordState {
+              | Valid =>
+                self.send(SetFormState(Valid))
+                submit ? self.send(Submit) : ()
+              | Errors(erroredFields) =>
+                let newFieldsState: array<(field, fieldState)> =
+                  erroredFields->Belt.Array.map(((field, errorMsg)) => (field, Error(errorMsg)))
+                self.send(SetFieldsState(newFieldsState))
+                submit
+                  ? onSubmitFail({
+                      send: self.send,
+                      state: {
+                        ...self.state,
+                        fieldsState: newFieldsState,
+                      },
+                      setFormState: state => self.send(SetFormState(state)),
+                      raiseSubmitFailed: error => self.send(RaiseSubmitFailed(error)),
+                    })
+                  : ()
+                self.send(SetFormState(Errored))
+              }
+              None
+            },
+          )
+        | FieldChangeValue(field, value) =>
+          UpdateWithSideEffects(
+            {
+              ...state,
+              formState: state.formState == Errored ? Errored : Dirty,
+              values: Config.set(state.values, field, value),
+            },
+            self => {
+              switch validationStrategy {
+              | OnChange => self.send(ValidateField(Field(field)))
+              | OnDemand => ()
+              }
+              None
+            },
+          )
+        | FieldChangeValueWithCallback(field, updateFn) =>
+          let oldValue = Config.get(state.values, field)
+          UpdateWithSideEffects(
+            {
+              ...state,
+              formState: state.formState == Errored ? Errored : Dirty,
+              values: Config.set(state.values, field, updateFn(oldValue)),
+            },
+            self => {
+              switch validationStrategy {
+              | OnChange => self.send(ValidateField(Field(field)))
+              | OnDemand => ()
+              }
+              None
+            },
+          )
+        | FieldChangeState(_, _) => NoUpdate
+        | FieldArrayAdd(field, entry) =>
+          Update({
             ...state,
-            formState: state.formState == Errored ? Errored : Dirty,
-            values: Config.set(state.values, field, value),
-          },
-          self => {
-            switch validationStrategy {
-            | OnChange => self.send(ValidateField(Field(field)))
-            | OnDemand => ()
-            }
-            None
-          },
-        )
-      | FieldChangeValueWithCallback(field, updateFn) =>
-        let oldValue = Config.get(state.values, field)
-        UpdateWithSideEffects(
-          {
-            ...state,
-            formState: state.formState == Errored ? Errored : Dirty,
-            values: Config.set(state.values, field, updateFn(oldValue)),
-          },
-          self => {
-            switch validationStrategy {
-            | OnChange => self.send(ValidateField(Field(field)))
-            | OnDemand => ()
-            }
-            None
-          },
-        )
-      | FieldChangeState(_, _) => NoUpdate
-      | FieldArrayAdd(field, entry) =>
-        Update({
-          ...state,
-          values: Config.set(
-            state.values,
-            field,
-            Belt.Array.concat(Config.get(state.values, field), [entry]),
-          ),
-        })
-      | FieldArrayRemove(field, index) =>
-        Update({
-          ...state,
-          values: Config.set(
-            state.values,
-            field,
-            Config.get(state.values, field)->Belt.Array.keepWithIndex((_, i) => i != index),
-          ),
-        })
-      | FieldArrayRemoveBy(field, predicate) =>
-        Update({
-          ...state,
-          values: Config.set(
-            state.values,
-            field,
-            Config.get(state.values, field)->Belt.Array.keep(entry => !predicate(entry)),
-          ),
-        })
-      | FieldArrayUpdateByIndex(field, value, index) =>
-        Update({
-          ...state,
-          values: Config.set(
-            state.values,
-            field,
-            Config.get(state.values, field)->Belt.Array.mapWithIndex((i, currentValue) =>
-              i == index ? value : currentValue
+            values: Config.set(
+              state.values,
+              field,
+              Belt.Array.concat(Config.get(state.values, field), [entry]),
             ),
-          ),
-        })
-      | SetFormState(newState) => Update({...state, formState: newState})
-      | ResetForm =>
-        Update({
-          fieldsState: getInitialFieldsState(schema),
-          values: initialState,
-          formState: Pristine,
-        })
-      | SetValues(fn) => Update({...state, values: fn(state.values)})
-      | SetFieldValue(field, value) =>
-        Update({...state, values: Config.set(state.values, field, value)})
-      | RaiseSubmitFailed(err) => Update({...state, formState: SubmitFailed(err)})
-      }
+          })
+        | FieldArrayRemove(field, index) =>
+          Update({
+            ...state,
+            values: Config.set(
+              state.values,
+              field,
+              Config.get(state.values, field)->Belt.Array.keepWithIndex((_, i) => i != index),
+            ),
+          })
+        | FieldArrayRemoveBy(field, predicate) =>
+          Update({
+            ...state,
+            values: Config.set(
+              state.values,
+              field,
+              Config.get(state.values, field)->Belt.Array.keep(entry => !predicate(entry)),
+            ),
+          })
+        | FieldArrayUpdateByIndex(field, value, index) =>
+          Update({
+            ...state,
+            values: Config.set(
+              state.values,
+              field,
+              Config.get(state.values, field)->Belt.Array.mapWithIndex((i, currentValue) =>
+                i == index ? value : currentValue
+              ),
+            ),
+          })
+        | SetFormState(newState) => Update({...state, formState: newState})
+        | ResetForm =>
+          Update({
+            fieldsState: getInitialFieldsState(schema),
+            values: initialState,
+            formState: Pristine,
+          })
+        | SetValues(fn) => Update({...state, values: fn(state.values)})
+        | SetFieldValue(field, value) =>
+          Update({...state, values: Config.set(state.values, field, value)})
+        | RaiseSubmitFailed(err) => Update({...state, formState: SubmitFailed(err)})
+        },
     )
 
     let getFieldState = field =>
