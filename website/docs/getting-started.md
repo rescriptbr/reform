@@ -51,7 +51,7 @@ let make = (~email) => {
       <input
         className="input"
         value={form.values.name}
-        onChange={event => onChange((event->ReactEvent.Form.target)["value"])}
+        onChange={ReForm.Helpers.handleChange(form.handleChange(FormFields.Name))}
         type_="text"
       />
     </div>
@@ -60,7 +60,7 @@ let make = (~email) => {
       <input
         className="input"
         value={form.values.email}
-        onChange={evt => onChange((event->ReactEvent.Form.target)["value"])}
+        onChange={ReForm.Helpers.handleChange(form.handleChange(FormFields.Email))}
         type_="email"
       />
     </div>
