@@ -1,50 +1,30 @@
-name: npm-publish
+name: publish package on npm
 
 on:
   release:
-    types:
-      - created
+    types: [created]
 
 jobs:
-  release:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
         with:
-          fetch-depth: 0
-          persist-credentials: false
+          node-version: 14
+      - run: yarn
+      - run: yarn res:build
 
-      - uses: actions/setup-node@v2-beta
+  publish-npm:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
         with:
           node-version: 14
           registry-url: https://registry.npmjs.org/
-
-      - run: yarn install --pure-lockfile
-      - run: yarn res:setup
-
-      - uses: dorny/paths-filter@v2
-        id: paths
-        with:
-          filters: |
-            reform:
-              - 'reform/**'
-
-      # If `reform` have changed in the last commit
-      - if: steps.paths.outputs.reform == 'true'
-        run: |
-          cd reform
-          npm version patch
-          npm publish --access public
+      - run: cp readme.md reform/readme.md
+      - run: cd reform && npm publish --access=public
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
-
-      - if: steps.paths.outputs.reform == 'true'
-        run: |
-          git config --global user.email "github-actions@github.com" 
-          git config --global user.name "github-actions[bot]"
-          git commit --message "Update package.json" --all
-
-      - uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref }}
+          node_auth_token: ${{secrets.npm_token}}
