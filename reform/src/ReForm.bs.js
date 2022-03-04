@@ -216,14 +216,23 @@ function Make(Config) {
                                         _0: /* Errored */3
                                       });
                                 } else {
+                                  var newFieldsState$1 = Belt_Array.map(self.state.fieldsState, (function (param) {
+                                          return [
+                                                  param[0],
+                                                  /* Valid */1
+                                                ];
+                                        }));
                                   Curry._1(self.send, {
-                                        TAG: /* SetFormState */10,
-                                        _0: /* Valid */4
+                                        TAG: /* SetFieldsState */2,
+                                        _0: newFieldsState$1
                                       });
                                   if (submit) {
                                     Curry._1(self.send, /* Submit */1);
                                   }
-                                  
+                                  Curry._1(self.send, {
+                                        TAG: /* SetFormState */10,
+                                        _0: /* Valid */4
+                                      });
                                 }
                                 
                               })
