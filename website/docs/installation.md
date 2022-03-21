@@ -4,7 +4,7 @@ id: installation
 slug: /installation
 ---
 
-## Dependencies
+## Dependencies 📦
 
 Install `reform` and `reschema`:
 

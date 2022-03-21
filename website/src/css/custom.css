@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap');
+
 :root {
   --red: #DD1350;
   --red-hover: #C11347;
@@ -14,6 +16,8 @@
   --ifm-color-primary-lighter: rgb(102, 212, 189);
   --ifm-color-primary-lightest: rgb(146, 224, 208);
   --ifm-code-font-size: 95%;
+  --ifm-font-family-base: 'DM Sans', sans-serif;
+  --ifm-footer-link-hover-color: #000;
 }
 
 html[data-theme="dark"] {

@@ -7,8 +7,24 @@
   text-align: center;
 }
 
+.hero {
+  padding: 0 24px;
+}
+
 .hero > img {
   margin-bottom: 1.6rem;
+}
+
+.hero-text {
+  margin: 0;
+  color: rgba(0, 0, 0, 0.6);
+  letter-spacing: -0.06em;
+  margin-bottom: 16px;
+}
+
+.hero-title {
+  letter-spacing: -0.06em;
+  font-weight: bold;
 }
 
 .hero-title > span {
@@ -27,12 +43,16 @@
   }
 
   .main-wrapper {
-    padding: 4rem 0;
+    padding: 3rem 0;
   }
 
   .hero-title {
-    font-size: 1.8rem;
-    margin-bottom: 1.6rem;
+    font-size: 2.4rem;
+    margin-bottom: 8px;
+  }
+
+  .hero-text {
+    font-size: 1.6rem;
   }
 }
 
@@ -43,14 +63,19 @@
   }
 
   .main-wrapper {
-    padding: 4rem 0;
+    padding: 3rem 0;
     max-width: 600px;
   }
 
   .hero-title {
-    font-size: 2.4rem;
-    margin-bottom: 1.6rem;
+    font-size: 3.0rem;
+    margin-bottom: 10px;
   }
+
+  .hero-text {
+    font-size: 1.8rem;
+  }
+
 }
 
 
@@ -61,14 +86,19 @@
   }
 
   .main-wrapper {
-    padding: 5rem 0;
+    padding: 4rem 0;
     max-width: 700px;
   }
 
   .hero-title {
-    font-size: 2.6rem;
-    margin-bottom: 1.6rem;
+    font-size: 3.0rem;
+    margin-bottom: 10px;
   }
+
+  .hero-text {
+    font-size: 1.8rem;
+  }
+
 }
 
 
@@ -81,14 +111,20 @@
   }
 
   .main-wrapper {
-    padding: 6rem 0;
+    padding: 5rem 0;
     max-width: 800px;
   }
 
-  .hero-title {
-    font-size: 2.4rem;
-    margin-bottom: 1.6rem;
+   .hero-title {
+    font-size: 3.0rem;
+    margin-bottom: 10px;
+  }
+
+  .hero-text {
+    font-size: 1.8rem;
   }
 }
 
-
+.highlight-title {
+  letter-spacing: -0.06em;
+}

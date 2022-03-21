@@ -4,12 +4,11 @@ id: getting-started
 slug: /getting-started
 ---
 
-## Quick start
+## Quick start 🚀
 
 The following code excerpt demonstrates a quick start example:
 
-```rescript
-// UserForm.res
+```ocaml title="UserForm.res"
 
 module FormFields = %lenses(
   type state = {
@@ -31,7 +30,6 @@ let make = (~email) => {
     }},
     ~initialState={
       name: "",
-      // Initialize from external values if you want
       email,
     },
     ~schema={

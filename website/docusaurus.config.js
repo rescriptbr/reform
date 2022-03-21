@@ -1,4 +1,6 @@
-/** @type {import('@docusaurus/types').DocusaurusConfig} */
+const lightCodeTheme = require("prism-react-renderer/themes/github");
+const darkCodeTheme = require("prism-react-renderer/themes/dracula");
+
 module.exports = {
   title: "ReForm",
   tagline: "Reasonably making forms sound good",
@@ -15,7 +17,7 @@ module.exports = {
       disableSwitch: true,
     },
     navbar: {
-      title: "ReForm",
+      title: "",
       logo: {
         alt: "ReForm Logo",
         src: "img/logo.svg",
@@ -28,8 +30,7 @@ module.exports = {
           position: "left",
         },
         {
-          href:
-            "https://github.com/rescriptbr/reform/blob/master/reform/CHANGELOG.md",
+          href: "https://github.com/rescriptbr/reform/blob/master/reform/CHANGELOG.md",
           label: "Changelog",
           position: "left",
         },
@@ -79,6 +80,10 @@ module.exports = {
         },
       ],
       copyright: `Copyright © ${new Date().getFullYear()} ReForm. Built with Docusaurus.`,
+    },
+    prism: {
+      theme: lightCodeTheme,
+      darkTheme: darkCodeTheme,
     },
   },
   presets: [
