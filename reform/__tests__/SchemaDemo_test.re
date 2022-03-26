@@ -27,11 +27,11 @@ test("should validate a correct record", () => {
 
   let user = ProfileLenses.{email: "teste@mail.com", age: 18};
 
-  module ProfileValidation = ReSchema.Make(ProfileLenses);
+  module ProfileValidation = ReForm__ReSchema.Make(ProfileLenses);
 
   let schema =
     ProfileValidation.Validation.(Schema(email(Email) + int(~min=18, Age)));
 
   expect(schema |> ProfileValidation.validate(user))
-  |> toBe(ReSchema.Errors([||]));
+  |> toBe(ReForm__ReSchema.Errors([||]));
 });

@@ -4,15 +4,15 @@
 var Curry = require("rescript/lib/js/curry.js");
 var React = require("react");
 var Caml_obj = require("rescript/lib/js/caml_obj.js");
-var ReSchema = require("reschema/src/ReSchema.bs.js");
 var Belt_Array = require("rescript/lib/js/belt_Array.js");
 var Belt_Option = require("rescript/lib/js/belt_Option.js");
 var Caml_option = require("rescript/lib/js/caml_option.js");
 var ReactUpdate = require("rescript-react-update/src/ReactUpdate.bs.js");
-var ReSchemaI18n = require("reschema/src/ReSchemaI18n.bs.js");
+var ReForm__ReSchema = require("./ReForm__ReSchema.bs.js");
+var ReForm__ReSchemaI18n = require("./ReForm__ReSchemaI18n.bs.js");
 
 function Make(Config) {
-  var ReSchema$1 = ReSchema.Make(Config);
+  var ReSchema = ReForm__ReSchema.Make(Config);
   var getInitialFieldsState = function (schema) {
     return Belt_Array.map(schema._0, (function (validator) {
                   return [
@@ -86,7 +86,7 @@ function Make(Config) {
     var onSubmitFail = onSubmitFailOpt !== undefined ? onSubmitFailOpt : (function (prim) {
           
         });
-    var i18n = i18nOpt !== undefined ? i18nOpt : ReSchemaI18n.$$default;
+    var i18n = i18nOpt !== undefined ? i18nOpt : ReForm__ReSchemaI18n.$$default;
     var validationStrategy = validationStrategyOpt !== undefined ? validationStrategyOpt : /* OnChange */0;
     var match = ReactUpdate.useReducer({
           formState: /* Pristine */2,
@@ -145,7 +145,7 @@ function Make(Config) {
                     return {
                             TAG: /* SideEffects */2,
                             _0: (function (self) {
-                                var fieldState = Curry._4(ReSchema$1.validateOne, field, self.state.values, i18n, schema);
+                                var fieldState = Curry._4(ReSchema.validateOne, field, self.state.values, i18n, schema);
                                 var newFieldState;
                                 if (fieldState !== undefined) {
                                   var message = fieldState[1];
@@ -179,7 +179,7 @@ function Make(Config) {
                     return {
                             TAG: /* SideEffects */2,
                             _0: (function (self) {
-                                var recordState = Curry._3(ReSchema$1.validate, i18n, self.state.values, schema);
+                                var recordState = Curry._3(ReSchema.validate, i18n, self.state.values, schema);
                                 if (recordState) {
                                   var newFieldsState = Belt_Array.map(recordState._0, (function (param) {
                                           return [
@@ -412,7 +412,7 @@ function Make(Config) {
       
     };
     var validateFields = function (fields) {
-      var fieldsValidated = Curry._4(ReSchema$1.validateFields, fields, state.values, i18n, schema);
+      var fieldsValidated = Curry._4(ReSchema.validateFields, fields, state.values, i18n, schema);
       var newFieldsState = Belt_Array.concatMany(Belt_Array.map(state.fieldsState, (function (fieldStateItem) {
                   var field = fieldStateItem[0];
                   if (!Belt_Array.some(fields, (function (fieldItem) {
@@ -584,7 +584,7 @@ function Make(Config) {
           };
   };
   return {
-          ReSchema: ReSchema$1,
+          ReSchema: ReSchema,
           Validation: undefined,
           getInitialFieldsState: getInitialFieldsState,
           formContext: formContext,
@@ -598,6 +598,12 @@ function Make(Config) {
 
 var Helpers;
 
+var ReSchema;
+
+var ReSchemaI18n;
+
 exports.Helpers = Helpers;
+exports.ReSchema = ReSchema;
+exports.ReSchemaI18n = ReSchemaI18n;
 exports.Make = Make;
 /* react Not a pure module */

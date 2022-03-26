@@ -1,6 +1,8 @@
-open ReSchema
+open ReForm__ReSchema
 
 module Helpers = ReForm__Helpers
+module ReSchema = ReForm__ReSchema
+module ReSchemaI18n = ReForm__ReSchemaI18n
 
 module type Config = {
   type field<'a>

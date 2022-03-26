@@ -3,7 +3,7 @@
 
 var Jest = require("@glennsl/bs-jest/src/jest.bs.js");
 var Curry = require("rescript/lib/js/curry.js");
-var ReSchema = require("reschema/src/ReSchema.bs.js");
+var ReForm__ReSchema = require("../src/ReForm__ReSchema.bs.js");
 
 function get(state, field) {
   if (field) {
@@ -33,7 +33,7 @@ var ProfileLenses = {
 };
 
 Jest.test("should validate a correct record", (function (param) {
-        var ProfileValidation = ReSchema.Make({
+        var ProfileValidation = ReForm__ReSchema.Make({
               set: set,
               get: get
             });
