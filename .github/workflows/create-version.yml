@@ -32,4 +32,4 @@ jobs:
           yarn version --${{ github.event.inputs.versionType }}
       
       - name: Push the tags
-        run: git push origin main --tags
+        run: git push origin master --tags
