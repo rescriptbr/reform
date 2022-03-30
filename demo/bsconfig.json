@@ -17,13 +17,7 @@
   ],
   "suffix": ".bs.js",
   "namespace": true,
-  "bs-dependencies": [
-    "@rescript/react",
-    "bs-css",
-    "bs-css-emotion",
-    "@rescriptbr/reform",
-    "reschema"
-  ],
+  "bs-dependencies": ["@rescript/react", "@rescriptbr/reform", "reschema"],
   "bs-dev-dependencies": [],
   "ppx-flags": ["lenses-ppx/ppx"],
   "refmt": 3,

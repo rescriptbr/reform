@@ -20,8 +20,8 @@
   "author": "Gabriel Rubens <fakenickels.dev>",
   "license": "MIT",
   "peerDependencies": {
-    "@rescript/react": "^0.10.1",
-    "rescript": "^9.1.1"
+    "rescript": "^9.1.1",
+    "@rescript/react": "^0.10.3"
   },
   "devDependencies": {
     "@rescript/react": "^0.10.1",
