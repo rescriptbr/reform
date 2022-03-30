@@ -59,10 +59,6 @@ module.exports = {
               label: "Basic usage",
               to: "docs/basic-usage",
             },
-            {
-              label: "API",
-              to: "docs/api",
-            },
           ],
         },
         {
