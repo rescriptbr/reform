@@ -20,10 +20,16 @@
     "@docusaurus/core": "2.0.0-beta.14",
     "@docusaurus/preset-classic": "2.0.0-beta.14",
     "@mdx-js/react": "^1.6.21",
+    "@rescript/react": "0.10.3",
+    "@rescriptbr/ancestor": "0.5.0",
+    "@rescriptbr/reform": "11.0.2",
     "clsx": "^1.1.1",
+    "lenses-ppx": "6.1.10",
     "prism-react-renderer": "^1.2.1",
+    "raw-loader": "4.0.2",
     "react": "^17.0.1",
-    "react-dom": "^17.0.1"
+    "react-dom": "^17.0.1",
+    "reschema": "2.2.0"
   },
   "browserslist": {
     "production": [
