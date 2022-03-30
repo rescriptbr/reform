@@ -60,6 +60,6 @@
     "demo:build": "yarn workspace demo build"
   },
   "dependencies": {
-    "rescript": "^9.1.1"
+    "rescript": "9.1.4"
   }
 }
