@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap');
 
+.docusaurus-highlight-code-line {
+  background-color: #e9eff4!important;
+}
+
 :root {
   --red: #DD1350;
   --red-hover: #C11347;

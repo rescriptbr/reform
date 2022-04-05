@@ -13,8 +13,8 @@ let input = Emotion.css({
 })
 
 @react.component
-let make = (~value, ~onChange, ~name=?, ~type_="text", ~placeholder=?) => {
-  <Base tag=#input value onChange ?name ?placeholder type_ className=input />
+let make = (~value=?, ~onChange=?, ~name=?, ~type_="text", ~placeholder=?) => {
+  <Base tag=#input ?value ?onChange ?name ?placeholder type_ className=input />
 }
 
 module Error = {
