@@ -10,6 +10,7 @@ module Form = ReForm.Make(FormFields)
 
 @react.component
 let make = () => {
+  // highlight-start
   let handleSubmit = ({state}: Form.onSubmitAPI) => {
     Js.log(state.values)
 
@@ -27,6 +28,8 @@ let make = () => {
     },
     (),
   )
+
+  // highlight-end
 
   React.null
 }
