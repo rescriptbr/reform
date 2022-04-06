@@ -55,10 +55,6 @@ module.exports = {
               label: "Getting started",
               to: "docs/getting-started",
             },
-            {
-              label: "Basic usage",
-              to: "docs/basic-usage",
-            },
           ],
         },
         {

@@ -18,7 +18,7 @@ import { make as SubmitPreview } from './SignUpForm_Submit.bs.js'
 import { Preview } from '../__components'
 
 After setting up `reform`, `reschema`, and `lenses-ppx` in the [previous section](/docs/installation), you're ready to create your first form. You can understand every
-part of this tutorial by reading the [API reference](/docs/api-reference), but we know that you want a sneak peak before getting deeper in the API.
+part of this tutorial by reading the **API reference**, but we know that you want a sneak peak before getting deeper in the API.
 
 ## Quick start 
 
