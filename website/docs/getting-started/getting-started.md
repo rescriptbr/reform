@@ -9,10 +9,12 @@ import CodeBlock from '@theme/CodeBlock'
 import HandlingChangesSource from '!!raw-loader!./SignUpForm_HandlingChanges.res'
 import MarkupSource from '!!raw-loader!./SignUpForm_Markup.res'
 import FormHookSource from '!!raw-loader!./SignUpForm_FormHook.res'
+import SubmitSource from '!!raw-loader!./SignUpForm_Submit.res'
 // Preview
 import { make as HandlingChangesPreview } from './SignUpForm_HandlingChanges.bs.js'
 import { make as MarkupPreview } from './SignUpForm_Markup.bs.js'
 import { make as FormHookPreview } from './SignUpForm_FormHook.bs.js'
+import { make as SubmitPreview } from './SignUpForm_Submit.bs.js'
 import { Preview } from '../__components'
 
 After setting up `reform`, `reschema`, and `lenses-ppx` in the [previous section](/docs/installation), you're ready to create your first form. You can understand every
@@ -37,13 +39,13 @@ module FormFields = %lenses(
 The name of the record passed to `lenses-ppx` must be named as `state`.
 :::
 
-You might be asking yourself: _"what this lenses-ppx is doing?"_ and it's kinda of magic, but it's a way to create "getters" and "setters" for the `state` record.
+You might be asking yourself: _"what this lenses-ppx is doing?"_ and it's kind of magic, but it's a way to create "getters" and "setters" for the `state` record.
 
 After that, we have to create a new form using the `ReForm.Make` module functor. 
 The module functor expects a lenses module which was created by
 `lenses-ppx` and returns a new form module. You can see the API reference of this module [here](/docs/reform-make).
 
-```reason title="SignUpForm.res" 
+```reason {9} title="SignUpForm.res" 
 module FormFields = %lenses(
   type state = {
     name: string,
@@ -61,41 +63,70 @@ You can read more about module functors [here](https://rescript-lang.org/docs/ma
 ### The `Form.use` hook
 ReForm provides a form hook and we're going to use it by passing some parameters like `schema`, an `onSubmit` function, `initialState`, etc.
 
-<CodeBlock title="SignUpForm.res" className="language-reason"> {FormHookSource}</CodeBlock>
+<CodeBlock  title="SignUpForm.res" className="language-reason"> {FormHookSource}</CodeBlock>
 
 We can split this snippet in four parts:
-- 1. The `Form.use` hook calling: This is the hook provided by reform. It returns a `form` object that's typed as `Form.api` and you can read more about its api _here_.
+- 1. The `Form.use` hook calling: This is the hook provided by reform. It returns a `form` object that is typed as `Form.api` and you can read more about its api _here_.
 - 2. The `onSubmit` parameter: Just a function that will be called when you trigger the `form.submit` function.
 - 3. The `validationStrategy`: We're telling to reform which strategy of validation we want to use, in this case, we're using `OnDemand` which means that we'll trigger the validation **manually** using the `form` object.
-- 4. The `schema` parameter: It's a schema created using [ReSchema](https://github.com/rescriptbr/reschema). You can read more about the usage of _reschema with reform_ and its _official documentation_.
+- 4. The `schema` parameter: It's a schema created using [ReSchema](https://github.com/rescriptbr/reschema). You can read more about the usage of _reschema with reform_ and in its _official documentation_.
 
 ### Creating our form component
 We need a form to make everything works, so we're going to use a combination of inputs and button to create a simple sign up form:
 :::important
-For this tutorial, we created some local components (like `Input`, `Button`, `Input.Error`) just to make the markup more readable, but with the same API of native input and button (`onChange`, `value`, `onClick`, etc). Another components like `Box` or `Typography` are from [Ancestor](https://github.com/rescriptbr/reform) which is
+For this tutorial, we created some local components (like `Input`, `Button`, `Input.Error`) just to make the markup more readable, but with the same API of native (`onChange`, `value`, `onClick`, etc). Another components like `Box` or `Typography` are from [Ancestor](https://github.com/rescriptbr/reform) which is
 an UI library and is totally optional for this tutorial. Feel free to use pure html with or without css to create your own form.
 :::
-<CodeBlock title="SignUpForm.res" className="language-reason"> {MarkupSource}</CodeBlock>
+<CodeBlock metastring="{33-43}" title="SignUpForm.res" className="language-reason"> {MarkupSource}</CodeBlock>
+
 <Preview>
   <MarkupPreview/>
 </Preview>
 
 
 ### Integrating the form
-We created the `Form` module by combining `lenses-ppx`, `reform` and `reschema` and we also have a simple form component. Now, it's time to put everything to
-work together. 
 
-Different from libraries like [react-hook-form](https://react-hook-form.com/), ReForm doesn't use any kinda of magic with refs.
+We created the `Form` module by combining `lenses-ppx`, `reform` and `reschema` and we also have a simple form component. Now, it's time to make everything working together. 
+
+Different from libraries like [react-hook-form](https://react-hook-form.com/), ReForm doesn't use any kind of magic with refs.
 ReForm was created to be both deadly simple and to make forms sound good, leveraging ReScript's powerful typesytem. 
 Even the schemas we use are nothing more than constructors built-in in the language itself.
 
 We encourage you to handle every change in your inputs manually. Not just the changes, but also the conversion of values, like string to int or string to float.
-Could be more verbosive to do everything manually, but it's intentional and keep you in control of everything that happens with your forms.
+Might be more verbosive to do everything manually, but it's intentional and keep you in control of everything that happens with your forms.
 
-The `form` record returned by reform has some fields like `handleChange` and `values` that we're going to use to make everything work.
-We're going to start by handling tha changes on the inputs:
+The `form` record returned by reform has some fields like `handleChange` and `values` that we're going to use to integrate the form module with our form component.
+We're going to start by handling the changes on the inputs:
 
-<CodeBlock title="SignUpForm.res" className="language-reason"> {HandlingChangesSource}</CodeBlock>
+<CodeBlock metastring="{41-42,48-49,56-57,61-68}" title="SignUpForm.res" className="language-reason"> {HandlingChangesSource}</CodeBlock>
+
+Also, we've added a simple block to display the form values. If you type something in any input, you can see the values changing:
 <Preview>
   <HandlingChangesPreview />
 </Preview>
+
+But, we can just type and see the values, if you click on the submit button, nothing happens, no error messages, no console.log, etc.
+To make everything works, we still have to do two things: trigger the `form.submit` function and render the validation errors (when we got an error) using then`form.getFieldError` function:
+
+<CodeBlock metastring="{55-58,44-47,67-70,74-77}" title="SignUpForm.res" className="language-reason"> {SubmitSource}</CodeBlock>
+
+Now, when we click on the submit button without fill the form (or filling with invalid values), we can see the error message for each field.
+Also, if we open the browser console and fill all fields correctly, we can see the result of the form submission on the console.
+
+<Preview>
+  <SubmitPreview />
+</Preview>
+
+<br/>
+
+
+### Disclaimers
+
+There are some disclaimers about this part of the tutorial:
+
+- The first one, is about the handling of our `handleSubmit` function. If you click on the submit button without filling the fields, the function
+will not be triggered. That's the expected behavior. The `onSubmit` function will be triggered when the form is valid. If you need to handle
+a function on the submit and there are invalid fields, you can use the `onSubmitFail` parameter. You can read more about this **here**.
+- Because we're passing `OnDemand` to the `validationStrategy` parameter, we have to call the form validation **manually** using a function like `form.validateForm` or just call
+call the `form.submit` function (like we did) that triggers the form validation automatically. If you need to trigger the validation on every change, you can use `OnChange` as a validation strategy.
+You can read more about validation strategies **here**.

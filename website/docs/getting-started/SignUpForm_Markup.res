@@ -25,13 +25,13 @@ let make = () => {
     ~schema={
       open Form.Validation
 
-      Schema(string(~min=3, Name) + string(~min=8, Password) + email(~error=`Invalid email`, Email))
+      Schema(string(~min=3, Name) + string(~min=8, Password) + email(~error="Invalid email", Email))
     },
     (),
   )
 
   <Box display=[xs(#flex)] flexDirection=[xs(#column)] alignItems=[xs(#center)]>
-    <Box maxW=[xs(320->#px)] width=[xs(100.0->#pct)]>
+    <Box tag=#form maxW=[xs(320->#px)] width=[xs(100.0->#pct)]>
       <Typography tag=#h1 fontSize=[xs(24->#px)] fontWeight=[xs(#700)] mb=[xs(1)]>
         {"Sign up"->React.string}
       </Typography>

@@ -25,7 +25,7 @@ let make = () => {
     ~schema={
       open Form.Validation
 
-      Schema(string(~min=3, Name) + string(~min=8, Password) + email(~error=`Invalid email`, Email))
+      Schema(string(~min=3, Name) + string(~min=8, Password) + email(~error="Invalid email", Email))
     },
     (),
   )
@@ -41,6 +41,10 @@ let make = () => {
           value={form.values.name}
           onChange={ReForm.Helpers.handleChange(form.handleChange(Name))}
         />
+        {switch Field(Name)->form.getFieldError {
+        | None => React.null
+        | Some(message) => <Input.Error> message </Input.Error>
+        }}
       </Box>
       <Box mt=[xs(1)]>
         <Input
@@ -48,6 +52,10 @@ let make = () => {
           value={form.values.email}
           onChange={ReForm.Helpers.handleChange(form.handleChange(Email))}
         />
+        {switch Field(Email)->form.getFieldError {
+        | None => React.null
+        | Some(message) => <Input.Error> message </Input.Error>
+        }}
       </Box>
       <Box mt=[xs(1)]>
         <Input
@@ -56,15 +64,19 @@ let make = () => {
           value={form.values.password}
           onChange={ReForm.Helpers.handleChange(form.handleChange(Password))}
         />
+        {switch Field(Password)->form.getFieldError {
+        | None => React.null
+        | Some(message) => <Input.Error> message </Input.Error>
+        }}
       </Box>
-      <Box mt=[xs(1)]> <Button> {"Submit"->React.string} </Button> </Box>
       <Box mt=[xs(1)]>
-        <Typography tag=#strong> {"Form Values"->React.string} </Typography>
-        <Box display=[xs(#flex)] gap=[xs(8->#px->#one)]>
-          <span> {form.values.name->React.string} </span>
-          <span> {form.values.email->React.string} </span>
-          <span> {form.values.password->React.string} </span>
-        </Box>
+        <Button
+          onClick={e => {
+            e->ReactEvent.Mouse.preventDefault
+            form.submit()
+          }}>
+          {"Submit"->React.string}
+        </Button>
       </Box>
     </Box>
   </Box>
