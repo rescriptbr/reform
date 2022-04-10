@@ -3,9 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "description": "Reasonably making forms with ReScript and React sound good",
-  "repository": "git@github.com:reasonbr/reform.git",
-  "homepage": "https://github.com/reasonbr/reform#readme",
-  "bugs": "https://github.com/reasonbr/reform/issues",
+  "repository": "git@github.com:rescriptbr/reform.git",
+  "homepage": "https://github.com/rescriptbr/reform#readme",
+  "bugs": "https://github.com/rescriptbr/reform/issues",
   "keywords": [
     "reason",
     "bucklescript",
