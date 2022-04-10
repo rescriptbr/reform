@@ -5,10 +5,10 @@
   "refmt": 3,
   "bs-dependencies": [
     "@rescript/react",
-    "rescript-react-update",
-    "@rescriptbr/reschema"
+    "@rescriptbr/reschema",
+    "rescript-react-update"
   ],
-  "bs-dev-dependencies": ["@glennsl/bs-jest"],
+  "bs-dev-dependencies": [],
   "bsc-flags": ["-bs-super-errors"],
   "package-specs": {
     "module": "commonjs",
@@ -21,10 +21,6 @@
   "sources": [
     {
       "dir": "src"
-    },
-    {
-      "dir": "__tests__",
-      "type": "dev"
     }
   ]
 }

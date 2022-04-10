@@ -17,26 +17,22 @@
     "rescript-reform",
     "reform"
   ],
-  "author": "Astrocoders <astrocoders.com>",
+  "author": "Gabriel Rubens <fakenickels.dev>",
   "license": "MIT",
   "peerDependencies": {
     "@rescript/react": "^0.10.1",
     "rescript": "^9.1.1"
   },
   "devDependencies": {
-    "@glennsl/bs-jest": "^0.4.9",
     "@rescript/react": "^0.10.1",
     "rescript": "^9.1.1"
   },
   "scripts": {
     "start": "yarn res:watch",
-    "test": "yarn res:build",
-    "test:watch": "jest --watch",
     "res:clean": "rescript clean",
     "res:build": "yarn res:clean; rescript build",
     "res:watch": "yarn res:clean; rescript build -w",
-    "lint:staged": "lint-staged",
-    "res:setup": "rescript build"
+    "res:setup": "yarn rescript build"
   },
   "dependencies": {
     "@rescriptbr/reschema": "https://github.com/rescriptbr/reschema#chore/improving-dx",
