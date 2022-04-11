@@ -24,7 +24,7 @@ jobs:
         with:
           node-version: 14
           registry-url: https://registry.npmjs.org/
-      - run: cp readme.md reform/readme.md
+      - run: cp README.md reform/
       - run: cd reform && npm publish --access=public
         env:
           NODE_AUTH_TOKEN: ${{secrets.ADMIN_NPM_TOKEN}}
