@@ -24,8 +24,7 @@
     "res:watch": "rescript build -w",
     "start:rescripts": "rescripts start",
     "res:build": "rescript build",
-    "res:clean": "rescript clean",
-    "postinstall": "yarn res:build"
+    "res:clean": "rescript clean"
   },
   "eslintConfig": {
     "extends": "react-app"
