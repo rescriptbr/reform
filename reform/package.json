@@ -35,7 +35,7 @@
     "res:setup": "yarn rescript build"
   },
   "dependencies": {
-    "@rescriptbr/reschema": "@rescriptbr/reschema@v3.0.0-5",
+    "@rescriptbr/reschema": "3.0.0-5",
     "rescript-react-update": "^3.0.1"
   }
 }
