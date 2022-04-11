@@ -100,9 +100,8 @@ module Make = (Config: Config) => {
     | OnChange
     | OnDemand
 
-  let getInitialFieldsState: Validation.schema<'meta> => array<(field, fieldState)> = schema => {
-    let Validation.Schema(validators) = schema
-    validators->Belt.Array.map(validator =>
+  let getInitialFieldsState: Validation.schema => array<(field, fieldState)> = schema => {
+    schema->Belt.Array.map(validator =>
       switch validator {
       | Validation.IntMin({field}) => (ReSchema.Field(field), (Pristine: fieldState))
       | Validation.True({field}) => (Field(field), Pristine)
@@ -159,24 +158,16 @@ module Make = (Config: Config) => {
       (),
     ) => {
       let fieldInterface = useField(field)
+
       React.useMemo3(
         () =>
           fieldInterface
           ->Belt.Option.map(render)
           ->Belt.Option.getWithDefault(renderOnMissingContext),
         (
-          {
-            open Belt.Option
-            fieldInterface->map(({error}) => error)
-          },
-          {
-            open Belt.Option
-            fieldInterface->map(({value}) => value)
-          },
-          {
-            open Belt.Option
-            fieldInterface->map(({state}) => state)
-          },
+          fieldInterface->Belt.Option.map(({error}) => error),
+          fieldInterface->Belt.Option.map(({value}) => value),
+          fieldInterface->Belt.Option.map(({state}) => state),
         ),
       )
     }
@@ -184,7 +175,7 @@ module Make = (Config: Config) => {
 
   let use = (
     ~initialState,
-    ~schema: Validation.schema<'meta>,
+    ~schema: Validation.schema,
     ~onSubmit,
     ~onSubmitFail=ignore,
     ~i18n=ReSchemaI18n.default,
@@ -220,8 +211,12 @@ module Make = (Config: Config) => {
         | ValidateField(field) =>
           SideEffects(
             self => {
-              let fieldState =
-                schema |> ReSchema.validateOne(~field, ~values=self.state.values, ~i18n)
+              let fieldState = ReSchema.validateOne(
+                ~field,
+                ~values=self.state.values,
+                ~i18n,
+                schema,
+              )
               let newFieldState: fieldState = switch fieldState {
               | None => Valid
               | Some(fieldState) =>
@@ -234,10 +229,9 @@ module Make = (Config: Config) => {
 
               let newFieldsState =
                 state.fieldsState
-                ->Belt.Array.keep(elem =>
-                  elem |> (((fieldValue, _fieldState)) => fieldValue != field)
-                )
+                ->Belt.Array.keep(((value, _)) => value != field)
                 ->Belt.Array.concat([(field, newFieldState)])
+
               self.send(SetFieldsState(newFieldsState))
               None
             },
@@ -245,7 +239,7 @@ module Make = (Config: Config) => {
         | ValidateForm(submit) =>
           SideEffects(
             self => {
-              let recordState = schema |> ReSchema.validate(~i18n, self.state.values)
+              let recordState = ReSchema.validate(~i18n, self.state.values, schema)
 
               switch recordState {
               | Valid => {
@@ -369,21 +363,18 @@ module Make = (Config: Config) => {
       )
 
     let getFieldError = field =>
-      getFieldState(field) |> (
-        x =>
-          switch x {
-          | Error(error) => Some(error)
-          | NestedErrors(_errors) =>
-            Js.log2(
-              "The following field has nested errors, access these with `getNestedFieldError` instead of `getFieldError`",
-              field,
-            )
-            None
-          | Pristine
-          | Valid =>
-            None
-          }
-      )
+      switch getFieldState(field) {
+      | Error(error) => Some(error)
+      | NestedErrors(_errors) =>
+        Js.log2(
+          "The following field has nested errors, access these with `getNestedFieldError` instead of `getFieldError`",
+          field,
+        )
+        None
+      | Pristine
+      | Valid =>
+        None
+      }
 
     let validateFields = (fields: array<field>) => {
       let fieldsValidated = ReSchema.validateFields(~fields, ~values=state.values, ~i18n, schema)
@@ -391,24 +382,24 @@ module Make = (Config: Config) => {
       let newFieldsState = Belt.Array.map(state.fieldsState, fieldStateItem => {
         let (field, _) = fieldStateItem
 
-        Belt.Array.some(fields, fieldItem => fieldItem == field)
-          ? {
-              let newFieldState =
-                fieldsValidated->Belt.Array.getBy(fieldStateValidated =>
-                  Belt.Option.map(fieldStateValidated, ((item, _)) => item) == Some(field)
-                )
+        if Belt.Array.some(fields, fieldItem => fieldItem == field) {
+          let newFieldState =
+            fieldsValidated->Belt.Array.getBy(fieldStateValidated =>
+              Belt.Option.map(fieldStateValidated, ((item, _)) => item) == Some(field)
+            )
 
-              newFieldState
-              ->Belt.Option.getWithDefault(None)
-              ->Belt.Option.mapWithDefault([], ((_, newFieldStateValidated)) =>
-                switch newFieldStateValidated {
-                | Valid => [(field, (Valid: fieldState))]
-                | Error(message) => [(field, Error(message))]
-                | NestedErrors(message) => [(field, NestedErrors(message))]
-                }
-              )
+          newFieldState
+          ->Belt.Option.getWithDefault(None)
+          ->Belt.Option.mapWithDefault([], ((_, newFieldStateValidated)) =>
+            switch newFieldStateValidated {
+            | Valid => [(field, (Valid: fieldState))]
+            | Error(message) => [(field, Error(message))]
+            | NestedErrors(message) => [(field, NestedErrors(message))]
             }
-          : [fieldStateItem]
+          )
+        } else {
+          [fieldStateItem]
+        }
       })->Belt.Array.concatMany
 
       send(SetFieldsState(newFieldsState))
@@ -421,20 +412,17 @@ module Make = (Config: Config) => {
     let raiseSubmitFailed = error => send(RaiseSubmitFailed(error))
 
     let getNestedFieldError = (field, index) =>
-      getFieldState(field) |> (
-        x =>
-          switch x {
-          | NestedErrors(errors) =>
-            switch errors->Belt.Array.get(index) {
-            | None => None
-            | Some(error) => Some(error.error)
-            }
-          | Pristine
-          | Valid
-          | Error(_) =>
-            None
-          }
-      )
+      switch getFieldState(field) {
+      | NestedErrors(errors) =>
+        switch errors->Belt.Array.get(index) {
+        | None => None
+        | Some(error) => Some(error.error)
+        }
+      | Pristine
+      | Valid
+      | Error(_) =>
+        None
+      }
 
     let interface: api = {
       state: state,

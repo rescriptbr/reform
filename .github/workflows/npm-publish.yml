@@ -27,4 +27,4 @@ jobs:
       - run: cp readme.md reform/readme.md
       - run: cd reform && npm publish --access=public
         env:
-          node_auth_token: ${{secrets.npm_token}}
+          NODE_AUTH_TOKEN: ${{secrets.ADMIN_NPM_TOKEN}}

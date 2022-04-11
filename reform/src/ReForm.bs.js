@@ -4,17 +4,17 @@
 var Curry = require("rescript/lib/js/curry.js");
 var React = require("react");
 var Caml_obj = require("rescript/lib/js/caml_obj.js");
-var ReSchema = require("reschema/src/ReSchema.bs.js");
+var ReSchema = require("@rescriptbr/reschema/src/ReSchema.bs.js");
 var Belt_Array = require("rescript/lib/js/belt_Array.js");
 var Belt_Option = require("rescript/lib/js/belt_Option.js");
 var Caml_option = require("rescript/lib/js/caml_option.js");
 var ReactUpdate = require("rescript-react-update/src/ReactUpdate.bs.js");
-var ReSchemaI18n = require("reschema/src/ReSchemaI18n.bs.js");
+var ReSchemaI18n = require("@rescriptbr/reschema/src/ReSchemaI18n.bs.js");
 
 function Make(Config) {
   var ReSchema$1 = ReSchema.Make(Config);
   var getInitialFieldsState = function (schema) {
-    return Belt_Array.map(schema._0, (function (validator) {
+    return Belt_Array.map(schema, (function (validator) {
                   return [
                           /* Field */{
                             _0: validator.field
@@ -161,8 +161,8 @@ function Make(Config) {
                                 } else {
                                   newFieldState = /* Valid */1;
                                 }
-                                var newFieldsState = Belt_Array.concat(Belt_Array.keep(state.fieldsState, (function (elem) {
-                                            return Caml_obj.caml_notequal(elem[0], field);
+                                var newFieldsState = Belt_Array.concat(Belt_Array.keep(state.fieldsState, (function (param) {
+                                            return Caml_obj.caml_notequal(param[0], field);
                                           })), [[
                                         field,
                                         newFieldState
@@ -401,12 +401,12 @@ function Make(Config) {
                   }));
     };
     var getFieldError = function (field) {
-      var x = getFieldState(field);
-      if (typeof x === "number") {
+      var error = getFieldState(field);
+      if (typeof error === "number") {
         return ;
       }
-      if (x.TAG !== /* NestedErrors */0) {
-        return x._0;
+      if (error.TAG !== /* NestedErrors */0) {
+        return error._0;
       }
       console.log("The following field has nested errors, access these with `getNestedFieldError` instead of `getFieldError`", field);
       
@@ -472,14 +472,14 @@ function Make(Config) {
                 });
     };
     var getNestedFieldError = function (field, index) {
-      var x = getFieldState(field);
-      if (typeof x === "number") {
+      var errors = getFieldState(field);
+      if (typeof errors === "number") {
         return ;
       }
-      if (x.TAG !== /* NestedErrors */0) {
+      if (errors.TAG !== /* NestedErrors */0) {
         return ;
       }
-      var error = Belt_Array.get(x._0, index);
+      var error = Belt_Array.get(errors._0, index);
       if (error !== undefined) {
         return error.error;
       }
