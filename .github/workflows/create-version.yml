@@ -23,12 +23,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          ssh-key: ${{ secrets.ADMIN_SSH_KEY }}
       - uses: actions/setup-node@v1
         with:
           node-version: 14
       - run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
+          git config user.name rescriptbr-admin
+          git config user.email rescriptbr@gmail.com
           
       - name: Generate new version ${{ github.event.inputs.versionType }}
         run: |
