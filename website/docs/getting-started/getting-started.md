@@ -26,7 +26,7 @@ part of this tutorial by reading the **API reference**, but we know that you wan
 First off, we need to create our "lenses module" using lenses-ppx. Don't worry if you don't know what a ppx is, you can keep going just following our instructions.
 We need to create a record that represents the state of the form. In this tutorial, the form has three fields: `name`, `email`, and `password`.
 
-```reason title="SignUpForm.res"
+```rescript title="SignUpForm.res"
 module FormFields = %lenses(
   type state = {
     name: string,
@@ -63,7 +63,7 @@ You can read more about module functors [here](https://rescript-lang.org/docs/ma
 ### The `Form.use` hook
 ReForm provides a form hook and we're going to use it by passing some parameters like `schema`, an `onSubmit` function, `initialState`, etc.
 
-<CodeBlock  title="SignUpForm.res" className="language-reason"> {FormHookSource}</CodeBlock>
+<CodeBlock  title="SignUpForm.res" className="language-rescript"> {FormHookSource}</CodeBlock>
 
 We can split this snippet into four parts:
 - 1. The `Form.use` hook calling: This is the hook provided by reform. It returns a `form` object that is typed as `Form.api` and you can read more about its api _here_.
@@ -77,7 +77,7 @@ We need a form to make everything work, so we're going to use a combination of i
 For this tutorial, we created some local components (like `Input`, `Button`, `Input.Error`) just to make the markup more readable, but with the same API (`onChange`, `value`, `onClick`, etc). Another components like `Box` or `Typography` are from [Ancestor](https://github.com/rescriptbr/reform) which is
 an ui library and is totally optional for this tutorial. Feel free to use pure html with or without css to create your form.
 :::
-<CodeBlock metastring="{33-43}" title="SignUpForm.res" className="language-reason"> {MarkupSource}</CodeBlock>
+<CodeBlock metastring="{33-43}" title="SignUpForm.res" className="language-rescript"> {MarkupSource}</CodeBlock>
 
 <Preview>
   <MarkupPreview/>
@@ -98,7 +98,7 @@ Might be more verbose to do everything manually, but it's intentional and keep y
 The `form` record returned by reform has some fields like `handleChange` and `values` that we're going to use to integrate the form module with our form component.
 We're going to start by handling the changes on the inputs:
 
-<CodeBlock metastring="{41-42,48-49,56-57,61-68}" title="SignUpForm.res" className="language-reason"> {HandlingChangesSource}</CodeBlock>
+<CodeBlock metastring="{41-42,48-49,56-57,61-68}" title="SignUpForm.res" className="language-rescript"> {HandlingChangesSource}</CodeBlock>
 
 Also, we've added a simple block to display the form values. If you type something in any input, you can see the values changing:
 <Preview>
@@ -108,7 +108,7 @@ Also, we've added a simple block to display the form values. If you type somethi
 But, we can just type and see the values, if you click on the submit button, nothing happens, no error messages, no console.log, etc.
 To make everything work, we still have to do two things: trigger the `form.submit` function and render the validation errors (when we got an error) using the `form.getFieldError` function:
 
-<CodeBlock metastring="{55-58,44-47,67-70,74-77}" title="SignUpForm.res" className="language-reason"> {SubmitSource}</CodeBlock>
+<CodeBlock metastring="{55-58,44-47,67-70,74-77}" title="SignUpForm.res" className="language-rescript"> {SubmitSource}</CodeBlock>
 
 Now, when we click on the submit button without filling the form (or filling with invalid values), we can see the error message for each field.
 Also, if we open the browser console and fill all fields correctly, we can see the result of the form submission on the console.
