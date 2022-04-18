@@ -45,7 +45,7 @@ After that, we have to create a new form using the `ReForm.Make` module functor.
 The module functor expects a lenses module that was created by
 `lenses-ppx` and returns a new form module. You can see the API reference of this module [here](/docs/reform-make).
 
-```reason {9} title="SignUpForm.res" 
+```rescript {9} title="SignUpForm.res" 
 module FormFields = %lenses(
   type state = {
     name: string,
