@@ -10718,11 +10718,6 @@ reschema@2.0.3, reschema@^2.0.3:
   dependencies:
     reason-react-update "2.0.0"
 
-reschema@2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/reschema/-/reschema-2.2.0.tgz#e98730d5dff98ec4d99798a31bf1c4a4ebcb8f1c"
-  integrity sha512-vkFNYm2GEqrmoK+n1xomn/EXgltvCfqmowMxXkr2IBa6Zw0JItunzOap73PaS9DUGak0h6xHoIOciGcq+LC9cg==
-
 rescript-react-update@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/rescript-react-update/-/rescript-react-update-3.0.1.tgz"

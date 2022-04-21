@@ -77,7 +77,7 @@ We need a form to make everything work, so we're going to use a combination of i
 For this tutorial, we created some local components (like `Input`, `Button`, `Input.Error`) just to make the markup more readable, but with the same API (`onChange`, `value`, `onClick`, etc). Another components like `Box` or `Typography` are from [Ancestor](https://github.com/rescriptbr/reform) which is
 an ui library and is totally optional for this tutorial. Feel free to use pure html with or without css to create your form.
 :::
-<CodeBlock metastring="{33-43}" title="SignUpForm.res" className="language-rescript"> {MarkupSource}</CodeBlock>
+<CodeBlock title="SignUpForm.res" className="language-rescript"> {MarkupSource}</CodeBlock>
 
 <Preview>
   <MarkupPreview/>

@@ -21,7 +21,7 @@
     "@rescript/react",
     "@rescriptbr/reform",
     "@rescriptbr/ancestor",
-    "reschema"
+    "@rescriptbr/reschema"
   ],
   "ppx-flags": ["lenses-ppx/ppx"],
   "refmt": 3,
