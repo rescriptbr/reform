@@ -24,7 +24,7 @@ let make = () => {
     ~schema={
       open Form.Validation
 
-      Schema(string(~min=3, Name) + string(~min=8, Password) + email(~error="Invalid email", Email))
+      schema([string(~min=3, Name), string(~min=8, Password), email(~error="Invalid email", Email)])
     },
     (),
   )
