@@ -23,9 +23,6 @@ yarn add lenses-ppx -D
 > `lenses-ppx` is a preprocessor that you can use to generate type-safe "getters" and "setters" to the form values. Check out the official [documentation](https://github.com/Astrocoders/lenses-ppx).
 
 Then add these dependencies to `bsconfig.json`:
-```js
-var a = ""
-```
 ```diff
 {
   ...
