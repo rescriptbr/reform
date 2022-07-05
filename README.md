@@ -5,9 +5,9 @@
   <br />
 </p>
 <p align="center">
-  <a href="https://rescript-reform.netlify.app">Documentation</a> • 
-  <a target="_blank" href="https://rescript-reform.netlify.app/docs/installation">Installation</a> • 
-  <a target="_blank" href="https://rescript-reform.netlify.app/docs/getting-started#quick-start">Basic usage</a>
+  <a href="https://reform.rescriptbrasil.org">Documentation</a> • 
+  <a target="_blank" href="https://reform.rescriptbrasil.org/docs/installation">Installation</a> • 
+  <a target="_blank" href="https://reform.rescriptbrasil.org/docs/getting-started">Basic usage</a>
 </p>
 <br/>
 
@@ -63,9 +63,9 @@ Code that deals with strongly typed forms can quickly become walls of repeated t
 
 ## Support 🚀
 
-🌍 We usually hang out at https://discord.gg/reasonml or https://forum.rescript-lang.org/ so feel free to ask anything there.
+🌍 We usually hang out at https://forum.rescript-lang.org/ so feel free to ask anything there.
 
-🇧🇷 🇵🇹  Se você é Brasileiro, Português ou fala português, você pode entrar contato através do discord do [ReasonBR](http://discord.com/invite/SSDMNYQ)
+🇧🇷 🇵🇹  Se você é Brasileiro, Português ou fala português, você pode entrar contato através do disco(http://discord.com/invite/SSDMNYQ)
 
 ## Contributors ✨
 
