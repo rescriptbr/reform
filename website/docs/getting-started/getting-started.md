@@ -66,9 +66,9 @@ ReForm provides a form hook and we're going to use it by passing some parameters
 <CodeBlock title="SignUpForm.res" language="rescript"> {FormHookSource}</CodeBlock>
 
 We can split this snippet into four parts:
-- 1. The `Form.use` hook calling: This is the hook provided by reform. It returns a `form` object that is typed as `Form.api` and you can read more about its api _here_.
+- 1. The `Form.use` hook calling: This is the hook provided by reform. It returns a `form` record that is typed as `Form.api` and you can read more about its api _here_.
 - 2. The `onSubmit` parameter: Just a function that will be called when you trigger the `form.submit` function.
-- 3. The `validationStrategy`: We're telling to reform which strategy of validation we want to use, in this case, we're using `OnDemand` which means that we'll trigger the validation **manually** using the `form` object.
+- 3. The `validationStrategy`: We're telling to reform which strategy of validation we want to use, in this case, we're using `OnDemand` which means that we'll trigger the validation **manually** using the `form` record.
 - 4. The `schema` parameter: It's a schema created using [ReSchema](https://github.com/rescriptbr/reschema). You can read more about the usage of _reschema with reform_ and in its _official documentation_.
 
 ### Creating our form component
