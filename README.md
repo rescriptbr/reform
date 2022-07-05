@@ -1,5 +1,5 @@
 [![All Contributors](https://img.shields.io/badge/all_contributors-13-orange.svg?style=flat-square)](#contributors)
-
+[![npm version](https://badge.fury.io/js/@rescriptbr%2Freform.svg)](https://badge.fury.io/js/@rescriptbr%2Freform)
 <p align="center">
   <img src="./assets/logo.svg" /> 
   <br />
@@ -65,7 +65,7 @@ Code that deals with strongly typed forms can quickly become walls of repeated t
 
 🌍 We usually hang out at https://forum.rescript-lang.org/ so feel free to ask anything there.
 
-🇧🇷 🇵🇹  Se você é Brasileiro, Português ou fala português, você pode entrar contato através do disco(http://discord.com/invite/SSDMNYQ)
+🇧🇷 🇵🇹  Se você é Brasileiro, Português ou fala português, você pode entrar contato através do discord do [ReScriptBR](http://discord.com/invite/SSDMNYQ).
 
 ## Contributors ✨
 
