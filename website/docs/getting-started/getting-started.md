@@ -98,17 +98,21 @@ Might be more verbose to do everything manually, but it's intentional and keep y
 The `form` record returned by reform has some fields like `handleChange` and `values` that we're going to use to integrate the form module with our form component.
 We're going to start by handling the changes on the inputs:
 
-<CodeBlock metastring="{41-42,48-49,56-57,61-68}" title="SignUpForm.res" language="rescript"> {HandlingChangesSource}</CodeBlock>
+<CodeBlock metastring="{45-46,52-53,60-61,65-71}" title="SignUpForm.res" language="rescript"> {HandlingChangesSource}</CodeBlock>
 
 Also, we've added a simple block to display the form values. If you type something in any input, you can see the values changing:
 <Preview>
   <HandlingChangesPreview />
 </Preview>
 
+<br />
+
 But, we can just type and see the values, if you click on the submit button, nothing happens, no error messages, no console.log, etc.
 To make everything work, we still have to do two things: trigger the `form.submit` function and render the validation errors (when we got an error) using the `form.getFieldError` function:
 
-<CodeBlock metastring="{55-58,44-47,67-70,74-77}" title="SignUpForm.res" language="rescript"> {SubmitSource}</CodeBlock>
+<br />
+
+<CodeBlock metastring="{46,57,69,79-80}" title="SignUpForm.res" language="rescript"> {SubmitSource}</CodeBlock>
 
 Now, when we click on the submit button without filling the form (or filling with invalid values), we can see the error message for each field.
 Also, if we open the browser console and fill all fields correctly, we can see the result of the form submission on the console.
