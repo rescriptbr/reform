@@ -37,6 +37,7 @@ let make = () => {
         | list{}
         | list{"signup"} =>
           <SignUp />
+        | list{"login"} => <Login />
         | _ => React.null
         }}
       </Box>

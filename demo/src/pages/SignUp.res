@@ -82,7 +82,7 @@ let make = () => {
         placeholder="Confirm password"
         error=?{form.getFieldError(Field(ConfirmPassword))}
       />
-      <Button label="Sign In" onClick={_ => form.submit()} />
+      <Button label="Sign Up" onClick={_ => form.submit()} />
       <Typography
         color=[xs(#hex("#000"))]
         href="https://github.com/rescriptbr/reform/blob/master/demo/src/pages/SignUp.res"
