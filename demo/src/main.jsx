@@ -1,1 +1,1 @@
-import './Index.bs'
+import './Main.bs'

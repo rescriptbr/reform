@@ -17,7 +17,12 @@
   ],
   "suffix": ".bs.js",
   "namespace": true,
-  "bs-dependencies": ["@rescript/react", "@rescriptbr/reform", "reschema"],
+  "bs-dependencies": [
+    "@rescript/react",
+    "@rescriptbr/reform",
+    "@rescriptbr/reschema",
+    "@rescriptbr/ancestor"
+  ],
   "bs-dev-dependencies": [],
   "ppx-flags": ["lenses-ppx/ppx"],
   "refmt": 3,
