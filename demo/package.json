@@ -16,6 +16,7 @@
     "vite": "2.6.4"
   },
   "scripts": {
+    "build": "yarn rescript:build && yarn vite:build",
     "vite:dev": "vite",
     "vite:build": "vite build",
     "vite:serve": "vite preview",

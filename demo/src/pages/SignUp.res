@@ -32,8 +32,8 @@ let schema = {
 }
 @react.component
 let make = () => {
-  let handleSubmit = _ => {
-    Js.Console.log("Submitted")
+  let handleSubmit = ({state}: Form.onSubmitAPI) => {
+    Js.Console.log2("Submitted => ", state.values)
     None
   }
 
