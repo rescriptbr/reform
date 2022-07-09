@@ -24,6 +24,7 @@ let schema = {
     email(Email),
     nonEmpty(Password),
     nonEmpty(ConfirmPassword),
+    string(~min=6, Password),
     /*
      * Custom validation
      */
@@ -82,6 +83,18 @@ let make = () => {
         error=?{form.getFieldError(Field(ConfirmPassword))}
       />
       <Button label="Sign In" onClick={_ => form.submit()} />
+      <Typography
+        color=[xs(#hex("#000"))]
+        href="https://github.com/rescriptbr/reform/blob/master/demo/src/pages/SignUp.res"
+        target="_blank"
+        textAlign=[xs(#center)]
+        fontSize=[xs(1.6->#rem)]
+        letterSpacing=[xs(-0.04->#em)]
+        fontWeight=[xs(#400)]
+        my=[xs(2)]
+        tag=#a>
+        {`See source on Github 🔎`->React.string}
+      </Typography>
     </Box>
   </Box>
 }

@@ -43,11 +43,21 @@ let make = () => {
       <Box display=[xs(#flex)] justifyContent=[xs(#center)] py=[xs(3)]>
         <Typography tag=#p fontSize=[xs(1.8->#rem)] fontWeight=[xs(#600)]>
           {`Made with `->React.string}
-          <Typography href="https://rescript-lang.org" target="_blank" tag=#a>
+          <Typography
+            color=[xs(#hex("#000"))]
+            fontWeight=[xs(#700)]
+            href="https://rescript-lang.org"
+            target="_blank"
+            tag=#a>
             {`ReScript`->React.string}
           </Typography>
           {` and `->React.string}
-          <Typography href="https://reform.rescriptbrasil.org" target="_blank" tag=#a>
+          <Typography
+            color=[xs(#hex("#000"))]
+            fontWeight=[xs(#700)]
+            href="https://reform.rescriptbrasil.org"
+            target="_blank"
+            tag=#a>
             {`ReForm`->React.string}
           </Typography>
         </Typography>
