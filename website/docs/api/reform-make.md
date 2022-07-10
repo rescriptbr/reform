@@ -1,5 +1,5 @@
 ---
-title: ReForm.Make
+title: ReForm.Make(...)
 id: reform-make
 slug: /reform-make
 ---

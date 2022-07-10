@@ -18,7 +18,7 @@ import { make as SubmitPreview } from './SignUpForm_Submit.bs.js'
 import { Preview } from '../__components'
 
 After setting up `reform`, `reschema`, and `lenses-ppx` in the [previous section](/docs/installation), you're ready to create your first form. You can understand every
-part of this tutorial by reading the **API reference**, but we know that you want a sneak peek before getting deeper into the API.
+part of this tutorial by reading the [API reference](/docs/reform), but we know that you want a sneak peek before getting deeper into the API.
 
 ## Quick start 
 
@@ -69,7 +69,7 @@ We can split this snippet into four parts:
 - 1. The `Form.use` hook calling: This is the hook provided by reform. It returns a `form` record that is typed as `Form.api` and you can read more about its api _here_.
 - 2. The `onSubmit` parameter: Just a function that will be called when you trigger the `form.submit` function.
 - 3. The `validationStrategy`: We're telling to reform which strategy of validation we want to use, in this case, we're using `OnDemand` which means that we'll trigger the validation **manually** using the `form` record.
-- 4. The `schema` parameter: It's a schema created using [ReSchema](https://github.com/rescriptbr/reschema). You can read more about the usage of _reschema with reform_ and in its _official documentation_.
+- 4. The `schema` parameter: It's a schema created using [ReSchema](https://github.com/rescriptbr/reschema). You can read more about the usage of ReSchema with ReForm [here](https://github.com/rescriptbr/reschema/blob/master/docs/reform.md).
 
 ### Creating our form component
 We need a form to make everything work, so we're going to use a combination of inputs and buttons to create a simple sign up form:
@@ -107,8 +107,8 @@ Also, we've added a simple block to display the form values. If you type somethi
 
 <br />
 
-But, we can just type and see the values, if you click on the submit button, nothing happens, no error messages, no console.log, etc.
-To make everything work, we still have to do two things: trigger the `form.submit` function and render the validation errors (when we got an error) using the `form.getFieldError` function:
+Now, we can just type and see the values. If you click on the submit button, nothing happens, no error messages, no console.log, etc.
+To make everything work, we still have two things to do: trigger the `form.submit` function and render the validation errors (when we got an error) using the `form.getFieldError` function:
 
 <br />
 
@@ -130,7 +130,7 @@ There are some disclaimers about this part of the tutorial:
 
 - The first one is about the handling of our `handleSubmit` function. If you click on the submit button without filling the fields, the function
 will not be triggered. That's the expected behavior. The `onSubmit` function will be triggered when the form is valid. If you need to handle
-a function on the submit and there are invalid fields, you can use the `onSubmitFail` parameter. You can read more about this **here**.
+a function on the submit and there are invalid fields, you can use the `onSubmitFail` parameter. You can read more about it [here](/docs/reform-use#onsubmitfail).
 - Because we're passing `OnDemand` to the `validationStrategy` parameter, we have to call the form validation **manually** using a function like `form.validateForm` or just
 call the `form.submit` function (like we did) that triggers the form validation automatically. If you need to trigger the validation on every change, you can use `OnChange` as a validation strategy.
-You can read more about validation strategies **here**.
+You can see the validation strategies [here](/docs/reform#validationstrategy).
