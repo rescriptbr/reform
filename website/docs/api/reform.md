@@ -77,7 +77,7 @@ type state = {
 }
 ```
 
-#### `validationStrategy`
+### `validationStrategy`
 This is the available validations strategies.
 ```rescript
 type validationStrategy =
@@ -85,78 +85,44 @@ type validationStrategy =
   | OnDemand
   ```
 
+### `fieldInterface`
+```rescript
+type fieldInterface<'value> = {
+  handleChange: 'value => unit,
+  error: option<string>,
+  state: fieldState,
+  validate: unit => unit,
+  value: 'value,
+}
+```
+
 ### `api`
-This type is a record with following fields:
-
-#### `state`
-- Type: `state`
-
-#### `values`
-- Type: `Config.state`
-
-#### `formState`
-- Type: `formState`
-
-#### `fieldsState`
-- Type: `array<(field, fieldState)>`
-
-#### `isSubmitting`
-- Type: `bool`
-
-#### `isDirty`
-- Type: `bool`
-
-#### `isPristine`
-- Type: `bool`
-
-#### `getFieldState`
-- Type: `field => fieldState`
-
-#### `getFieldError`
-- Type: `field => option<string>`
-
-#### `getNestedFieldError`
-- Type: ``(field, int) => option<string>``
-
-#### `handleChange`
-- Type: `'a. (Config.field<'a>, 'a) => unit`
-
-#### `handleChangeWithCallback`
-- Type: `'a. (Config.field<'a>, 'a => 'a) => unit`
-
-#### `arrayPush`
-- Type: `'a. (Config.field<array<'a>>, 'a) => unit`
-
-#### `arrayUpdateByIndex`
-- Type: `'a. (~field: Config.field<array<'a>>, ~index: int, 'a) => unit`
-
-#### `arrayRemoveByIndex`
-- Type: `'a. (Config.field<array<'a>>, int) => unit`
-
-#### `arrayRemoveBy`
-- Type: `'a. (Config.field<array<'a>>, 'a => bool) => unit`
-
-#### `submit`
-- Type: `unit => unit`
-
-#### `resetForm`
-- Type: `unit => unit`
-
-#### `setValues`
-- Type: ``(Config.state => Config.state) => unit``
-
-#### `setFieldValue`
-- Type: `'a. (Config.field<'a>, 'a, ~shouldValidate: bool=?, unit) => unit`
-
-#### `validateField`
-- Type: `field => unit`
-
-#### `validateForm`
-- Type: `unit => unit`
-
-#### `validateFields`
-- Type: `array<field> => array<fieldState>`
-
-#### `raiseSubmitFailed`
-- Type: `option<string> => unit`
+```rescript
+type api = {
+  state: state,
+  values: Config.state,
+  formState: formState,
+  fieldsState: array<(field, fieldState)>,
+  isSubmitting: bool,
+  isDirty: bool,
+  isPristine: bool,
+  getFieldState: field => fieldState,
+  getFieldError: field => option<string>,
+  getNestedFieldError: (field, int) => option<string>,
+  handleChange: 'a. (Config.field<'a>, 'a) => unit,
+  handleChangeWithCallback: 'a. (Config.field<'a>, 'a => 'a) => unit,
+  arrayPush: 'a. (Config.field<array<'a>>, 'a) => unit,
+  arrayUpdateByIndex: 'a. (~field: Config.field<array<'a>>, ~index: int, 'a) => unit,
+  arrayRemoveByIndex: 'a. (Config.field<array<'a>>, int) => unit,
+  arrayRemoveBy: 'a. (Config.field<array<'a>>, 'a => bool) => unit,
+  submit: unit => unit,
+  resetForm: unit => unit,
+  setValues: (Config.state => Config.state) => unit,
+  setFieldValue: 'a. (Config.field<'a>, 'a, ~shouldValidate: bool=?, unit) => unit,
+  validateField: field => unit,
+  validateForm: unit => unit,
+  validateFields: array<field> => array<fieldState>,
+  raiseSubmitFailed: option<string> => unit,
+}
+```
 

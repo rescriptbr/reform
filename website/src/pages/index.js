@@ -25,7 +25,7 @@ export default function Home() {
             <div>
               <Link
                 className={clsx("button button--primary button--lg")}
-                to={useBaseUrl("docs/getting-started")}
+                to={useBaseUrl("docs/")}
               >
                 Get Started
               </Link>
