@@ -53,7 +53,7 @@ let make = () => {
               value={field.value}
               onChange={ReForm.Helpers.handleChange(field.handleChange)}
               placeholder="Email"
-              error=?{form.getFieldError(Field(Email))}
+              error=?field.error
             />}
         />
         <Form.Field
@@ -64,7 +64,7 @@ let make = () => {
               onChange={ReForm.Helpers.handleChange(field.handleChange)}
               type_="password"
               placeholder="Password"
-              error=?{form.getFieldError(Field(Password))}
+              error=?field.error
             />}
         />
         <Button label="Login" onClick={_ => form.submit()} />
