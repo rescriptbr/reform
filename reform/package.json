@@ -1,6 +1,6 @@
 {
   "name": "@rescriptbr/reform",
-  "version": "12.0.0-0",
+  "version": "12.0.0",
   "description": "Reasonably making forms with ReScript and React sound good",
   "repository": "git@github.com:reasonbr/reform.git",
   "homepage": "https://github.com/reasonbr/reform#readme",
@@ -20,8 +20,8 @@
   "author": "Gabriel Rubens <fakenickels.dev>",
   "license": "MIT",
   "peerDependencies": {
-    "rescript": "^9.1.1",
-    "@rescript/react": "^0.10.3"
+    "@rescript/react": "^0.10.3",
+    "rescript": "^9.1.1"
   },
   "devDependencies": {
     "@rescript/react": "^0.10.1",
