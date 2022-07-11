@@ -2784,12 +2784,42 @@
   dependencies:
     jest "27.2.5"
 
+"@rescriptbr/reform@12.0.0":
+  version "12.0.0"
+  resolved "https://registry.yarnpkg.com/@rescriptbr/reform/-/reform-12.0.0.tgz#659cc8972dc20c948bb3099905463b72b4b05bb4"
+  integrity sha512-JaiMX6Q5fbNL14D+Q8ZYNJV3Tx8CYoWNRyeXEWCD8rCTtOnMwa+Am0MVtxaDGnVovAzmxikCR8LDCc3ILPOlgg==
+  dependencies:
+    "@rescriptbr/reschema" "3.0.0-5"
+    rescript-react-update "^3.0.1"
+
+"@rescriptbr/reform@12.0.0-0":
+  version "12.0.0-0"
+  resolved "https://registry.yarnpkg.com/@rescriptbr/reform/-/reform-12.0.0-0.tgz#5e212e25bfdb39f0a391e38b03ccfcfd9961b108"
+  integrity sha512-Yn/WSf24EIBMDaX7z1U3a3+nobKtKSiVc+YtjOzvHMUax1l9/nLPkD0blV1DwIxkneNbwADY77EOG9G9NvxzzQ==
+  dependencies:
+    "@rescriptbr/reschema" "3.0.0-5"
+    rescript-react-update "^3.0.1"
+
+"@rescriptbr/reschema@3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@rescriptbr/reschema/-/reschema-3.0.0.tgz#24cfe4b604dfa7bd272435adb3a3e6c2cdd9e3e9"
+  integrity sha512-wGRxoBk1bZ5c+PMMXE0QFyHXH5+Pz+LnpYRUTdd3H+7E/RBzB1ggC1930679UBJjT1z6NDCY8Vvku8rv2iTU0A==
+  dependencies:
+    jest "27.5.1"
+
 "@rescriptbr/reschema@3.0.0-5":
   version "3.0.0-5"
   resolved "https://registry.yarnpkg.com/@rescriptbr/reschema/-/reschema-3.0.0-5.tgz#0a7617cf318c5c64c12b842da2d40b4653ca8a65"
   integrity sha512-x2LENqDAkh09mbKoIDcmRHWgz4t8j5mENMCu5dUdisQ2n+aSIvFDd2O3jTnbGHCUXl2KbTyzKgtVLm0clC+A4Q==
   dependencies:
     jest "27.5.1"
+
+"@rescriptbr/reschema@^3.0.0":
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/@rescriptbr/reschema/-/reschema-3.0.1.tgz#38e0bfa676987bc20a07b03c02e564483c7c3a27"
+  integrity sha512-N2UDQV1Ew0MCCRO3LX5WUYHYQ9rGRcx68AVe52TMdGMTwoGREmI7MAu6Vh1MTvIXee2xnYJ7rUoqrV0V6fsL9Q==
+  dependencies:
+    rescript "^9.0.2"
 
 "@rollup/pluginutils@^4.1.1":
   version "4.2.0"
@@ -10719,7 +10749,7 @@ rescript@9.1.1, rescript@^9.1.1:
   resolved "https://registry.yarnpkg.com/rescript/-/rescript-9.1.1.tgz"
   integrity sha512-c+zR5aZ5mXDpAx6oyS61t4sUPiq2VXgHigilYSMazDLp1uUGbf2JvgbSfRJFaKAjfsTKcohJyH0vtdihhdZmMA==
 
-rescript@9.1.4:
+rescript@9.1.4, rescript@^9.0.2:
   version "9.1.4"
   resolved "https://registry.yarnpkg.com/rescript/-/rescript-9.1.4.tgz#1eb126f98d6c16942c0bf0df67c050198e580515"
   integrity sha512-aXANK4IqecJzdnDpJUsU6pxMViCR5ogAxzuqS0mOr8TloMnzAjJFu63fjD6LCkWrKAhlMkFFzQvVQYaAaVkFXw==
