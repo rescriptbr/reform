@@ -1,16 +1,23 @@
-const lightCodeTheme = require("prism-react-renderer/themes/nightOwl")
+const lightCodeTheme = require("prism-react-renderer/themes/nightOwl");
 const darkCodeTheme = require("prism-react-renderer/themes/dracula");
 
 module.exports = {
   title: "ReForm",
   tagline: "Reasonably making forms sound good",
-  url: "https://rescript-reform.netlify.app/",
+  url: "https://reform.rescriptbrasil.org",
   baseUrl: "/",
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
   favicon: "img/favicon.ico",
   organizationName: "@rescriptbr",
   projectName: "reform",
+  scripts: [
+    {
+      src: "https://scripts.simpleanalyticscdn.com/latest.js",
+      defer: true,
+      async: true,
+    },
+  ],
   themeConfig: {
     colorMode: {
       defaultMode: "light",
@@ -66,7 +73,7 @@ module.exports = {
             },
             {
               label: "Twitter",
-              href: "https://twitter.com/reasonmlbrasil",
+              href: "https://twitter.com/rescriptbr",
             },
           ],
         },

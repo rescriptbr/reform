@@ -15,6 +15,7 @@ export default function Home() {
       description="Reasonably making forms sound good"
     >
       <main>
+        <noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="" referrerpolicy="no-referrer-when-downgrade" /></noscript>
         <div className={clsx(styles["main-wrapper"])}>
           <div className={clsx(styles.hero)}>
             <h1 className={styles["hero-title"]}>Powerful and type-safe</h1>
