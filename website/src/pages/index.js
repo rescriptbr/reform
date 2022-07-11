@@ -15,13 +15,21 @@ export default function Home() {
       description="Reasonably making forms sound good"
     >
       <main>
-        <noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="" referrerpolicy="no-referrer-when-downgrade" /></noscript>
+        {process.env.NODE_ENV === "production" && (
+          <noscript>
+            <img
+              src="https://queue.simpleanalyticscdn.com/noscript.gif"
+              alt=""
+              referrerpolicy="no-referrer-when-downgrade"
+            />
+          </noscript>
+        )}
         <div className={clsx(styles["main-wrapper"])}>
           <div className={clsx(styles.hero)}>
             <h1 className={styles["hero-title"]}>Powerful and type-safe</h1>
             <p className={styles["hero-text"]}>
-              Reasonably making forms with <span>ReScript</span> and{" "}
-              React sound good
+              Reasonably making forms with <span>ReScript</span> and React sound
+              good
             </p>
             <div>
               <Link
@@ -38,7 +46,9 @@ export default function Home() {
             <div className={clsx("row", styles.highlights)}>
               <section className="col margin-bottom--xl">
                 <img src="/img/focus.svg" />
-                <h2 className={styles["highlight-title"]}>Focused in ReScript</h2>
+                <h2 className={styles["highlight-title"]}>
+                  Focused in ReScript
+                </h2>
                 <p className=" padding-horiz--md">
                   We created ReForm to be both deadly simple and to make forms
                   sound good leveraging ReScript's powerful typesytem. Even the
@@ -48,7 +58,9 @@ export default function Home() {
               </section>
               <section className="col margin-bottom--xl">
                 <img src="/img/powerful.svg" />
-                <h2 className={styles["highlight-title"]}>Powerful and type-safe</h2>
+                <h2 className={styles["highlight-title"]}>
+                  Powerful and type-safe
+                </h2>
                 <p className=" padding-horiz--md">
                   ReForm is a powerful, type-safe and fully-featured form
                   library that includes hooks api, schema api, context provider,
@@ -57,7 +69,9 @@ export default function Home() {
               </section>
               <section className="col margin-bottom--xl">
                 <img src="/img/activity.svg" />
-                <h2 className={styles["highlight-title"]}>Actively maintained</h2>
+                <h2 className={styles["highlight-title"]}>
+                  Actively maintained
+                </h2>
                 <p className=" padding-horiz--md">
                   ReForm is used in production projects. This incentivizes us to
                   regularly improving the library and to keep breaking changes

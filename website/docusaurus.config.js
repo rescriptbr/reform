@@ -1,5 +1,12 @@
 const lightCodeTheme = require("prism-react-renderer/themes/nightOwl");
 const darkCodeTheme = require("prism-react-renderer/themes/dracula");
+const productionScripts = [
+  {
+    src: "https://scripts.simpleanalyticscdn.com/latest.js",
+    defer: true,
+    async: true,
+  },
+];
 
 module.exports = {
   title: "ReForm",
@@ -11,13 +18,7 @@ module.exports = {
   favicon: "img/favicon.ico",
   organizationName: "@rescriptbr",
   projectName: "reform",
-  scripts: [
-    {
-      src: "https://scripts.simpleanalyticscdn.com/latest.js",
-      defer: true,
-      async: true,
-    },
-  ],
+  scripts: process.env.NODE_ENV === "production" ? productionScripts : [],
   themeConfig: {
     colorMode: {
       defaultMode: "light",
