@@ -14,7 +14,7 @@
 ## Installation 📦
 
 ```
-yarn add @rescriptbr/reform reschema
+yarn add @rescriptbr/reform @rescriptbr/reschema
 ```
 
 Then add it to bsconfig.json
@@ -22,7 +22,7 @@ Then add it to bsconfig.json
 ```
 "bs-dependencies": [
  "@rescriptbr/reform",
- "reschema"
+ "@rescriptbr/reschema"
 ]
 ```
 
