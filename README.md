@@ -7,7 +7,8 @@
 <p align="center">
   <a href="https://reform.rescriptbrasil.org">Documentation</a> • 
   <a target="_blank" href="https://reform.rescriptbrasil.org/docs/installation">Installation</a> • 
-  <a target="_blank" href="https://reform.rescriptbrasil.org/docs/getting-started">Basic usage</a>
+  <a target="_blank" href="https://reform.rescriptbrasil.org/docs/getting-started">Basic usage</a> •  
+  <a target="_blank" href="https://reform-demo.rescriptbrasil.org">Live demo</a>
 </p>
 <br/>
 
