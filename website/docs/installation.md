@@ -9,9 +9,9 @@ slug: /installation
 Install `reform` and `reschema`:
 
 ```sh
-yarn add @rescriptbr/reform reschema
+yarn add @rescriptbr/reform @rescriptbr/reschema
 ```
-> `reschema` is a schema library that reform uses to validate form fields. Check out the official [documentation](https://github.com/rescriptbr/reschema).
+> `@rescriptbr/reschema` is a schema library that reform uses to validate form fields. Check out the official [documentation](https://github.com/rescriptbr/reschema).
 
 
 Then add `lenses-ppx`:
@@ -28,7 +28,7 @@ Then add these dependencies to `bsconfig.json`:
   ...
   "bs-dependencies": [
 +    "@rescriptbr/reform",
-+    "reschema"
++    "@rescriptbr/reschema"
   ],
   "ppx-flags": [
 +    "lenses-ppx/ppx"
