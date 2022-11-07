@@ -250,7 +250,6 @@ module Make = (Config: Config) => {
                     ))
                   self.send(SetFieldsState(newFieldsState))
                   submit ? self.send(Submit) : ()
-                  self.send(SetFormState(Valid))
                 }
               | Errors(erroredFields) =>
                 let newFieldsState: array<(field, fieldState)> =
