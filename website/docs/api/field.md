@@ -6,7 +6,7 @@ slug: /field
 
 ReForm provides a `Field` component that is optimized using `React.useMemo`. It prevents unnecessary re-renders that happens when you're using only the `Form.use` hook. 
 :::important
-`<Field />` depends on [`<Form.Provider />`](./docs/provider). 
+`<Field />` depends on [`<Form.Provider />`](./provider). 
 :::
 ### Basic usage
 ```rescript
