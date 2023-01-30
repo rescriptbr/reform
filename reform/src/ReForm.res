@@ -306,6 +306,7 @@ module Make = (Config: Config) => {
         | FieldArrayAdd(field, entry) =>
           Update({
             ...state,
+            formState: state.formState == Errored ? Errored : Dirty,
             values: Config.set(
               state.values,
               field,
@@ -315,6 +316,7 @@ module Make = (Config: Config) => {
         | FieldArrayRemove(field, index) =>
           Update({
             ...state,
+            formState: state.formState == Errored ? Errored : Dirty,
             values: Config.set(
               state.values,
               field,
@@ -324,6 +326,7 @@ module Make = (Config: Config) => {
         | FieldArrayRemoveBy(field, predicate) =>
           Update({
             ...state,
+            formState: state.formState == Errored ? Errored : Dirty,
             values: Config.set(
               state.values,
               field,
@@ -333,6 +336,7 @@ module Make = (Config: Config) => {
         | FieldArrayUpdateByIndex(field, value, index) =>
           Update({
             ...state,
+            formState: state.formState == Errored ? Errored : Dirty,
             values: Config.set(
               state.values,
               field,
