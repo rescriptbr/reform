@@ -141,11 +141,6 @@ module Make = (Config: Config) => {
   }
 
   module Provider = {
-    let makeProps = (~value, ~children, ()) =>
-      {
-        "value": Some(value),
-        "children": children,
-      }
     let make = React.Context.provider(formContext)
   }
 
