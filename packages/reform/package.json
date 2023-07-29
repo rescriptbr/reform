@@ -21,11 +21,11 @@
   "license": "MIT",
   "peerDependencies": {
     "@rescript/react": "^0.10.3",
-    "rescript": "^9.1.1"
+    "rescript": "^10.1.4"
   },
   "devDependencies": {
     "@rescript/react": "^0.10.1",
-    "rescript": "^9.1.1"
+    "rescript": "^10.1.4"
   },
   "scripts": {
     "start": "yarn res:watch",
@@ -36,6 +36,6 @@
   },
   "dependencies": {
     "@rescriptbr/reschema": "^3.0.3",
-    "rescript-react-update": "^3.0.1"
+    "rescript": "^10.1.4"
   }
 }
