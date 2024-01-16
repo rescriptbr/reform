@@ -16,5 +16,5 @@
     "error": false
   },
   "suffix": ".bs.js",
-  "bs-dependencies": ["@rescriptbr/reform"]
+  "bs-dependencies": ["@rescriptbr/reform", "@rescriptbr/reschema"]
 }

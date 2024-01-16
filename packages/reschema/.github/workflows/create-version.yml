@@ -1,0 +1,39 @@
+name: Create version
+
+on:
+  workflow_dispatch:
+    inputs:
+        versionType:
+          description: Version type
+          required: true
+          default: 'patch'
+          type: choice
+          options:
+            - patch
+            - minor
+            - major
+            - premajor
+            - preminor
+            - prepatch
+            - prerelease
+
+
+jobs:
+  create-version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ssh-key: ${{ secrets.ADMIN_SSH_KEY }}
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 15
+      - run: |
+          git config user.name rescriptbr-admin
+          git config user.email rescriptbr@gmail.com
+          
+      - name: Generate new version ${{ github.event.inputs.versionType }}
+        run: npm version ${{ github.event.inputs.versionType }}
+      
+      - name: Push the tags
+        run: git push origin master --tags

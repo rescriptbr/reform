@@ -37,6 +37,7 @@
   "workspaces": [
     "packages/reform",
     "packages/website",
+    "packages/reschema",
     "packages/demo"
   ],
   "husky": {
@@ -58,7 +59,7 @@
     "demo:build": "yarn workspace demo build"
   },
   "dependencies": {
-    "@rolandpeelen/rewatch": "^0.0.11",
+    "@rolandpeelen/rewatch": "0.0.12-0c3740d.0",
     "rescript": "^10.1.4"
   }
 }

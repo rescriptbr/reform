@@ -1,0 +1,24 @@
+{
+  "name": "@rescriptbr/reschema",
+  "version": "3.0.3",
+  "description": "Schema validation made easy for ReScript",
+  "repository": "git@github.com:rescriptbr/reschema.git",
+  "homepage": "https://github.com/rescriptbr/reschema#readme",
+  "bugs": "https://github.com/rescriptbr/reschema/issues",
+  "author": "Gabriel Rubens <fakenickels.dev>",
+  "main": "src/ReSchema.bs.js",
+  "scripts": {
+    "test": "jest",
+    "rescript:start": "npx rescript build -w",
+    "rescript:build": "npx rescript build",
+    "rescript:clean": "npx rescript clean",
+    "lint:staged": "lint-staged"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "28.1.3"
+  },
+  "dependencies": {
+    "rescript": "^9.0.2"
+  }
+}

@@ -207,7 +207,7 @@ module Make = (Config: Config) => {
               None
             },
           )
-        | SetFieldsState(fieldsState) => Update({...state, fieldsState: fieldsState})
+        | SetFieldsState(fieldsState) => Update({...state, fieldsState})
         | ValidateField(field) =>
           SideEffects(
             self => {
@@ -425,7 +425,7 @@ module Make = (Config: Config) => {
       }
 
     let interface: api = {
-      state: state,
+      state,
       formState: state.formState,
       fieldsState: state.fieldsState,
       values: state.values,
@@ -437,9 +437,9 @@ module Make = (Config: Config) => {
       setValues: fn => send(SetValues(fn)),
       setFieldValue: (field, value, ~shouldValidate=true, ()) =>
         shouldValidate ? send(FieldChangeValue(field, value)) : send(SetFieldValue(field, value)),
-      getFieldState: getFieldState,
-      getFieldError: getFieldError,
-      getNestedFieldError: getNestedFieldError,
+      getFieldState,
+      getFieldError,
+      getNestedFieldError,
       handleChange: (field, value) => send(FieldChangeValue(field, value)),
       handleChangeWithCallback: (field, updateFn) =>
         send(FieldChangeValueWithCallback(field, updateFn)),
@@ -450,8 +450,8 @@ module Make = (Config: Config) => {
       arrayRemoveByIndex: (field, index) => send(FieldArrayRemove(field, index)),
       validateField: field => send(ValidateField(field)),
       validateForm: () => send(ValidateForm(false)),
-      validateFields: validateFields,
-      raiseSubmitFailed: raiseSubmitFailed,
+      validateFields,
+      raiseSubmitFailed,
     }
 
     interface
