@@ -132,7 +132,7 @@ module Make = (Config: Config) => {
       validateField,
       state,
     }) => {
-      handleChange: handleChange(field),
+      handleChange: value => handleChange(field, value),
       error: getFieldError(Field(field)),
       state: getFieldState(Field(field)),
       validate: () => validateField(Field(field)),
@@ -159,17 +159,15 @@ module Make = (Config: Config) => {
     ) => {
       let fieldInterface = useField(field)
 
-      React.useMemo3(
-        () =>
-          fieldInterface
-          ->Belt.Option.map(render)
-          ->Belt.Option.getWithDefault(renderOnMissingContext),
-        (
-          fieldInterface->Belt.Option.map(({error}) => error),
-          fieldInterface->Belt.Option.map(({value}) => value),
-          fieldInterface->Belt.Option.map(({state}) => state),
-        ),
-      )
+      React.useMemo(() =>
+        fieldInterface
+        ->Belt.Option.map(render)
+        ->Belt.Option.getWithDefault(renderOnMissingContext)
+      , (
+        fieldInterface->Belt.Option.map(({error}) => error),
+        fieldInterface->Belt.Option.map(({value}) => value),
+        fieldInterface->Belt.Option.map(({state}) => state),
+      ))
     }
   }
 
@@ -183,12 +181,7 @@ module Make = (Config: Config) => {
     (),
   ) => {
     let (state, send) = ReactUpdate.useReducer(
-      {
-        fieldsState: getInitialFieldsState(schema),
-        values: initialState,
-        formState: Pristine,
-      },
-      (action, state) =>
+      (state: state, action) =>
         switch action {
         | Submit =>
           UpdateWithSideEffects(
@@ -353,6 +346,11 @@ module Make = (Config: Config) => {
           Update({...state, values: Config.set(state.values, field, value)})
         | RaiseSubmitFailed(err) => Update({...state, formState: SubmitFailed(err)})
         },
+      {
+        fieldsState: getInitialFieldsState(schema),
+        values: initialState,
+        formState: Pristine,
+      },
     )
 
     let getFieldState = field =>
@@ -365,12 +363,7 @@ module Make = (Config: Config) => {
     let getFieldError = field =>
       switch getFieldState(field) {
       | Error(error) => Some(error)
-      | NestedErrors(_errors) =>
-        Js.log2(
-          "The following field has nested errors, access these with `getNestedFieldError` instead of `getFieldError`",
-          field,
-        )
-        None
+      | NestedErrors(_errors) => None
       | Pristine
       | Valid =>
         None

@@ -19,6 +19,6 @@
     "jest": "28.1.3"
   },
   "dependencies": {
-    "rescript": "^9.0.2"
+    "rescript": "^11.0.0"
   }
 }
