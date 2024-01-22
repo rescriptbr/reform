@@ -35,9 +35,9 @@
   },
   "pre-commit": "lint:staged",
   "workspaces": [
-    "reform",
-    "website",
-    "demo"
+    "packages/reform",
+    "packages/website",
+    "packages/reschema"
   ],
   "husky": {
     "hooks": {
@@ -48,8 +48,9 @@
   "scripts": {
     "docs:watch": "yarn workspace website start",
     "docs:build": "yarn workspace website build",
-    "res:watch": "yarn workspace @rescriptbr/reform res:watch",
-    "res:build": "yarn workspace @rescriptbr/reform res:build",
+    "res:watch": "rewatch watch",
+    "res:build": "rewatch build",
+    "res:clean": "rewatch clean",
     "res:setup": "yarn workspace @rescriptbr/reform res:setup",
     "test": "yarn workspace @rescriptbr/reform test",
     "test:watch": "yarn workspace @rescriptbr/reform test:watch",
@@ -57,6 +58,7 @@
     "demo:build": "yarn workspace demo build"
   },
   "dependencies": {
-    "rescript": "9.1.4"
+    "@rolandpeelen/rewatch": "0.0.12-0c3740d.0",
+    "rescript": "^11.0.0"
   }
 }

@@ -20,12 +20,12 @@
   "author": "Gabriel Rubens <fakenickels.dev>",
   "license": "MIT",
   "peerDependencies": {
-    "@rescript/react": "^0.10.3",
-    "rescript": "^9.1.1"
+    "@rescript/react": "^0.12.0",
+    "rescript": "^11.0.0"
   },
   "devDependencies": {
-    "@rescript/react": "^0.10.1",
-    "rescript": "^9.1.1"
+    "@rescript/react": "^0.12.0",
+    "rescript": "^11.0.0"
   },
   "scripts": {
     "start": "yarn res:watch",
@@ -36,6 +36,7 @@
   },
   "dependencies": {
     "@rescriptbr/reschema": "^3.0.3",
-    "rescript-react-update": "^3.0.1"
+    "rescript": "^11.0.0",
+    "rescript-react-update": "5.0.2"
   }
 }

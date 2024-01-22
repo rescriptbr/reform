@@ -1,0 +1,20 @@
+{
+  "name": "reform-monorepo",
+  "sources": [
+    {
+      "dir": "src/",
+      "subdirs": true
+    }
+  ],
+  "package-specs": [
+    {
+      "module": "commonjs",
+      "in-source": true
+    }
+  ],
+  "warnings": {
+    "error": false
+  },
+  "suffix": ".bs.js",
+  "bs-dependencies": ["@rescriptbr/reform", "@rescriptbr/reschema"]
+}

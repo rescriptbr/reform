@@ -1,0 +1,16 @@
+{
+  "name": "demo",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@rescript/react": "^0.12.0",
+    "@rescriptbr/reform": "12.0.0-0",
+    "lenses-ppx": "6.1.10",
+    "rescript": "^11.0.0"
+  },
+  "scripts": {
+    "rescript:start": "npx rescript build -w",
+    "rescript:build": "npx rescript build",
+    "rescript:clean": "npx rescript clean"
+  }
+}

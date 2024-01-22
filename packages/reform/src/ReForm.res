@@ -132,7 +132,7 @@ module Make = (Config: Config) => {
       validateField,
       state,
     }) => {
-      handleChange: handleChange(field),
+      handleChange: value => handleChange(field, value),
       error: getFieldError(Field(field)),
       state: getFieldState(Field(field)),
       validate: () => validateField(Field(field)),
@@ -141,11 +141,6 @@ module Make = (Config: Config) => {
   }
 
   module Provider = {
-    let makeProps = (~value, ~children, ()) =>
-      {
-        "value": Some(value),
-        "children": children,
-      }
     let make = React.Context.provider(formContext)
   }
 
@@ -159,17 +154,15 @@ module Make = (Config: Config) => {
     ) => {
       let fieldInterface = useField(field)
 
-      React.useMemo3(
-        () =>
-          fieldInterface
-          ->Belt.Option.map(render)
-          ->Belt.Option.getWithDefault(renderOnMissingContext),
-        (
-          fieldInterface->Belt.Option.map(({error}) => error),
-          fieldInterface->Belt.Option.map(({value}) => value),
-          fieldInterface->Belt.Option.map(({state}) => state),
-        ),
-      )
+      React.useMemo(() =>
+        fieldInterface
+        ->Belt.Option.map(render)
+        ->Belt.Option.getWithDefault(renderOnMissingContext)
+      , (
+        fieldInterface->Belt.Option.map(({error}) => error),
+        fieldInterface->Belt.Option.map(({value}) => value),
+        fieldInterface->Belt.Option.map(({state}) => state),
+      ))
     }
   }
 
@@ -183,12 +176,7 @@ module Make = (Config: Config) => {
     (),
   ) => {
     let (state, send) = ReactUpdate.useReducer(
-      {
-        fieldsState: getInitialFieldsState(schema),
-        values: initialState,
-        formState: Pristine,
-      },
-      (action, state) =>
+      (state: state, action) =>
         switch action {
         | Submit =>
           UpdateWithSideEffects(
@@ -207,7 +195,7 @@ module Make = (Config: Config) => {
               None
             },
           )
-        | SetFieldsState(fieldsState) => Update({...state, fieldsState: fieldsState})
+        | SetFieldsState(fieldsState) => Update({...state, fieldsState})
         | ValidateField(field) =>
           SideEffects(
             self => {
@@ -353,6 +341,11 @@ module Make = (Config: Config) => {
           Update({...state, values: Config.set(state.values, field, value)})
         | RaiseSubmitFailed(err) => Update({...state, formState: SubmitFailed(err)})
         },
+      {
+        fieldsState: getInitialFieldsState(schema),
+        values: initialState,
+        formState: Pristine,
+      },
     )
 
     let getFieldState = field =>
@@ -365,12 +358,7 @@ module Make = (Config: Config) => {
     let getFieldError = field =>
       switch getFieldState(field) {
       | Error(error) => Some(error)
-      | NestedErrors(_errors) =>
-        Js.log2(
-          "The following field has nested errors, access these with `getNestedFieldError` instead of `getFieldError`",
-          field,
-        )
-        None
+      | NestedErrors(_errors) => None
       | Pristine
       | Valid =>
         None
@@ -425,7 +413,7 @@ module Make = (Config: Config) => {
       }
 
     let interface: api = {
-      state: state,
+      state,
       formState: state.formState,
       fieldsState: state.fieldsState,
       values: state.values,
@@ -437,9 +425,9 @@ module Make = (Config: Config) => {
       setValues: fn => send(SetValues(fn)),
       setFieldValue: (field, value, ~shouldValidate=true, ()) =>
         shouldValidate ? send(FieldChangeValue(field, value)) : send(SetFieldValue(field, value)),
-      getFieldState: getFieldState,
-      getFieldError: getFieldError,
-      getNestedFieldError: getNestedFieldError,
+      getFieldState,
+      getFieldError,
+      getNestedFieldError,
       handleChange: (field, value) => send(FieldChangeValue(field, value)),
       handleChangeWithCallback: (field, updateFn) =>
         send(FieldChangeValueWithCallback(field, updateFn)),
@@ -450,8 +438,8 @@ module Make = (Config: Config) => {
       arrayRemoveByIndex: (field, index) => send(FieldArrayRemove(field, index)),
       validateField: field => send(ValidateField(field)),
       validateForm: () => send(ValidateForm(false)),
-      validateFields: validateFields,
-      raiseSubmitFailed: raiseSubmitFailed,
+      validateFields,
+      raiseSubmitFailed,
     }
 
     interface

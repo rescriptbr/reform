@@ -1,8 +1,6 @@
 {
-  "$schema": "https://raw.githubusercontent.com/rescript-lang/rescript-compiler/master/docs/docson/build-schema.json",
   "name": "@rescriptbr/reform",
-  "reason": { "react-jsx": 3 },
-  "refmt": 3,
+  "jsx": { "version": 4 },
   "bs-dependencies": [
     "@rescript/react",
     "@rescriptbr/reschema",

@@ -4,15 +4,15 @@
   "private": true,
   "dependencies": {
     "@emotion/css": "11.7.1",
-    "@rescript/react": "0.10.3",
+    "@rescript/react": "^0.12.0",
     "@rescriptbr/ancestor": "0.5.0",
     "@rescriptbr/reform": "12.0.1",
     "@vitejs/plugin-react": "1.0.0",
     "lenses-ppx": "6.1.10",
-    "react": "17.0.2",
-    "react-dom": "17.0.2",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
     "@rescriptbr/reschema": "3.0.1",
-    "rescript": "9.1.1",
+    "rescript": "^11.0.0",
     "vite": "2.6.4"
   },
   "scripts": {
